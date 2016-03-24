@@ -6,9 +6,9 @@ module.exports = function(io) {
     var path = require("path");
     var util = require("../lib/util");
 
-    // var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
+    var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
     // var NEO4J_API_URL = "http://" + process.env['NEO4J_HOST'] + ":7474/db/data/transaction/commit";
-    var NEO4J_API_URL = "http://54.201.10.92:7474/db/data/transaction/commit";
+    // var NEO4J_API_URL = "http://54.201.10.92:7474/db/data/transaction/commit";
     // var NEO4J_USER = process.env['NEO4J_USER'];
     // var NEO4J_PASS = process.env['NEO4J_PASS'];
     var NEO4J_USER = "neo4j";
@@ -177,13 +177,25 @@ module.exports = function(io) {
                     "Author - Profile Link" : "a.link",
                     "Journal - Name" : "j.name"
                     // ...
-                }
+                };
 
-                var return_param = ""
-                for (var col in column_names) {
-                    return_param += column_mappings[col] + ", "
-                }
-                query = "MATCH (a:Author)<-[r:authored_by]-(ar:Article) RETURN *"
+                console.log(column_mappings["Article - Title"]);
+
+                var return_param = "";
+                // for (var col in column_names) {
+                //     return_param += column_mappings[col] + ", ";
+                // }
+
+                Object.keys(column_names).forEach(function (key) {
+                    return_param += column_mappings[column_names[key]];
+                    console.log(column_mappings[column_names[key]]);
+                });
+
+                // var n = return_param.lastIndexOf(',');
+                // return_param[n] = "";
+                query = "MATCH (a:Author)<-[r:authored_by]-(ar:Article) RETURN " + return_param;
+
+                console.log(return_param);
                 // Generate Cipher Query here and assign to query variable
                 //
                 //

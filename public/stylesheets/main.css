@@ -761,11 +761,15 @@ ul.sub-menu {
 }
 
 #team {
-  padding: 85px 0;
+  padding: 10px 0 85px;
 }
 
 #team-carousel {
   margin-top: 80px;
+}
+
+.item > div {
+  margin-bottom: 20px;
 }
 
 #company-information .padding-top{
@@ -861,9 +865,28 @@ ul.sub-menu {
   border-color: #702340;
 }
 
+.person-info {
+  text-align: center;
+}
+
+.other-members .person-thumb img {
+  width: 65%;
+  margin: 0 auto;
+}
+
+.other-members .item > div {
+  margin-top: 60px;
+}
+
+.other-members .social-profile {
+  width: 65%;
+  margin: 0 auto;
+  left: 18%;
+}
+
 .person-info h2 {
   font-weight: 300;
-  margin-bottom: 5px;
+  margin: 5px;
 }
 
 .person-info h3 {

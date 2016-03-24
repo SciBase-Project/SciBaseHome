@@ -247,7 +247,7 @@
 
                     -->
                         <div class="result">
-                            <p>Your dataset was generated successfully. Download it <a id="download-link" href="">here</a>.</p>
+                            <p>Your dataset was generated successfully. Download it <a id="download-link" download href="">here</a>.</p>
                         </div>
                     </div>
                 </div>
@@ -267,13 +267,13 @@
     </footer>
     <!--/#footer-->
 
-    <script type="text/javascript" src="/javascripts/datacenter.js"></script>
+    <!-- <script type="text/javascript" src="/javascripts/datacenter.js"></script> -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io();
 
         $(document).ready(function() {
-            $("#download-button").click(function(e){
+            $("#download-button").click(function(e) {
                 e.preventDefault();
                 var columns = [];
                 var columns_input = document.getElementById("columns-input");
@@ -284,14 +284,16 @@
                 console.log("Columns: " + JSON.stringify(columns));
                 socket.emit('query_builder__request', columns);
                 console.log("Emitted");
-            });
+        });
 
             socket.on('query_builder__response', function(info){
-                var data = JSON.parse(info);
+                // var data = JSON.parse(info);
+                var data = info;
                 console.log(data);
                 var url = data["url"];
                 $("#download-link").attr("href",url);
                 $(".result").css("display","block");
+                // window.location.href = url;
             });
 
         });
