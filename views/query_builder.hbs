@@ -1,8 +1,8 @@
 
-    <header id="header">      
+    <header id="header">
         <div class="container">
             <div class="row">
-                <!-- <div class="col-sm-12 overflow">
+<!--                 <div class="col-sm-12 overflow">
                    <div class="social-icons pull-right">
                         <ul class="nav nav-pills">
                             <li><a href=""><i class="fa fa-facebook"></i></a></li>
@@ -11,7 +11,7 @@
                             <li><a href=""><i class="fa fa-dribbble"></i></a></li>
                             <li><a href=""><i class="fa fa-linkedin"></i></a></li>
                         </ul>
-                    </div> 
+                    </div>
                 </div> -->
              </div>
         </div>
@@ -28,15 +28,15 @@
                     <a class="navbar-brand" href="index.html">
                         <h1><img src="images/logo.png" alt="logo"></h1>
                     </a>
-                    
+
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/">Home</a></li>
-                        <li><a href="/team">The Team</a></li>                    
+                        <li><a href="/team">The Team</a></li>
                         <li><a href="publications">Publications</a></li>
                         <li class="active"><a href="/datacenter">Data Center</a></li>
-                        <li class="dropdown"><a href="/datacenter">Sign In</a></li>                
+                        <li class="dropdown"><a href="/datacenter">Sign In</a></li>
                     </ul>
                     </ul>
                 </div>
@@ -69,7 +69,7 @@
         </div>
     </section>
     <!--/#action-->
-    
+
     <section id="blog" class="padding-top padding-bottom">
         <div class="container">
             <div class="row">
@@ -201,51 +201,53 @@
                     </div>
                     -->
                     <style type="text/css">
-                        .search_query {
+                        .query-builder-container {
                             width: 100%;
                             text-align: center;
                         }
-                        .search_box {
-                            width: 60%;
-                            margin: 0 auto;
-                            height: 60px;
-                            border-top: 1px solid rgb(141, 206, 212);
-                            border-bottom: 1px solid rgb(141, 206, 212);
-                            text-align: center;
+                        .result {
+                            display: none;
                         }
 
-                        .search_box input {
-                            text-align: center;
-                            border: 0;
-                            background: none;
-                            font-size: 3em;
-                            outline: none;
-                        }
-
-                        .search_query .result {
+                        .query-builder-container .result {
                             margin-top: 20px;
                         }
 
-                        .download_json {
-                            display: none;
-                            width: 20%;
-                            margin: 0 auto;
+                        #download-button {
+                            margin-top: 1.5em;
                         }
-
-                        .error_msg {
-                            color: red;
-                            display: none;
+                        select {
+                            width: 80%;
                         }
                     </style>
-                    <div class="search_query">
-                        <h2>Enter Query</h2>
+                    <div class="query-builder-container">
+                        <h2>Select columns you are interested in</h2>
+
+                        <select id="columns-input" multiple="" size="8">
+                          <option>Article - Title</option>
+                          <option>Article - Abstract</option>
+                          <option>Article - DOI</option>
+                          <option>Author - Full Name</option>
+                          <option>Author - First Name</option>
+                          <option>Author - Last Name</option>
+                          <option>Author - Middle Name</option>
+                          <!-- <option>Author - Institute</option> -->
+                          <!-- <option>Author - Department</option> -->
+                          <option>Journal - Name</option>
+                          <!-- <option>Paper - Author Name</option> -->
+                          <!-- <option>Paper - Journal</option> -->
+                        </select>
+                        <div class="row">
+                            <a href="#" id="download-button" class="btn btn-common">Generate JSON</a>
+                        </div>
+<!--
                         <div class="search_box">
-                            <input type="text">
+                            <input type="text" id="query_search_box">
                         </div>
 
+                    -->
                         <div class="result">
-                            <a href="#" class="btn btn-common">Download JSON</a>
-                            <a href="#" class="btn btn-common">Download CSV</a>
+                            <p>Your dataset was generated successfully. Download it <a id="download-link" href="">here</a>.</p>
                         </div>
                     </div>
                 </div>
@@ -260,71 +262,7 @@
                 <div class="col-sm-12 text-center bottom-separator">
                     <img src="images/home/under.png" class="img-responsive inline" alt="">
                 </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="testimonial bottom">
-                        <h2>Testimonial</h2>
-                        <div class="media">
-                            <div class="pull-left">
-                                <a href="#"><img src="images/home/profile1.png" alt=""></a>
-                            </div>
-                            <div class="media-body">
-                                <blockquote>Nisi commodo bresaola, leberkas venison eiusmod bacon occaecat labore tail.</blockquote>
-                                <h3><a href="#">- Jhon Kalis</a></h3>
-                            </div>
-                         </div>
-                        <div class="media">
-                            <div class="pull-left">
-                                <a href="#"><img src="images/home/profile2.png" alt=""></a>
-                            </div>
-                            <div class="media-body">
-                                <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison eiusmod.</blockquote>
-                                <h3><a href="">- Abraham Josef</a></h3>
-                            </div>
-                        </div>   
-                    </div> 
-                </div>
-              <div class="col-md-3 col-sm-6">
-                    <div class="contact-info bottom">
-                        <h2>Contacts</h2>
-                        <address>
-                        E-mail: <a href="mailto:someone@example.com">email@email.com</a> <br> 
-                        Phone: +91 (123) 456 7890 <br> 
-                        </address>
-
-                        <h2>Address</h2>
-                        <address>
-                        PES Institute of Technology - Bangalore South Campus <br> 
-                        Hosur Road, <br> 
-                        (1km before Electronic City), <br> 
-                        Bangalore KA - 560100 <br> 
-                        </address>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-12">
-                    <div class="contact-form bottom">
-                        <h2>Send a message</h2>
-                        <form id="main-contact-form" name="contact-form" method="post" action="sendemail.php">
-                            <div class="form-group">
-                                <input type="text" name="name" class="form-control" required="required" placeholder="Name">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" name="email" class="form-control" required="required" placeholder="Email Id">
-                            </div>
-                            <div class="form-group">
-                                <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Your text here"></textarea>
-                            </div>                        
-                            <div class="form-group">
-                                <input type="submit" name="submit" class="btn btn-submit" value="Submit">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="copyright-text text-center">
-                        <p>&copy; SciBase | PES Institute of Technology - Bangalore South Campus. All Rights Reserved.</p>
-                    </div>
-                </div>
-            </div>
+                
         </div>
     </footer>
     <!--/#footer-->
@@ -334,26 +272,26 @@
     <script>
         var socket = io();
 
-        $(document).keypress(function(e) {
-            if(e.which == 13) {
-                var query = $("#query_search_box").val();
-                console.log("Query: " + query);
-                socket.emit('query_request', query);
-                console.log("Emitted");
-            }
+        $(document).ready(function() {
+            $("#download-button").click(function(e){
+                e.preventDefault();
+                var columns = [];
+                var columns_input = document.getElementById("columns-input");
 
-            socket.on('query_response', function(info){
-
-                console.log(info);
-                var data = info;
-                console.log(data);
-                if(data["status"] == "success") {
-                    var url = data["url"];
-                    $(".download_json").attr("href",url);
-                    $(".download_json").css("display","block");
-                } else {
-                    $(".error_msg").css("display","block");
+                for(var i=0; i< columns_input.selectedOptions.length; i++) {
+                    columns.push(columns_input.selectedOptions[i].value);
                 }
+                console.log("Columns: " + JSON.stringify(columns));
+                socket.emit('query_builder__request', columns);
+                console.log("Emitted");
+            });
+
+            socket.on('query_builder__response', function(info){
+                var data = JSON.parse(info);
+                console.log(data);
+                var url = data["url"];
+                $("#download-link").attr("href",url);
+                $(".result").css("display","block");
             });
 
         });
