@@ -117,20 +117,32 @@ module.exports = function(io) {
                     }
                 }, function(error, response, body) {
                     if (!error && response.statusCode === 200) {
-                        var file_name = util.randomString(20) + ".json";
+                        var file_name_json = util.randomString(20) + ".json";
+                        var file_name_csv = util.randomString(20) + ".csv";
                         var error = false,
                             response_body = {};
-                        console.log("API request successful. Received reply:", JSON.stringify(body));
+                        // console.log("API request successful. Received reply:", JSON.stringify(body));
 
                         response_body.status = "success";
-                        response_body.url = "/downloads/generated/" + file_name;
+                        response_body.json_url = "/downloads/generated/json/" + file_name_base + ".json";
+                        response_body.csv_url = "/downloads/generated/csv/" + file_name_base + ".csv";
+                        console.log(JSON.stringify(response_body));
                         try {
-                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/", file_name), JSON.stringify(body), 'utf-8');
+                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/json", file_name_json), JSON.stringify(body), 'utf-8');
                         } catch (e) {
                             console.log("Error:", e.message);
                             response_body.status = "error";
-                            response_body.url = null;
+                            response_body.json_url = null;
                         }
+
+                        try {
+                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/csv", file_name_csv), util.jsonToCsv(body), 'utf-8');
+                        } catch (e) {
+                            console.log("Error:", e.message);
+                            response_body.status = "error";
+                            response_body.csv_url = null;
+                        }
+
 
                         /**
                          * The result of the query is sent with query_response event of socket.
@@ -182,14 +194,17 @@ module.exports = function(io) {
                 console.log(column_mappings["Article - Title"]);
 
                 var return_param = "";
-                // for (var col in column_names) {
-                //     return_param += column_mappings[col] + ", ";
-                // }
+                for (var i=0; i < column_names.length; i++) {
+                    return_param += column_mappings[column_names[i]];
+                    if(i < column_names.length - 1)
+                        return_param += ","
+                }
+                console.log(return_param);
 
-                Object.keys(column_names).forEach(function (key) {
-                    return_param += column_mappings[column_names[key]];
-                    console.log(column_mappings[column_names[key]]);
-                });
+                // Object.keys(column_names).forEach(function (key) {
+                //     return_param += column_mappings[column_names[key]];
+                //     console.log(column_mappings[column_names[key]]);
+                // });
 
                 // var n = return_param.lastIndexOf(',');
                 // return_param[n] = "";
@@ -218,19 +233,22 @@ module.exports = function(io) {
                     }
                 }, function(error, response, body) {
                     if (!error && response.statusCode === 200) {
-                        var file_name = util.randomString(20) + ".json";
+                        var file_name = util.randomString(20);
                         var error = false,
                             response_body = {};
                         console.log("API request successful. Received reply:", JSON.stringify(body));
 
                         response_body.status = "success";
-                        response_body.url = "/downloads/generated/" + file_name;
+                        response_body.json_url = "/downloads/generated/" + file_name + ".json";
+                        response_body.csv_url = "/downloads/generated" + file_name + ".csv";
                         try {
                             fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/", file_name), JSON.stringify(body), 'utf-8');
+
                         } catch (e) {
                             console.log("Error:", e.message);
                             response_body.status = "error";
-                            response_body.url = null;
+                            response_body.json_url = null;
+                            response_body.csv_url = null;
                         }
 
                         /**
