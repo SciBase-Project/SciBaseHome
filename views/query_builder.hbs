@@ -238,7 +238,7 @@
                           <!-- <option>Paper - Journal</option> -->
                         </select>
                         <div class="row">
-                            <a href="#" id="download-button" class="btn btn-common">Generate JSON</a>
+                            <a href="#" id="download-button" class="btn btn-common">Generate</a>
                         </div>
 <!--
                         <div class="search_box">
@@ -247,7 +247,7 @@
 
                     -->
                         <div class="result">
-                            <p>Your dataset was generated successfully. Download it <a id="download-link" download href="">here</a>.</p>
+                            <p>Your dataset was generated successfully. Download as: <a id="download-link-json" href="">JSON</a> or <a id="download-link-csv" href="">CSV</a>.</p>
                         </div>
                     </div>
                 </div>
@@ -290,8 +290,10 @@
                 // var data = JSON.parse(info);
                 var data = info;
                 console.log(data);
-                var url = data["url"];
-                $("#download-link").attr("href",url);
+                var json_url = data["json_url"];
+                var csv_url = data["csv_url"];
+                $("#download-link-json").attr("href",json_url);
+                $("#download-link-csv").attr("href",csv_url);
                 $(".result").css("display","block");
                 // window.location.href = url;
             });
