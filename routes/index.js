@@ -37,33 +37,19 @@ module.exports = function(io) {
     /* GET home page. */
     router.get('/datacenter', function(req, res, next) {
         var dataset_list = [{
-            title: "Dataset A",
-            description: "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet",
-            download_link: "dataset_a.zip",
+            title: "Scimago Dataset (1999 - 2014)",
+            description: " this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
+            download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
             internal: true,
-            format: "csv",
-            size: "53 MB"
+            format: "xlsx",
+            size: "external"
         }, {
-            title: "Dataset B",
-            description: "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet",
-            download_link: "dataset_b.zip",
+            title: "Scimago Dataset ( Archive at the time of January 2010)",
+            description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
+            download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
             internal: true,
-            format: "csv",
-            size: "153 MB"
-        }, {
-            title: "Dataset C",
-            description: "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet",
-            download_link: "dataset_c.zip",
-            internal: true,
-            format: "csv",
-            size: "523 MB"
-        }, {
-            title: "Dataset D",
-            description: "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet",
-            download_link: "dataset_d.zip",
-            internal: true,
-            format: "csv",
-            size: "33 MB"
+            format: "xlsx",
+            size: "external"
         }, {
             title: "AMiner Paper",
             description: "This file saves the paper information and the citation network.",
