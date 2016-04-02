@@ -14,6 +14,8 @@ module.exports = function(io) {
     var NEO4J_USER = "neo4j";
     var NEO4J_PASS = "scibase";
 
+
+
     /* GET home page. */
     router.get('/', function(req, res, next) {
         res.render('index', {
@@ -115,32 +117,21 @@ module.exports = function(io) {
                         "Authorization": "Basic " + auth_payload,
                         "Accept": "application/json; charset=UTF-8"
                     }
-                }, function(error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var file_name_json = util.randomString(20) + ".json";
-                        var file_name_csv = util.randomString(20) + ".csv";
+                }, function(err, response, body) {
+                    if (!err && response.statusCode === 200) {
+                        var file_name= util.randomString(20) + ".json";
                         var error = false,
                             response_body = {};
                         // console.log("API request successful. Received reply:", JSON.stringify(body));
 
                         response_body.status = "success";
-                        response_body.json_url = "/downloads/generated/json/" + file_name_base + ".json";
-                        response_body.csv_url = "/downloads/generated/csv/" + file_name_base + ".csv";
-                        console.log(JSON.stringify(response_body));
+                        response_body.url = "/downloads/generated/json/" + file_name;
                         try {
-                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/json", file_name_json), JSON.stringify(body), 'utf-8');
+                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/json", file_name), JSON.stringify(body), 'utf-8');
                         } catch (e) {
                             console.log("Error:", e.message);
                             response_body.status = "error";
-                            response_body.json_url = null;
-                        }
-
-                        try {
-                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/csv", file_name_csv), util.jsonToCsv(body), 'utf-8');
-                        } catch (e) {
-                            console.log("Error:", e.message);
-                            response_body.status = "error";
-                            response_body.csv_url = null;
+                            response_body.url = null;
                         }
 
 
@@ -155,9 +146,9 @@ module.exports = function(io) {
                         console.log("Response sent: ", JSON.stringify(response_body));
                         socket.emit("query_response", response_body);
                     } else {
-                        console.log("API request failed with error: " + error)
-                        console.log("response.statusCode: " + response.statusCode)
-                        console.log("response.statusText: " + response.statusText)
+                        console.log("API request failed with error: " + err);
+                        console.log("response.statusCode: " + response.statusCode);
+                        console.log("response.statusText: " + response.statusText);
                     }
                 }); // request ends
             }); // socket event handler ends
@@ -197,7 +188,7 @@ module.exports = function(io) {
                 for (var i=0; i < column_names.length; i++) {
                     return_param += column_mappings[column_names[i]];
                     if(i < column_names.length - 1)
-                        return_param += ","
+                        return_param += ",";
                 }
                 console.log(return_param);
 
@@ -231,23 +222,30 @@ module.exports = function(io) {
                         "Authorization": "Basic " + auth_payload,
                         "Accept": "application/json; charset=UTF-8"
                     }
-                }, function(error, response, body) {
-                    if (!error && response.statusCode === 200) {
-                        var file_name = util.randomString(20);
+                }, function(err, response, body) {
+                    if (!err && response.statusCode === 200) {
+                        var file_name_base = util.randomString(20);
                         var error = false,
                             response_body = {};
-                        console.log("API request successful. Received reply:", JSON.stringify(body));
+                        // console.log("API request successful. Received reply:", JSON.stringify(body));
 
                         response_body.status = "success";
-                        response_body.json_url = "/downloads/generated/" + file_name + ".json";
-                        response_body.csv_url = "/downloads/generated" + file_name + ".csv";
+                        response_body.json_url = "/downloads/generated/json/" + file_name_base + ".json";
+                        response_body.csv_url = "/downloads/generated/csv/" + file_name_base + ".csv";
+                        console.log(JSON.stringify(response_body));
                         try {
-                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/", file_name), JSON.stringify(body), 'utf-8');
-
+                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/json", file_name_base + ".json"), JSON.stringify(body), 'utf-8');
                         } catch (e) {
                             console.log("Error:", e.message);
                             response_body.status = "error";
                             response_body.json_url = null;
+                        }
+
+                        try {
+                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/csv", file_name_base + ".csv"), util.jsonToCsv(body), 'utf-8');
+                        } catch (e) {
+                            console.log("Error:", e.message);
+                            response_body.status = "error";
                             response_body.csv_url = null;
                         }
 
@@ -262,19 +260,17 @@ module.exports = function(io) {
                         console.log("Response sent: ", JSON.stringify(response_body));
                         socket.emit("query_builder__response", response_body);
                     } else {
-                        console.log("API request failed with error: " + error)
-                        console.log("response.statusCode: " + response.statusCode)
-                        console.log("response.statusText: " + response.statusText)
+                        console.log("API request failed with error: " + err);
+                        console.log("response.statusCode: " + response.statusCode);
+                        console.log("response.statusText: " + response.statusText);
                     }
                 }); // request ends
             }); // socket event handler ends
         }); // io event handler ends
 
+        res.render('query_builder', {});
 
-        res.render('query_builder', {
-            title: 'SciBase'
-        });
     });
 
     return router;
-}
+};
