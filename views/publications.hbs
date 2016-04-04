@@ -25,7 +25,7 @@
                         <span class="icon-bar"></span>
                     </button>
 
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="/">
                         <h1><img src="images/logo.png" alt="logo"></h1>
                     </a>
                     
@@ -85,11 +85,118 @@
                                            <span class="uppercase"><a href="#">10 <br><small>Jan</small></a></span>
                                        </div>
                                     </div>
-                                </div -->>
+                                </div -->
                                 <div class="post-content overflow">
                                     <h2 class="post-title bold"><a href="blogdetails.html">DSRS: Estimation and Forecasting of Journal Influence in the Science and Technology Domain via a Lightweight Quantitative Approach</a></h2>
                                     <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
                                     <p>The evaluation of journals based on their influence is of interest for numerous reasons. Various methods of computing a score have been proposed for measuring the scientific influence of scholarly journals. Typically the computation of any of these scores involves compiling the citation information pertaining to the journal under consideration. This involves significant overhead since the article citation information of not only the journal under consideration but also that of other journals for the recent few years need to be stored. Our work is motivated by the idea of developing a computationally lightweight approach that does not require any data storage, yet yields a score which is useful for measuring the importance of journals. In this paper, a regression analysis based method is proposed to calculate Journal Influence Score. Proposed model is validated using historical data from the SCImago portal. The results show that the error is small between rankings obtained using the proposed method and the SCImago Journal Rank, thus proving that the proposed approach is a feasible and effective method of calculating scientific impact of journals.</p>
+                                    <p>
+                                    <script type="text/javascript" language="Javascript">
+
+var v1 = "";
+var v2 = "";
+var v3 = "";
+var v4 = "";
+var v5 = "";
+var v6 = "";
+var B0 = 0.0923715257441432;
+var B1 = 0.00585705300923252;
+var B2 = 0.000426180365273499;
+var B3 = -0.0000164176688297669;
+var B4 = 0.000128464253845954;
+var B5 = -0.000402520147148778;
+var B6 = 0.331746855609088;
+var answer = 0;
+
+
+function Reset () {
+
+document.getElementById("v1").value = "";
+document.getElementById("v2").value = "";
+document.getElementById("v3").value = "";
+document.getElementById("v4").value = "";
+document.getElementById("v5").value = "";
+document.getElementById("v6").value = "";
+document.getElementById("answer").value = "";
+
+}
+
+function Calculate () {
+
+v1=document.getElementById("v1").value;
+v2=document.getElementById("v2").value;
+v3=document.getElementById("v3").value;
+v4=document.getElementById("v4").value;
+v5=document.getElementById("v5").value;
+v6=document.getElementById("v6").value;
+
+
+if (v1==null || v1==""||isNaN(v1))
+  {
+  alert("H-Index must be filled out / H-Index must be Numeric ");
+  return;
+  }
+else if (v2==null || v2==""||isNaN(v2))
+  {
+  alert("Total Docs. (Current Year) must be filled out / Total Docs. (Current Year) must be Numeric");
+return;  
+}
+else if (v3==null || v3==""||isNaN(v3))
+  {
+  alert("Total Refs. must be filled out / Total Refs. must be Numeric");
+return; 
+ }
+else if (v4==null || v4==""||isNaN(v4))
+  {
+  alert("Total Cites (3years) must be filled out / Total Cites (3years) must be Numeric");
+return;  
+}
+else if (v5==null || v5==""||isNaN(v5))
+  {
+  alert("Citable Docs. (3years) must be filled out / Citable Docs. (3years) must be Numeric");
+return; 
+ }
+else if (v6==null || v6==""||isNaN(v6))
+  {
+  alert("Cites / Doc. (2years) must be filled out / Cites / Doc. (2years) must be Numeric");
+return;  
+}
+
+
+answer = B0+ v1*B1 + v2*B2 + v3*B3 + v4*B4 + v5*B5 + v6*B6;
+answer = answer.toFixed(3)
+
+
+document.getElementById("answer").value=answer;
+
+}
+
+</script>
+
+<form>
+<h2><font color="green">Journal Influence Factor Calculation</font></h2> <br> 
+<fieldset style="width:500px">
+<legend><h3>Enter Input Parameter</h3></legend>
+<b>H-Index </b><input type="text" id="v1"> <br><br>
+<b>Total Docs. (Current Year)</b> <input type="text" id="v2"> <br><br>
+<b>Total Refs.</b> <input type="text" id="v3" > <br><br>
+<b>Total Cites (3years)</b> <input type="text" id="v4" > <br><br>
+<b>Citable Docs. (3years)</b> <input type="text" id="v5" > <br><br>
+<b>Cites / Doc. (2years)</b> <input type="text" id="v6" > <br>
+</fieldset>
+<br><button type="button" onclick="Calculate()">Calculate Journal Influence Factor</button>
+<button type="button" onclick="Reset()">Reset Values</button>
+
+<br><br>
+<fieldset style="width:500px">
+<legend><h3>OUTPUT</h3></legend>
+<b>Journal Influence Factor</b> <input type="text" id="answer" readonly>
+</fieldset>
+
+<!-- <br>
+<h5><i><font size="3" color="blue"><u>Tool Created By</u> <br> NEELAM<br>M.Tech.||CSE||PESIT South Campus, Bangalore</font></i></h5> -->
+</form>
+</p>
                                     <a href="files/papers/paper1.pdf" class="read-more" download>View More</a>
                                     <div class="post-bottom overflow">
                                         <span class="post-date pull-left">Submitted.</span>
