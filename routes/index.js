@@ -143,7 +143,7 @@ module.exports = function(io) {
         res.render('custom_datasets', {});
     });
 
-    router.get('/custom_datasets/query_builder', function(req, res, next) {
+    router.get('/query_builder', function(req, res, next) {
 
         // socket.io events
         io.on("connection", function(socket) {
