@@ -258,5 +258,39 @@ module.exports = function(io) {
 
     });
 
+    router.get('/login', function(req, res, next) {
+        res.redirect('https://orcid.org/oauth/authorize?client_id=APP-7V6NPHD04FV07E8W&response_type=code&scope=/authenticate&redirect_uri=http://localhost:3000/loged_in')
+    });
+
+    router.get('/loged_in', function(req, res, next) {
+        // var code = req.query.code;
+        // var headers = {
+        //     'Accept': 'application/json'
+        // };
+
+        // var dataString = 'client_id=APP-7V6NPHD04FV07E8W&client_secret=b6f8f45a-4c36-4f7a-b9ae-92f47a647613&grant_type=authorization_code&redirect_uri=http://localhost:3000/loged_in&code=' + code;
+
+        // var options = {
+        //     url: 'https://orcid.org/oauth/token',
+        //     method: 'POST',
+        //     headers: headers,
+        //     body: dataString
+        // };
+
+        // function callback(error, response, body) {
+        //     if (!error && response.statusCode == 200) {
+        //         console.log(body);
+        //         console.log("success");
+        //     }
+        // }
+
+        // request(options, callback);
+        
+        res.render('logged_in', {
+            token: req.query.code
+        });
+
+    });
+
     return router;
 };
