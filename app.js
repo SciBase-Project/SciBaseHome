@@ -36,6 +36,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/apidoc',express.static(path.join(__dirname, 'doc/doc')));
 app.use('/downloads',express.static(path.join(__dirname, 'files/datasets')));
 
 app.use('/', routes);
