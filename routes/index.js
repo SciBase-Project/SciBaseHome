@@ -18,8 +18,10 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
-        res.render('index', {
-            title: 'SciBase'
+        util.getStats(function(result) {
+            console.log("Result: ",result);
+            result.title = "SciBase";
+            res.render('index', result);
         });
     });
 
@@ -44,7 +46,7 @@ module.exports = function(io) {
             format: "xlsx",
             size: "external"
         }, {
-            title: "Scimago Dataset ( Archive at the time of January 2010)",
+            title: "Scimago Dataset (Archive at the time of January 2010)",
             description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
             download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
             internal: true,
@@ -188,11 +190,6 @@ module.exports = function(io) {
                 query = "MATCH (a:Author)<-[r:authored_by]-(ar:Article) RETURN " + return_param;
 
                 console.log(return_param);
-                // Generate Cipher Query here and assign to query variable
-                //
-                //
-                //
-                //
 
                 var request_json = {
                     "statements": [{

@@ -1,4 +1,4 @@
-    <header id="header">      
+    <header id="header">
     <div class="container">
         <div class="row">
             <!-- <div class="col-sm-12 overflow">
@@ -10,7 +10,7 @@
                         <li><a href=""><i class="fa fa-dribbble"></i></a></li>
                         <li><a href=""><i class="fa fa-linkedin"></i></a></li>
                     </ul>
-                </div> 
+                </div>
             </div> -->
          </div>
     </div>
@@ -27,15 +27,15 @@
                 <a class="navbar-brand" href="/">
                     <h1><img src="images/logo.png" alt="logo"></h1>
                 </a>
-                
+
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="/">Home</a></li>
-                    <li><a href="/team">The Team</a></li>                    
+                    <li><a href="/team">The Team</a></li>
                     <li class="dropdown"><a href="publications">Publications</a></li>
                     <li class="dropdown"><a href="/datacenter">Data Center</a></li>
-                    <li class="dropdown"><a href="/datacenter">Log In</a></li>               
+                    <li class="dropdown"><a href="/datacenter">Log In</a></li>
                 </ul>
             </div>
             <div class="search">
@@ -132,19 +132,19 @@
             <div class="row">
                 <div class="action count">
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="7000" data-speed="3000" data-from="0">2</h1>   
+                        <h1 class="timer bold" data-to="7000" data-speed="3000" data-from="0">{{ journal_count }}</h1>
                         <h3>Journals</h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="12" data-speed="3000" data-from="0">1568</h1>   
-                        <h3>Articles</h3> 
+                        <h1 class="timer bold" data-to="12" data-speed="3000" data-from="0">{{ article_count }}</h1>
+                        <h3>Articles</h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="432" data-speed="3000" data-from="0">2759</h1> 
+                        <h1 class="timer bold" data-to="432" data-speed="3000" data-from="0">{{ author_count }}</h1>
                         <h3>Authors</h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="145" data-speed="3000" data-from="0">650</h1> 
+                        <h1 class="timer bold" data-to="145" data-speed="3000" data-from="0">{{ institution_count }}</h1>
                         <h3>Institutions</h3>
                     </div>
                 </div>
@@ -245,15 +245,15 @@
             <h2>Quick Links</h2>
             <ul>
                 <li><a href="http://pesitsouth.pes.edu/camms">CAMMS</a></li>
-                <li><a href="http://www.scimagojr.com/">SciMago</a></li>                    
+                <li><a href="http://www.scimagojr.com/">SciMago</a></li>
                 <li><a href="https://aminer.org/">Aminer</a></li>
                 <li><a href="www.slp.org.in/collnet/">CollNet</a></li>
-                <li><a href="www.instmetrics.org/">Institute of Scientometrics</a></li>               
-                <li><a href="https://sci-hub.io/">Sci-Hub</a></li>               
-                <li><a href="https://arxiv.org/">Arxive</a></li>               
-                <li><a href="www.journalmetrics.com/">JournalMetrics.com</a></li>               
-                <li><a href="www.harzing.com/resources/publish-or-perish">Publish or Perish</a></li>               
-                <li><a href="www.journalindicators.com/">CWTS Journal Indicators</a></li>               
+                <li><a href="www.instmetrics.org/">Institute of Scientometrics</a></li>
+                <li><a href="https://sci-hub.io/">Sci-Hub</a></li>
+                <li><a href="https://arxiv.org/">Arxive</a></li>
+                <li><a href="www.journalmetrics.com/">JournalMetrics.com</a></li>
+                <li><a href="www.harzing.com/resources/publish-or-perish">Publish or Perish</a></li>
+                <li><a href="www.journalindicators.com/">CWTS Journal Indicators</a></li>
             </ul>
                 <!-- <div class="testimonial bottom">
                     <h2>Testimonial</h2>
@@ -274,22 +274,22 @@
                             <blockquote>Capicola nisi flank sed minim sunt aliqua rump pancetta leberkas venison eiusmod.</blockquote>
                             <h3><a href="">- Abraham Josef</a></h3>
                         </div>
-                    </div>   
+                    </div>
                 </div>  -->
             </div>
             <div class="col-md-3 col-sm-6">
                     <div class="contact-info bottom">
                         <h2>Contacts</h2>
                         <address>
-                        E-mail: <a href="mailto:scibase@pes.edu">scibase@pes.edu</a> <br> 
+                        E-mail: <a href="mailto:scibase@pes.edu">scibase@pes.edu</a> <br>
                         </address>
 
                         <h2>Address</h2>
                         <address>
-                        PES Institute of Technology - Bangalore South Campus <br> 
-                        Hosur Road, <br> 
-                        (1km before Electronic City), <br> 
-                        Bangalore KA - 560100 <br> 
+                        PES Institute of Technology - Bangalore South Campus <br>
+                        Hosur Road, <br>
+                        (1km before Electronic City), <br>
+                        Bangalore KA - 560100 <br>
                         </address>
                     </div>
                 </div>
@@ -305,7 +305,7 @@
                         </div>
                         <div class="form-group">
                             <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Your text here"></textarea>
-                        </div>                        
+                        </div>
                         <div class="form-group">
                             <input type="submit" name="submit" class="btn btn-submit" value="Submit">
                         </div>
