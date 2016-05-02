@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Aminer query</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script>
+        var app = angular.module('scibase', []);
+        app.controller('AminerCtrl', function($scope, $http) {
+            $scope.data = [];
+            $scope.submit = function() {
+                $http({
+                    url: '/api/aminer',
+                    method: "GET",
+                    params: { index: $scope.index,
+                        publication: $scope.publication,
+                        title: $scope.title,
+                        year: $scope.year,
+                        page: $scope.page
+                    }
+                }).success( function(response) {
+                    $scope.data = response.data;
+                });
+            };
+        });
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Aminer query</h2>
+
+    <div ng-app="scibase" ng-controller="AminerCtrl">
+
+        <form ng-submit="submit()">
+
+            <div class="form-group">
+                <label>Index</label>
+                <input class="form-control" name="index" ng-model="index" type="text">
+
+                <label>Title</label>
+                <input class="form-control" name="title" ng-model="title" type="text">
+
+                <label>Year</label>
+                <input class="form-control" name="year" ng-model="year" type="text">
+
+                <label>Page</label>
+                <input class="form-control" name="page" ng-model="page" type="text">
+            </div>
+
+            <input type="submit" id="submit" class="btn btn-info" value="Submit">
+        </form>
+
+        <hr>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Index</th>
+                <th>Publication</th>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>References</th>
+                <th>Abstract</th>
+                <th>Year</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in data">
+                    <td>{{ x.index }}</td>
+                    <td>{{ x.publication }}</td>
+                    <td>{{ x.title }}</td>
+                    <td>{{ x.authors.toString(); }}</td>
+                    <td>{{ x.references.toString(); }}</td>
+                    <td>{{ x.abstract }}</td>
+                    <td>{{ x.year }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>
