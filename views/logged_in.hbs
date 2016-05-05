@@ -25,7 +25,11 @@
                         <li><a href="/team">The Team</a></li>
                         <li><a href="publications">Publications</a></li>
                         <li class="active"><a href="/datacenter">Data Center</a></li>
-                        <li class="dropdown"><a href="/login">Sign In</a></li>
+                        {{#if token}}
+                            <li class="dropdown"><a href="/logout">Log Out</a></li>
+                        {{else}}
+                            <li class="dropdown"><a href="/login">Sign In</a></li>
+                        {{/if}}
                     </ul>
                     </ul>
                 </div>
@@ -51,11 +55,14 @@
                         <div class="col-sm-12">
                             <h1 class="title">Logged In</h1>
                             {{#if token}}
-                                <p>You are now logged in with token {{token}}</p>
+                                <p>You are now logged in</p>
                             {{else}}
                                 <p>You are not logged in</p>
                             {{/if}}
                         </div>
+                        <p>Token: {{token}}</p>
+                        <p>Name: {{name}}</p>
+                        <p>Orcid Id: {{orcidId}}</p>
                     </div>
                 </div>
             </div>
@@ -67,8 +74,7 @@
         <div class="container">
             <div class="row">
                 <div class="masonery_area">
-                        
-                    </div>
+                    
                 </div>
             </div>
         </div>
