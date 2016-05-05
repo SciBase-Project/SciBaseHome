@@ -289,5 +289,9 @@ module.exports = function(io) {
 
     });
 
+    router.get('/aminerAPI', function(req, res, next) {
+        res.render('aminerAPI', {});
+    });
+
     return router;
 };
