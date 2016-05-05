@@ -254,12 +254,12 @@ module.exports = function(io) {
     });
 
     router.get('/login', function(req, res, next) {
-        res.redirect('https://orcid.org/oauth/authorize?client_id=APP-7V6NPHD04FV07E8W&response_type=code&scope=/authenticate&redirect_uri=http://localhost:3000/loged_in');
+        res.redirect('https://orcid.org/oauth/authorize?client_id=APP-7V6NPHD04FV07E8W&response_type=code&scope=/authenticate&redirect_uri=http://54.201.10.92:3000/loged_in');
     });
 
     router.get('/loged_in', function(req, res, next) {
         var code = req.query.code;
-        var dataString = 'client_id=APP-7V6NPHD04FV07E8W&client_secret=b6f8f45a-4c36-4f7a-b9ae-92f47a647613&grant_type=authorization_code&redirect_uri=http://localhost:3000/loged_in&code=' + code;
+        var dataString = 'client_id=APP-7V6NPHD04FV07E8W&client_secret=b6f8f45a-4c36-4f7a-b9ae-92f47a647613&grant_type=authorization_code&redirect_uri=http://54.201.10.92:3000/loged_in&code=' + code;
         console.log(dataString);
         var options = {
             url: 'https://orcid.org/oauth/token',
