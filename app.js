@@ -6,6 +6,16 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+try {
+  mongoose.connect('mongodb://localhost/scibase');
+} catch (err) {
+  throw new Error("Could not connect to database");
+}
+
+// add aminer schema
+require('./models/AminerSchema');
+
 
 var app = express();
 var io = socket_io(); // Socket.io
@@ -26,10 +36,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/apidoc',express.static(path.join(__dirname, 'doc/doc')));
 app.use('/downloads',express.static(path.join(__dirname, 'files/datasets')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+// api - amier
+app.use('/api/aminer', require('./routes/api/aminer'));
+app.get('/aminer.html', function (req, res) { res.sendFile( __dirname + "/views/" + "aminer.html" ); });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
