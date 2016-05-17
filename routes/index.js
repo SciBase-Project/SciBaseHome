@@ -6,7 +6,7 @@ module.exports = function(io) {
     var path = require("path");
     var util = require("../lib/util");
 
-    // this is a new comment
+    // this is a new comment here
 
     var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
     // var NEO4J_API_URL = "http://" + process.env['NEO4J_HOST'] + ":7474/db/data/transaction/commit";
