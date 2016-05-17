@@ -76,7 +76,7 @@
                 <div class="masonery_area">
 
                     {{#each datasets}}
-                        <div class="col-md-3 col-sm-4">
+                        <div class="col-md-3 col-sm-4 data-box">
                             <div class="single-blog two-column">
                                 <div class="post-thumb">
                                     <!-- <a href="blogdetails.html"><img src="images/blog/masonary/1.jpg" class="img-responsive" alt=""></a> -->
@@ -88,9 +88,9 @@
                                     <ul class="nav nav-justified post-nav">
                                         <!-- <li><a href="#"><i class="fa fa-tag"></i>Creative</a></li> -->
                                     </ul>
-                                    <h2 class="post-title bold"><a href="blogdetails.html">{{title}}</a></h2>
+                                    <h2 class="post-title bold data-box-title">{{title}}</h2>
                                     <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
-                                    <p>
+                                    <p class="data-box-description">
                                         <!-- Duis autem vel eum iriure dolor in hendrerit in blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber -->
                                         {{description}}
                                     </p>
@@ -108,17 +108,38 @@
                     {{/each}}
 
                     
-                    <div class="col-md-3 col-sm-4">
+                    <div class="col-md-3 col-sm-4 data-box">
                         <div class="single-blog two-column">
                             <div class="post-content overflow">
                                 <ul class="nav nav-justified post-nav">
                                     <!-- <li><a href="#"><i class="fa fa-tag"></i>Creative</a></li> -->
                                     <!-- <li><a href="#"><i class="fa fa-clock-o"></i>14 Feb</a></li> -->
                                 </ul>
-                                <h2 class="post-title bold"><a href="blogdetails.html">Dynamic Generator</a></h2>
+                                <h2 class="post-title bold data-box-title">Dynamic Generator</h2>
                                 <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
-                                <p>Now you can download a dynamic dataset from our database.</p>
+                                <p class="data-box-description">Now you can download a dynamic dataset from our database.</p>
                                 <a href="/custom_datasets" class="read-more">Click here!</a>
+                                <div class="post-bottom overflow">
+                                    <!-- <ul class="nav nav-justified post-nav">
+                                        <li><a href="#"><i class="fa fa-heart"></i>32 Love</a></li>
+                                        <li><a href="#"><i class="fa fa-comments"></i>3 Comments</a></li>
+                                    </ul> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-4 data-box">
+                        <div class="single-blog two-column">
+                            <div class="post-content overflow">
+                                <ul class="nav nav-justified post-nav">
+                                    <!-- <li><a href="#"><i class="fa fa-tag"></i>Creative</a></li> -->
+                                    <!-- <li><a href="#"><i class="fa fa-clock-o"></i>14 Feb</a></li> -->
+                                </ul>
+                                <h2 class="post-title bold data-box-title">Amnier API Details</h2>
+                                <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
+                                <p class="data-box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                <a href="/aminerAPI" class="read-more">Click here!</a>
                                 <div class="post-bottom overflow">
                                     <!-- <ul class="nav nav-justified post-nav">
                                         <li><a href="#"><i class="fa fa-heart"></i>32 Love</a></li>

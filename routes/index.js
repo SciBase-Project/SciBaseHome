@@ -17,7 +17,6 @@ module.exports = function(io) {
     var NEO4J_PASS = "scibase";
 
 
-
     /* GET home page. */
     router.get('/', function(req, res, next) {
         util.getStats(function(result) {
@@ -258,37 +257,52 @@ module.exports = function(io) {
     });
 
     router.get('/login', function(req, res, next) {
-        res.redirect('https://orcid.org/oauth/authorize?client_id=APP-7V6NPHD04FV07E8W&response_type=code&scope=/authenticate&redirect_uri=http://localhost:3000/loged_in');
+        res.redirect('https://orcid.org/oauth/authorize?client_id=APP-7V6NPHD04FV07E8W&response_type=code&scope=/authenticate&redirect_uri=http://54.201.10.92:3000/loged_in');
     });
 
     router.get('/loged_in', function(req, res, next) {
-        // var code = req.query.code;
-        // var headers = {
-        //     'Accept': 'application/json'
-        // };
+        var code = req.query.code;
+        var dataString = 'client_id=APP-7V6NPHD04FV07E8W&client_secret=b6f8f45a-4c36-4f7a-b9ae-92f47a647613&grant_type=authorization_code&redirect_uri=http://54.201.10.92:3000/loged_in&code=' + code;
+        console.log(dataString);
+        var options = {
+            url: 'https://orcid.org/oauth/token',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: dataString,
+        };
 
-        // var dataString = 'client_id=APP-7V6NPHD04FV07E8W&client_secret=b6f8f45a-4c36-4f7a-b9ae-92f47a647613&grant_type=authorization_code&redirect_uri=http://localhost:3000/loged_in&code=' + code;
+        var result = "not sure";
+        var name = "default Value";
+        var orcidId = "default Value";
+        console.log("insidefunc");
+        function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                body = JSON.parse(body);
+                name = body.name;
+                orcidId = body.orcid;
+                console.log("success");
+            } else {
+                console.log("failure");
+            }
+            response1 = JSON.stringify(response);
+            response2 = JSON.stringify(body);
 
-        // var options = {
-        //     url: 'https://orcid.org/oauth/token',
-        //     method: 'POST',
-        //     headers: headers,
-        //     body: dataString
-        // };
+            res.render('logged_in', {
+                token: req.query.code,
+                name: body.name,
+                orcidId: body.orcid
+            });
+        }
+        request(options, callback);
+        
 
-        // function callback(error, response, body) {
-        //     if (!error && response.statusCode == 200) {
-        //         console.log(body);
-        //         console.log("success");
-        //     }
-        // }
+    });
 
-        // request(options, callback);
-
-        res.render('logged_in', {
-            token: req.query.code
-        });
-
+    router.get('/aminerAPI', function(req, res, next) {
+        res.render('aminerAPI', {});
     });
 
     return router;
