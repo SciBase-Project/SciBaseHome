@@ -110,4 +110,20 @@ jQuery(function($) {'use strict';
 		});
 	}
 
+	$(".aminer-button").click(function(){
+		$("#blog .container .row .data-box").removeClass("none").removeClass("show").addClass("none");
+		$("#blog .container .row .aminer-dataset").removeClass("none").addClass("show");
+	});
+	$(".scimago-button").click(function(){
+		$("#blog .container .row .data-box").removeClass("none").removeClass("show").addClass("none");
+		$("#blog .container .row .scimago-dataset").removeClass("none").addClass("show");
+	});
+	$(".dynamic-button").click(function(){
+		$("#blog .container .row .data-box").removeClass("none").removeClass("show").addClass("none");
+		$("#blog .container .row .dynamic-dataset").removeClass("none").addClass("show");
+	});
+	$(".extra-button").click(function(){
+		$("#blog .container .row .data-box").removeClass("none").removeClass("show").addClass("none");
+		$("#blog .container .row .extra-dataset").removeClass("none").addClass("show");
+	});
 });

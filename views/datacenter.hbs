@@ -73,10 +73,15 @@
     <section id="blog" class="padding-top padding-bottom">
         <div class="container">
             <div class="row">
+                <div class="buttons" style="text-align: center;"> 
+                    <button class="aminer-button">AMiner</button>
+                    <button class="scimago-button">Scimago</button>
+                    <button class="dynamic-button">Dynamic Generator</button>
+                    <button class="extra-button">Extra</button>
+                </div>
                 <div class="masonery_area">
-
                     {{#each datasets}}
-                        <div class="col-md-3 col-sm-4 data-box">
+                        <div class="col-md-3 col-sm-4 data-box {{category}} none">
                             <div class="single-blog two-column">
                                 <div class="post-thumb">
                                     <!-- <a href="blogdetails.html"><img src="images/blog/masonary/1.jpg" class="img-responsive" alt=""></a> -->
@@ -108,7 +113,7 @@
                     {{/each}}
 
                     
-                    <div class="col-md-3 col-sm-4 data-box">
+                    <div class="col-md-3 col-sm-4 data-box dynamic-dataset none">
                         <div class="single-blog two-column">
                             <div class="post-content overflow">
                                 <ul class="nav nav-justified post-nav">
@@ -129,7 +134,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3 col-sm-4 data-box">
+                    <div class="col-md-3 col-sm-4 data-box extra-dataset none">
                         <div class="single-blog two-column">
                             <div class="post-content overflow">
                                 <ul class="nav nav-justified post-nav">

@@ -45,35 +45,40 @@ module.exports = function(io) {
             download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
             internal: true,
             format: "xlsx",
-            size: "external"
+            size: "external",
+            category: "scimago-dataset"
         }, {
             title: "Scimago Dataset (Archive at the time of January 2010)",
             description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
             download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
             internal: true,
             format: "xlsx",
-            size: "external"
+            size: "external",
+            category: "scimago-dataset"
         }, {
             title: "AMiner Paper",
             description: "This file saves the paper information and the citation network.",
             download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
             internal: false,
             format: "csv",
-            size: "509 MB"
+            size: "509 MB",
+            category: "aminer-dataset"
         }, {
             title: "AMiner Author",
             description: "This file saves the author information.",
             download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
             internal: false,
             format: "csv",
-            size: "167 MB"
+            size: "167 MB",
+            category: "aminer-dataset"
         }, {
             title: "AMiner Co-author",
             description: "This file saves the collaboration network among the authors in the second file.",
             download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
             internal: false,
             format: "csv",
-            size: "31.5 MB"
+            size: "31.5 MB",
+            category: "aminer-dataset"
         }, ];
 
         res.render('datacenter', {

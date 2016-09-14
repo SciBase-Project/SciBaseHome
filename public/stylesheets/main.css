@@ -1792,6 +1792,29 @@ Blog with right sidebar
   margin-top:15px;
 }
 
+#blog .container .row .buttons button {
+  padding: 15px;
+  width: 200px;
+  margin: 0px 30px;
+  background: rgb(0, 183, 255) none repeat scroll 0% 0%;
+  border: 0px none;
+  color: white;
+}
+
+#blog .container .row .none {
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  transition: all 0.5s;
+  padding: 0;
+}
+
+#blog .container .row .show {
+  transition: all 0.5s;
+  height: 300px;
+  overflow: hidden;
+}
+
 /* Audio CSS */
 
 .audiojs{
