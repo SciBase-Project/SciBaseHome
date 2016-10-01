@@ -122,8 +122,8 @@ jQuery(function($) {'use strict';
 		$("#blog .container .row .data-box").removeClass("none").removeClass("show").addClass("none");
 		$("#blog .container .row .dynamic-dataset").removeClass("none").addClass("show");
 	});
-	$(".extra-button").click(function(){
+	$(".scibase-button").click(function(){
 		$("#blog .container .row .data-box").removeClass("none").removeClass("show").addClass("none");
-		$("#blog .container .row .extra-dataset").removeClass("none").addClass("show");
+		$("#blog .container .row .scibase-dataset").removeClass("none").addClass("show");
 	});
 });

@@ -40,49 +40,87 @@ module.exports = function(io) {
     /* GET home page. */
     router.get('/datacenter', function(req, res, next) {
         var dataset_list = [{
-            title: "Scimago Dataset (1999 - 2014)",
-            description: " this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
-            download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
-            internal: true,
-            format: "xlsx",
-            size: "external",
-            category: "scimago-dataset"
-        }, {
-            title: "Scimago Dataset (Archive at the time of January 2010)",
-            description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
-            download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
-            internal: true,
-            format: "xlsx",
-            size: "external",
-            category: "scimago-dataset"
-        }, {
-            title: "AMiner Paper",
-            description: "This file saves the paper information and the citation network.",
-            download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
-            internal: false,
-            format: "csv",
-            size: "509 MB",
-            category: "aminer-dataset"
-        }, {
-            title: "AMiner Author",
-            description: "This file saves the author information.",
-            download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
-            internal: false,
-            format: "csv",
-            size: "167 MB",
-            category: "aminer-dataset"
-        }, {
-            title: "AMiner Co-author",
-            description: "This file saves the collaboration network among the authors in the second file.",
-            download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
-            internal: false,
-            format: "csv",
-            size: "31.5 MB",
-            category: "aminer-dataset"
-        }, ];
+                title: "Scimago Dataset (1999 - 2014)",
+                description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
+                download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
+                internal: true,
+                format: "XLSX",
+                size: "16.1 MB",
+                category: "scimago-dataset"
+            }, {
+                title: "Scimago Dataset (Archive at the time of January 2010)",
+                description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
+                download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
+                internal: true,
+                format: "XLSX",
+                size: "2.8 MB",
+                category: "scimago-dataset"
+            }, {
+                title: "AMiner Paper",
+                description: "This file saves the paper information and the citation network.",
+                download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
+                internal: false,
+                format: "CSV",
+                size: "509 MB",
+                category: "aminer-dataset"
+            }, {
+                title: "AMiner Author",
+                description: "This file saves the author information.",
+                download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
+                internal: false,
+                format: "CSV",
+                size: "167 MB",
+                category: "aminer-dataset"
+            }, {
+                title: "AMiner Co-author",
+                description: "This file saves the collaboration network among the authors in the second file.",
+                download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
+                internal: false,
+                format: "CSV",
+                size: "31.5 MB",
+                category: "aminer-dataset"
+            }, {
+                title: "ACM Journals",
+                description: "Dataset of ACM journals.",
+                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
+                internal: false,
+                format: "JSON",
+                size: "60 MB",
+                category: "scibase-dataset"
+            }, {
+                title: "Indian Journals",
+                description: "Dataset of Indian journals.",
+                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
+                internal: false,
+                format: "JSON",
+                size: "118 KB",
+                category: "scibase-dataset"
+            }, {
+                title: "International Journals",
+                description: "Dataset of International journals.",
+                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
+                internal: false,
+                format: "JSON",
+                size: "5.3 MB",
+                category: "scibase-dataset"
+            }, {
+                title: "Scholastic Indices",
+                description: "Scholastic indices.",
+                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
+                internal: false,
+                format: "CSV",
+                size: "4 KB",
+                category: "scibase-dataset"
+            }, 
+        ];
 
         res.render('datacenter', {
-            datasets: dataset_list
+            datasets: dataset_list,
+            helpers: {
+                toUpperCase: function(str) {
+                    return str.toUpperCase();
+                }
+            }
         });
     });
 
