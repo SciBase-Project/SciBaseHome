@@ -18,3 +18,30 @@ a {
 .data-box-description {
     height: 120px;
 }
+.zoomContainer .col-sm-4, .col-sm-6{
+
+	margin-top:20px;
+	
+}
+.content-holder{
+	margin:20px;
+   	padding:10px;
+   	border: 1px solid #00aeef;
+   	box-shadow: 0px 1px 1px #00afef;
+  	overflow: hidden;
+  	min-height:230px;
+  	width:280px;
+}
+.content-holder h3{
+	font-size:24px;
+}
+.content-holder p{
+	font-size:14px;
+}
+.slideshowNavigation .glyphicon{
+	font-size:24px;
+	font-weight: bold;
+}
+.slideshowNavigation button{
+	margin:20px;
+}

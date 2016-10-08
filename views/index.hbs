@@ -133,19 +133,19 @@
             <div class="row">
                 <div class="action count">
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="7000" data-speed="3000" data-from="0">{{ journal_count }}</h1>
+                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ journal_count }}</h1>
                         <h3>Journals</h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="12" data-speed="3000" data-from="0">{{ article_count }}</h1>
+                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ article_count }}</h1>
                         <h3>Articles</h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="432" data-speed="3000" data-from="0">{{ author_count }}</h1>
+                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ author_count }}</h1>
                         <h3>Authors</h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-to="145" data-speed="3000" data-from="0">{{ institution_count }}</h1>
+                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ institution_count }}</h1>
                         <h3>Institutions</h3>
                     </div>
                 </div>
@@ -155,8 +155,68 @@
 </section>
 <!--/#action-->
 
+    <div class="col-sm-12" style="margin:100px 0px;">
+            <div class="zoomViewport slideshowContainer">
+                <div class="zoomContainer text-center row">
+                    <div class="col-sm-4 container-fluid">
+                            <div class="content-holder zoomTarget wow slideInLeft" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin:0 Auto;">
+                                <h3>NLIQ</h3>
+                                <p>Non-local influence is the number of citations made from one paper in a given journal, to a number of different journals - divided by the total number of citations. NLIQ = 0 implies there is no diffusion.</p>
+
+                            </div>
+                        
+                    </div>
+                     <div class="col-sm-4 container-fluid">
+                                                  
+                            <div class="content-holder zoomTarget wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin:0 Auto;">
+                                 <h3>%IC</h3>
+                                <p>International collaboration accounts for the articles that have been produced by researchers from several countries. Every author's country is matched with the country of publishing journal. Ratio is calculated on the basis of weights assigned to different combination of authors affiliation and origin of the publishing journal.</p>
+                            
+                            </div>
+                        
+                    </div>
+                     <div class="col-sm-4 container-fluid">
+                                                  
+                            <div class="content-holder zoomTarget wow slideInRight" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin:0 Auto;">
+                               <h3>OCQ</h3>
+                               <p>Other-Citations Quotient is 1- (self-citations/total citations); where  self-citations of a paper S is considered a self-citation of P, if P and S share at least one author. Total citations is the number of citations of a journal.</p>
+                            </div>
+                        
+                    </div>
+                     <div class="col-sm-6 container-fluid">
+                                                  
+                            <div class="content-holder zoomTarget wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin:0 Auto;">
+                                <h3>SNIP</h3>
+                                <p>SNIP is the ratio of a source's average citation count per paper, and the citation potential of its subject field</p>
+
+                            
+                            </div>
+                        
+                    </div>
+                    <div class="col-sm-6 container-fluid">
+                                                 
+                            <div class="content-holder zoomTarget wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms" style="margin:0 Auto;">
+                                <h3>COPIOUS CITATIONS</h3>
+                                <p>Copious citations is defined as, if between two authors A and B, say; A cites all published papers of B and vice-versa.</p>
+                            
+                            </div>
+                        
+                    </div>
+                        <div class="clearer"></div>
+                </div>
+            </div>
+
+            <div class="slideshowNavigation clearfix col-sm-12 text-center">
+            <center>
+                <button class="zoomButton btn btn-lg btn-primary" data-type="prev" data-root=".slideshowContainer"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                <button class="zoomButton btn btn-lg btn-primary" data-type="next" data-root=".slideshowContainer"><span class="glyphicon glyphicon-chevron-right"></span></button>
+            </center>
+            </div>
+    </div>
+    <br>
+
 <section id="features">
-    <div class="container">
+    <div class="container col-sm-12">
         <div class="row">
             <div class="single-features">
                 <div class="col-sm-5 wow fadeInLeft" data-wow-duration="500ms" data-wow-delay="300ms">
@@ -321,3 +381,5 @@
         </div>
     </div>
 </footer>
+
+
