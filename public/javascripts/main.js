@@ -50,11 +50,13 @@ jQuery(function($) {'use strict';
 
 	});
 
-
 	$('.timer').each(count);
 	function count(options) {
 		var $this = $(this);
-		options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+		//options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+		options = {
+			to : $this.text()
+		};
 		$this.countTo(options);
 	}
 		
