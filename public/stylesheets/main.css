@@ -2769,3 +2769,6 @@ span.stButton_gradient,
   border-radius: 100%;
   margin: 10px 0;
 }
+.vertical-center .count h3 span{
+  color:#000;
+}

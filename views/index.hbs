@@ -134,11 +134,11 @@
                 <div class="action count">
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <h1 class="timer bold" data-speed="3000" data-from="0">{{ journal_count }}</h1>
-                        <h3>Journals</h3>
+                        <h3><a href="{{ JournalCsvUrl }}" title="Download CSV" download><span>Journals<span></a></h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <h1 class="timer bold" data-speed="3000" data-from="0">{{ article_count }}</h1>
-                        <h3>Articles</h3>
+                        <h3><a href="{{ ArticleCsvUrl }}" title = "Download CSV" download><span>Articles<span></a></h3>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
                         <h1 class="timer bold" data-speed="3000" data-from="0">{{ author_count }}</h1>

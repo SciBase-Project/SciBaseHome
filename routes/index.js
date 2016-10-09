@@ -20,10 +20,16 @@ module.exports = function(io) {
     /* GET home page. */
     router.get('/', function(req, res, next) {
         util.getStats(function(result) {
+           // var json_pre = '[{"Id":1,"UserName":"Sam Smith"},{"Id":2,"UserName":"Fred Frankly"},{"Id":1,"UserName":"Zachary Zupers"}]';
             console.log("Result: ",result);
             result.title = "SciBase";
+            result.JournalCsvUrl = "files/papers/Journals.csv";
+            result.ArticleCsvUrl = "files/papers/Articles.csv";
+            util.generateArticleCsv();
+            util.generateJournalCsv();
             res.render('index', result);
-        });
+             
+            });
     });
 
     router.get('/team', function(req, res, next) {
