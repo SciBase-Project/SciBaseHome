@@ -23,10 +23,17 @@ module.exports = function(io) {
            // var json_pre = '[{"Id":1,"UserName":"Sam Smith"},{"Id":2,"UserName":"Fred Frankly"},{"Id":1,"UserName":"Zachary Zupers"}]';
             console.log("Result: ",result);
             result.title = "SciBase";
+
             result.JournalCsvUrl = "files/papers/Journals.csv";
             result.ArticleCsvUrl = "files/papers/Articles.csv";
+            result.AuthorCsvUrl = "files/papers/Authors.csv";
+            result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+
             util.generateArticleCsv();
             util.generateJournalCsv();
+            util.generateAuthorCsv();
+            util.generateInstitutionCsv();
+
             res.render('index', result);
              
             });
