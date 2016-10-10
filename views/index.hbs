@@ -133,20 +133,28 @@
             <div class="row">
                 <div class="action count">
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ journal_count }}</h1>
-                        <h3><a href="{{ JournalCsvUrl }}" title="Download CSV" download><span>Journals<span></a></h3>
+                        <a href="{{ JournalCsvUrl }}" title="Download CSV" download>
+                            <h1 class="timer bold" data-speed="3000" data-from="0">{{ journal_count }}</h1>
+                            <h3><span>Journals</span></h3>
+                        </a>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ article_count }}</h1>
-                        <h3><a href="{{ ArticleCsvUrl }}" title = "Download CSV" download><span>Articles<span></a></h3>
+                        <a href="{{ ArticleCsvUrl }}" title = "Download CSV" download>
+                            <h1 class="timer bold" data-speed="3000" data-from="0">{{ article_count }}</h1>
+                            <h3><span>Articles</span></h3>
+                        </a>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ author_count }}</h1>
-                        <h3><a href="{{ AuthorCsvUrl }}" title = "Download CSV" download><span>Authors<span></a></h3>
+                        <a href="{{ AuthorCsvUrl }}" title = "Download CSV" download>
+                            <h1 class="timer bold" data-speed="3000" data-from="0">{{ author_count }}</h1>
+                            <h3><span>Authors</span></h3>
+                        </a>
                     </div>
                     <div class="col-sm-3 text-center wow bounceIn" data-wow-duration="1000ms" data-wow-delay="300ms">
-                        <h1 class="timer bold" data-speed="3000" data-from="0">{{ institution_count }}</h1>
-                        <h3><a href="{{ InstitutionCsvUrl }}" title = "Download CSV" download><span>Institutions<span></a></h3>
+                        <a href="{{ InstitutionCsvUrl }}" title = "Download CSV" download>
+                            <h1 class="timer bold" data-speed="3000" data-from="0">{{ institution_count }}</h1>
+                            <h3><span>Institutions</span></h3>
+                        </a>
                     </div>
                 </div>
             </div>
