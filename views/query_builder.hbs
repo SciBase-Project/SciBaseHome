@@ -224,19 +224,13 @@
                         <h2>Select columns you are interested in</h2>
 
                         <select id="columns-input" multiple="" size="8">
-                          <option>Article - Title</option>
-                          <option>Article - Abstract</option>
-                          <option>Article - DOI</option>
-                          <option>Author - Full Name</option>
-                          <option>Author - First Name</option>
-                          <option>Author - Last Name</option>
-                          <option>Author - Middle Name</option>
-                          <!-- <option>Author - Institute</option> -->
-                          <!-- <option>Author - Department</option> -->
-                          <option>Journal - Name</option>
-                          <!-- <option>Paper - Author Name</option> -->
-                          <!-- <option>Paper - Journal</option> -->
+                        
+                          {{#each dataModel}}
+                            <option>{{node}}->{{key}}</option>
+                          {{/each}}
+                        
                         </select>
+
                         <div class="row">
                             <a href="#" id="download-button" class="btn btn-common">Generate</a>
                         </div>
