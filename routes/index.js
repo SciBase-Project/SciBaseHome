@@ -94,7 +94,7 @@ module.exports = function(io) {
                 category: "aminer-dataset"
             }, {
                 title: "ACM Journals",
-                description: "Dataset of ACM journals.",
+                description: "This dataset consists of 40 ACM Journals with all the Articles and related information.",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
                 internal: false,
                 format: "JSON",
@@ -102,7 +102,7 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             }, {
                 title: "Indian Journals",
-                description: "Dataset of Indian journals.",
+                description: "This dataset consists of a fewer number of Indian Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
                 internal: false,
                 format: "JSON",
@@ -110,7 +110,7 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             }, {
                 title: "International Journals",
-                description: "Dataset of International journals.",
+                description: "This dataset consists of a International Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
                 internal: false,
                 format: "JSON",
@@ -118,13 +118,21 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             }, {
                 title: "Scholastic Indices",
-                description: "Scholastic indices.",
+                description: "This is a dataset which has the scholastic indices such as Other Citation Count, Non Local Influence Quotient, SNIP and International Collaboration Ratio for the 40 ACM Journals.",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
                 internal: false,
                 format: "CSV",
                 size: "4 KB",
                 category: "scibase-dataset"
-            }, 
+            }, {
+                title: "Terence Tao Dataset",
+                description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Terence Tao, an Australian-American mathematician and a co-recipient of the 2006 Fields Medal and the 2014 Breakthrough Prize in Mathematics.",
+                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                internal: false,
+                format: "JSON",
+                size: "137 MB",
+                category: "scibase-dataset"
+            },
         ];
 
         res.render('datacenter', {
