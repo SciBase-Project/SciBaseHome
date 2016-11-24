@@ -2777,3 +2777,42 @@ span.stButton_gradient,
 .vertical-center .count h3 span{
   color:#000;
 }
+
+/*Article_Search Page*/
+.test-select{
+  max-width: 80%;
+  min-width: 80%;
+}
+.selection-row{
+  background-color:rgb(236,236,236);
+  border-top:2px SOLID rgb(0, 183, 255);
+}
+#my-table{
+  border:2px SOLID #ccc;
+  border-radius:2px;
+  background-color: #fff;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  font-size:14px;
+}
+#my-table td, th{
+  padding:10px;
+  font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 22px;
+    color: #000;
+}
+.table-row{
+  margin-top:20px;
+  background-color:rgb(249, 249, 249);
+}
+.dynatable-search > input {
+  border: 2px solid rgb(226,226,226);
+  border-radius: 4px;
+}
+.dynatable-per-page-select{
+  border: 2px solid rgb(226,226,226);
+  border-radius: 4px; 
+}
