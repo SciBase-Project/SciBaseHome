@@ -449,6 +449,7 @@ module.exports = function(io) {
             console.log("A user connected");
                 socket.on('filterSearch_request', function(filter) {
                     console.log("Socket connected");
+                    console.log(filter);
                     util.search_article(filter, function(filterResult){
                         //console.log("filterResult", filterResult);
                         socket.emit("filterSearch_response", filterResult);

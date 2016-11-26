@@ -56,65 +56,68 @@
     <!--/#action-->
     <section id="article-search">
 
-    <div class="row selection-row">
-        <div class="col-sm-4">
-            <select class="test-select" id="journal">
-                <option value = "all" selected>All Journals</option>
-                {{#each dataset.journal_data}}
-                    <option value="{{name}}"> {{name}} </option>
-                {{else}}
-                    <option value="0">No data</option>
-                {{/each}}
-            </select>
+        <div class="row selection-row"  >
+            <div class = "container">
+                <div class="col-sm-4">
+                    <select class="test-select" id="journal">
+                        <option value = "all" selected>All Journals</option>
+                        {{#each dataset.journal_data}}
+                            <option value="{{name}}"> {{name}} </option>
+                        {{else}}
+                            <option value="0">No data</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="test-select" id="author">
+                        <option value = "all" selected>All Authors</option>
+                        {{#each dataset.author_data}}
+                            <option value="{{name}}"> {{name}} </option>
+                        {{else}}
+                            <option value="0">No data</option>
+                        {{/each}}
+                    </select>
+                </div> 
+                <div class="col-sm-4">
+                    <select class="test-select" id="country">
+                        <option value = "all" selected>All Countries</option>
+                        {{#each dataset.country_data}}
+                            <option value="{{name}}"> {{name}} </option>
+                        {{else}}
+                            <option value="0">No data</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-4">
-            <select class="test-select" id="author">
-                <option value = "all" selected>All Authors</option>
-                {{#each dataset.author_data}}
-                    <option value="{{name}}"> {{name}} </option>
-                {{else}}
-                    <option value="0">No data</option>
-                {{/each}}
-            </select>
-        </div> 
-        <div class="col-sm-4">
-            <select class="test-select" id="country">
-                <option value = "all" selected>All Countries</option>
-                {{#each dataset.country_data}}
-                    <option value="{{name}}"> {{name}} </option>
-                {{else}}
-                    <option value="0">No data</option>
-                {{/each}}
-            </select>
-        </div>
-    </div>
 
-    <div class="row table-row">
-        <div class="container">
-            <table id="my-table" class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>Title</th>
-                    <th>DOI</th>
-                    <th>Month</th>
-                    <th>Year</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                    {{#each dataset.article_data}}
+      <!--  <div class="loading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div> -->
+        <div class="row table-row">
+            <div class="container">
+                <table id="article-table" class="table table-hover">
+                    <thead>
                       <tr>
-                        <td>{{title}}</td>
-                        <td>{{doi}}</td>
-                        <td>{{month}}</td>
-                        <td>{{year}}</td>
+                        <th>TITLE</th>
+                        <th>DOI</th>
+                        <th>MONTH</th>
+                        <th>YEAR</th>
                         
                       </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {{#each dataset.article_data}}
+                          <tr>
+                            <td>{{title}}</td>
+                            <td>{{doi}}</td>
+                            <td>{{month}}</td>
+                            <td>{{year}}</td>
+                            
+                          </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
     </section>
     <!-- article search section ends-->
     <script src="/socket.io/socket.io.js"></script>
@@ -126,13 +129,13 @@
                 theme:"bootstrap"
             });
 
-            $('#my-table').dynatable();
+            $('#article-table').dynatable();
 
             $(".test-select").on("change", function(e){
                 var filterSearch = {};
                 filterSearch.journal = $("#journal").val();
                 filterSearch.author = $("#author").val();
-                filterSearch.country = $("country").val();
+                filterSearch.country = $("#country").val();
                 console.log("here");
                 socket.emit('filterSearch_request', filterSearch);
                 console.log("emmited");
@@ -140,7 +143,18 @@
             });
             socket.on('filterSearch_response', function(filterResult){
                 console.log("responded");
-                var dynatable = $('#my-table').dynatable({
+
+                var select2AuthorVal = $("#author").val();
+                var select2AuthorList= '<option value="all">All Authors</option>';
+                $.each(filterResult.author_data, function(i, item){
+                    select2AuthorList += '<option value="'+item.name+'"';
+                    select2AuthorList += (item.name == select2AuthorVal)?'selected':' ';
+                    select2AuthorList += '>'+item.name+'</option>';
+                });
+                $("#author").html(" ").promise().done(function(){
+                    $("#author").html(select2AuthorList);
+                });
+                var dynatable = $('#article-table').dynatable({
                     dataset : {
                         records : filterResult.article_data
                     }
