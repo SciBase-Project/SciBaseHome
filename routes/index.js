@@ -35,7 +35,7 @@ module.exports = function(io) {
             util.generateInstitutionCsv();
 
             res.render('index', result);
-             
+
             });
     });
 
@@ -124,7 +124,7 @@ module.exports = function(io) {
                 format: "CSV",
                 size: "4 KB",
                 category: "scibase-dataset"
-            }, 
+            },
         ];
 
         res.render('datacenter', {
@@ -353,7 +353,7 @@ module.exports = function(io) {
             });
         }
         request(options, callback);
-        
+
 
     });
 
