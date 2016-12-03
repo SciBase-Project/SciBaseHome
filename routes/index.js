@@ -20,7 +20,7 @@ module.exports = function(io) {
     /* GET home page. */
     router.get('/', function(req, res, next) {
         util.getStats(function(result) {
-           // var json_pre = '[{"Id":1,"UserName":"Sam Smith"},{"Id":2,"UserName":"Fred Frankly"},{"Id":1,"UserName":"Zachary Zupers"}]';
+
             console.log("Result: ",result);
             result.title = "SciBase";
 
@@ -94,7 +94,7 @@ module.exports = function(io) {
                 category: "aminer-dataset"
             }, {
                 title: "ACM Journals",
-                description: "Dataset of ACM journals.",
+                description: "This dataset consists of 40 ACM Journals with all the Articles and related information.",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
                 internal: false,
                 format: "JSON",
@@ -102,7 +102,7 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             }, {
                 title: "Indian Journals",
-                description: "Dataset of Indian journals.",
+                description: "This dataset consists of a fewer number of Indian Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
                 internal: false,
                 format: "JSON",
@@ -110,7 +110,7 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             }, {
                 title: "International Journals",
-                description: "Dataset of International journals.",
+                description: "This dataset consists of a International Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
                 internal: false,
                 format: "JSON",
@@ -118,12 +118,21 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             }, {
                 title: "Scholastic Indices",
-                description: "Scholastic indices.",
+                description: "This is a dataset which has the scholastic indices such as Other Citation Count, Non Local Influence Quotient, SNIP and International Collaboration Ratio for the 40 ACM Journals.",
                 download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
                 internal: false,
                 format: "CSV",
                 size: "4 KB",
                 category: "scibase-dataset"
+            }, {
+                title: "Terence Tao Dataset",
+                description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Terence Tao, an Australian-American mathematician and a co-recipient of the 2006 Fields Medal and the 2014 Breakthrough Prize in Mathematics.",
+                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                internal: false,
+                format: "JSON",
+                size: "137 MB",
+                category: "scibase-dataset"
+
             },
         ];
 
@@ -203,113 +212,175 @@ module.exports = function(io) {
     });
 
     router.get('/query_builder', function(req, res, next) {
+        util.getNodes(function(result){
+
+        
 
         // socket.io events
         io.on("connection", function(socket) {
             console.log("A user connected");
+                   
+       //console.log("this");
+        //console.log(result);
             /**
              * When a user enters a Cypher query, the data is sent with query_request
              * event of socket.
              */
             socket.on('query_builder__request', function(cols) {
+                //console.log(result);
                 var column_names = cols;
                 var query;
-                var column_mappings =  {
-                    "Article - Title": "ar.title",
-                    "Article - Abstract" : "ar.abstract",
-                    "Article - DOI" : "ar.doi",
-                    "Author - Full Name" : "a.full_name",
-                    "Author - First Name" : "a.first_name",
-                    "Author - Last Name" : "a.last_name",
-                    "Author - Middle Name" : "a.middle_name",
-                    "Author - Profile Link" : "a.link",
-                    "Journal - Name" : "j.name"
-                    // ...
-                };
 
-                console.log(column_mappings["Article - Title"]);
+                var statement = String(column_names).split(/[->,]+/);
+               // console.log(statement);
 
-                var return_param = "";
-                for (var i=0; i < column_names.length; i++) {
-                    return_param += column_mappings[column_names[i]];
-                    if(i < column_names.length - 1)
-                        return_param += ",";
+
+                var temp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                var nodesRec = [];
+                var indexOfNode = -1;
+                var return_param="", matching_param="";
+                var jsonRelationship = [];
+
+                for(var i =0; i< statement.length;i++){
+
+                    if(i%2 !=0){
+                        indexOfNode = (nodesRec.indexOf(statement[i-1]) + 1);
+                        return_param += ( nodesRec[indexOfNode]+".`"+statement[i]+"`" );
+                        if(i < statement.length - 1)
+                            return_param += ","; 
+                    }else{
+                        if(nodesRec.indexOf(statement[i]) == -1){
+                            nodesRec.push(statement[i]);
+                            nodesRec.push(temp[i/2]);
+                            
+                            if(i>0){
+                                item = {}
+                                item["statement"] = "MATCH (n:`"+statement[i-2]+"`)-[r]->(`"+statement[i]+"`) RETURN DISTINCT TYPE(r)";
+                                jsonRelationship.push(item);
+                            }
+                           
+                        }
+                        
+                        
+                    }
+
                 }
-                console.log(return_param);
-
-                // Object.keys(column_names).forEach(function (key) {
-                //     return_param += column_mappings[column_names[key]];
-                //     console.log(column_mappings[column_names[key]]);
-                // });
-
-                // var n = return_param.lastIndexOf(',');
-                // return_param[n] = "";
-                query = "MATCH (a:Author)<-[r:authored_by]-(ar:Article) RETURN " + return_param;
-
-                console.log(return_param);
-
-                var request_json = {
-                    "statements": [{
-                        "statement": query
-                    }]
+                
+                var jsonQuery = {
+                    "statements" : jsonRelationship
                 };
+               // console.log(jsonQuery);
+
+                var relationships = [];
+
                 var auth_payload = new Buffer(NEO4J_USER + ":" + NEO4J_PASS).toString('base64');
-                var res = request({
-                    url: NEO4J_API_URL,
-                    method: "POST",
-                    json: request_json,
-                    headers: {
-                        "Authorization": "Basic " + auth_payload,
-                        "Accept": "application/json; charset=UTF-8"
-                    }
-                }, function(err, response, body) {
-                    if (!err && response.statusCode === 200) {
-                        var file_name_base = util.randomString(20);
-                        var error = false,
-                            response_body = {};
-                        // console.log("API request successful. Received reply:", JSON.stringify(body));
 
-                        response_body.status = "success";
-                        response_body.json_url = "/downloads/generated/json/" + file_name_base + ".json";
-                        response_body.csv_url = "/downloads/generated/csv/" + file_name_base + ".csv";
-                        console.log(JSON.stringify(response_body));
-                        try {
-                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/json", file_name_base + ".json"), JSON.stringify(body), 'utf-8');
-                        } catch (e) {
-                            console.log("Error:", e.message);
-                            response_body.status = "error";
-                            response_body.json_url = null;
+                var res_1 = request({
+                        url: NEO4J_API_URL,
+                        method: "POST",
+                        json: jsonQuery,
+                        headers: {
+                            "Authorization": "Basic " + auth_payload,
+                            "Accept": "application/json; charset=UTF-8",
                         }
+                    }, function(err, response, body) {
+                        //console.log(body.results[0].data.length);
+                        if (!err && response.statusCode === 200) {
+                            
+                            for(var i=0;i<body.results.length; i++){
+                                if(body.results[i].data.length != 0){
+                                    console.log("this " + body.results[i].data[0].row[0]);
+                                    console.log("length " + body.results[i].data.length );
+                                    relationships.push(body.results[i].data[0].row[0]);
+                                } else{
+                                    relationships.push("contains");
+                                }
+                                
+                            }
+                            
+                            for(var j = 0, k=0; j<nodesRec.length; j+=2){
 
-                        try {
-                            fs.writeFileSync(path.join(__dirname, "../files/datasets/generated/csv", file_name_base + ".csv"), util.jsonToCsv(body), 'utf-8');
-                        } catch (e) {
-                            console.log("Error:", e.message);
-                            response_body.status = "error";
-                            response_body.csv_url = null;
-                        }
+                                matching_param +=((j==0)?("("+nodesRec[j+1]+":`"+nodesRec[j]+"`)"):("-[:"+relationships[k++]+"]->"+"("+nodesRec[j+1]+":`"+nodesRec[j]+"`)"));
 
-                        /**
-                         * The result of the query is sent with query_response event of socket.
-                         * For failure, the structure of the response is:
-                         * {"status": "error", "url": null}
-                         *
-                         * And for success:
-                         * {"status": "success", "url": "/downloads/generated/xyz.json"}
-                         */
-                        console.log("Response sent: ", JSON.stringify(response_body));
-                        socket.emit("query_builder__response", response_body);
-                    } else {
-                        console.log("API request failed with error: " + err);
-                        console.log("response.statusCode: " + response.statusCode);
-                        console.log("response.statusText: " + response.statusText);
+                            }
+                
+
+                            
+
+                            query = "MATCH "+matching_param+" RETURN " +return_param;
+
+                            
+
+                            var request_json = {
+                                "statements": [{
+                                    "statement": query
+                                }]
+                            };
+                            
+                            var res = request({
+                                url: NEO4J_API_URL,
+                                method: "POST",
+                                json: request_json,
+                                headers: {
+                                    "Authorization": "Basic " + auth_payload,
+                                    "Accept": "application/json; charset=UTF-8"
+                                }
+                            }, function(err, response, body) {
+                                if (!err && response.statusCode === 200) {
+                                    var file_name_base = util.randomString(20);
+                                    var error = false,
+                                        response_body = {};
+                                    // console.log("API request successful. Received reply:", JSON.stringify(body));
+
+                                    response_body.status = "success";
+                                    response_body.json_url = "files/papers/" + file_name_base + ".json";
+                                    response_body.csv_url = "files/papers/" + file_name_base + ".csv";
+                                    console.log(JSON.stringify(response_body));
+                                    try {
+                                        fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".json"), JSON.stringify(body), 'utf-8');
+                                    } catch (e) {
+                                        console.log("Error:", e.message);
+                                        response_body.status = "error";
+                                        response_body.json_url = null;
+                                    }
+
+                                    try {
+                                        fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), util.jsonToCsv(body), 'utf-8');
+                                    } catch (e) {
+                                        console.log("Error:", e.message);
+                                        response_body.status = "error";
+                                        response_body.csv_url = null;
+                                    }
+
+                                    /**
+                                     * The result of the query is sent with query_response event of socket.
+                                     * For failure, the structure of the response is:
+                                     * {"status": "error", "url": null}
+                                     *
+                                     * And for success:
+                                     * {"status": "success", "url": "/downloads/generated/xyz.json"}
+                                     */
+                                    console.log("Response sent: ", JSON.stringify(response_body));
+                                    socket.emit("query_builder__response", response_body);
+                                } else {
+                                    console.log("API request failed with error: " + err);
+                                    console.log("response.statusCode: " + response.statusCode);
+                                    console.log("response.statusText: " + response.statusText);
+                                }
+                            }); // data request ends
+
+                        } else{
+
+                        console.log(err);
                     }
-                }); // request ends
+                        
+                }); // relationships request ends
+
             }); // socket event handler ends
         }); // io event handler ends
 
-        res.render('query_builder', {});
-
+        res.render('query_builder', {dataModel : result});
+        });
     });
 
     router.get('/login', function(req, res, next) {

@@ -532,6 +532,11 @@ ul.sub-menu {
 /*************************
 *******Home Page******
 **************************/
+.fa-spin {
+    -webkit-transform-origin: 50% calc(50% - .5px);
+    transform-origin: 50% calc(50% - .5px);
+}
+
 #home-slider {
   background: url(../images/home/slider-bg.png) 0 100% repeat-x;
   position: relative;
