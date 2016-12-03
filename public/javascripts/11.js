@@ -57,4 +57,4 @@ var layout = {
     type: "linear"
   }
 };
-Plotly.plot('plotly-div', data, layout);
+Plotly.plot('plotly-div2', data, layout);

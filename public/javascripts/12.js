@@ -42,4 +42,4 @@ var layout = {
   }, 
   title: "Total citation count vs total article count with internationality score"
 };
-Plotly.plot('plotly-div', data, layout);
+Plotly.plot('plotly-div3', data, layout);
