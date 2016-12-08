@@ -58,7 +58,7 @@
 
         <div class="row selection-row"  >
             <div class = "container">
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <select class="test-select" id="journal">
                         <option value = "all" selected>All Journals</option>
                         {{#each dataset.journal_data}}
@@ -68,7 +68,7 @@
                         {{/each}}
                     </select>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <select class="test-select" id="author">
                         <option value = "all" selected>All Authors</option>
                         {{#each dataset.author_data}}
@@ -78,7 +78,7 @@
                         {{/each}}
                     </select>
                 </div> 
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <select class="test-select" id="country">
                         <option value = "all" selected>All Countries</option>
                         {{#each dataset.country_data}}
@@ -88,9 +88,24 @@
                         {{/each}}
                     </select>
                 </div>
+                <div class="col-sm-3">
+                    <select class="test-select" id="year">
+                        <option value = "all" selected>All Years</option>
+                        {{#each dataset.year_data}}
+                            <option value="{{year}}"> {{year}} </option>
+                        {{else}}
+                            <option value="0">No data</option>
+                        {{/each}}
+                    </select>
+                </div>
+
             </div>
         </div>
-
+        <div class="row" style = "margin-top:10px;">
+            <div class="container">
+                <button class="btn btn-md btn-primary pull-right"><span class="fa fa-download"></span> Download Data</button>
+            </div>
+        </div>
       <!--  <div class="loading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div> -->
         <div class="row table-row">
             <div class="container">
@@ -136,6 +151,7 @@
                 filterSearch.journal = $("#journal").val();
                 filterSearch.author = $("#author").val();
                 filterSearch.country = $("#country").val();
+                filterSearch.year = $("#year").val();
                 console.log("here");
                 socket.emit('filterSearch_request', filterSearch);
                 console.log("emmited");
@@ -145,15 +161,30 @@
                 console.log("responded");
 
                 var select2AuthorVal = $("#author").val();
+
                 var select2AuthorList= '<option value="all">All Authors</option>';
                 $.each(filterResult.author_data, function(i, item){
                     select2AuthorList += '<option value="'+item.name+'"';
                     select2AuthorList += (item.name == select2AuthorVal)?'selected':' ';
                     select2AuthorList += '>'+item.name+'</option>';
                 });
+                
                 $("#author").html(" ").promise().done(function(){
                     $("#author").html(select2AuthorList);
                 });
+
+                var select2YearVal= $("#year").val();
+                var select2YearList= '<option value="all">All Years</option>';
+                $.each(filterResult.year_data, function(i, item){
+                    select2YearList += '<option value="'+item.year+'"';
+                    select2YearList += (item.year == select2YearVal)?'selected':' ';
+                    select2YearList += '>'+item.year+'</option>';
+                });
+                
+                $("#year").html(" ").promise().done(function(){
+                    $("#year").html(select2YearList);
+                });
+
                 var dynatable = $('#article-table').dynatable({
                     dataset : {
                         records : filterResult.article_data

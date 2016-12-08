@@ -436,6 +436,7 @@ module.exports = function(io) {
         filterSearch.journal = "all";
         filterSearch.author = "all";
         filterSearch.country = "all";
+        filterSearch.year = "all";
         util.search_article(filterSearch, function(result){
             if(!result){
                 console.log("Error loading search_article");

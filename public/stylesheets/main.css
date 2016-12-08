@@ -2801,6 +2801,7 @@ span.stButton_gradient,
   -moz-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   font-size:14px;
+  margin-top: 10px;
 }
 #article-table td{
   font-weight: 300;
