@@ -103,7 +103,8 @@
         </div>
         <div class="row" style = "margin-top:10px;">
             <div class="container">
-                <button class="btn btn-md btn-primary pull-right"><span class="fa fa-download"></span> Download Data</button>
+                <button class="btn btn-md btn-primary pull-right" id="download-data"><span class="fa fa-download"></span> Download Data</button>
+                <a href="#"  id="downloadHidden" style="display:none;" download></a>
             </div>
         </div>
       <!--  <div class="loading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div> -->
@@ -157,8 +158,11 @@
                 console.log("emmited");
 
             });
+            var articleData = {{{parseJson dataset.article_data}}};
+            
             socket.on('filterSearch_response', function(filterResult){
                 console.log("responded");
+                articleData = filterResult.article_data;
 
                 var select2AuthorVal = $("#author").val();
 
@@ -193,7 +197,22 @@
 
                 dynatable.settings.dataset.originalRecords = filterResult.article_data;
                 dynatable.process();
+
+
+
+
             });
+            
+            $("#download-data").click(function(){
+                    socket.emit('downloadArticleData_request', articleData);
+                    console.log("sent download request");
+                });
+            socket.on("downloadArticleData_response", function(response){
+                console.log("recieved download response");
+                $("#downloadHidden").attr("href",response.csv_url);
+                $("#downloadHidden")[0].click();
+            });
+
         });
     </script>
    

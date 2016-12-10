@@ -5,7 +5,16 @@ module.exports = function(io) {
     var fs = require("fs");
     var path = require("path");
     var util = require("../lib/util");
+    var hbs = require('hbs');
 
+    hbs.registerHelper('toUpperCase', function(str){
+        return str.toUpperCase();
+    });
+
+    hbs.registerHelper('parseJson', function(context){
+        return JSON.stringify(context);
+    });
+    
     // this is a new comment here
 
     var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
@@ -136,12 +145,7 @@ module.exports = function(io) {
         ];
 
         res.render('datacenter', {
-            datasets: dataset_list,
-            helpers: {
-                toUpperCase: function(str) {
-                    return str.toUpperCase();
-                }
-            }
+            datasets: dataset_list
         });
     });
 
@@ -442,12 +446,15 @@ module.exports = function(io) {
                 console.log("Error loading search_article");
             }
 
-            res.render('article_search',{dataset : result});
+            res.render('article_search',{
+                dataset : result
+            });
         });
     });
 
     io.on("connection", function(socket) {
             console.log("A user connected");
+
                 socket.on('filterSearch_request', function(filter) {
                     console.log("Socket connected");
                     console.log(filter);
@@ -458,6 +465,38 @@ module.exports = function(io) {
                     });
                    
                 }); // socket event handler ends
+
+                socket.on('downloadArticleData_request', function(articleData){
+                    console.log("Downloading");
+                    var file_name_base = util.randomString(20);
+
+                    var response_body = {};
+                    
+                    response_body.csv_url = "files/papers/" + file_name_base + ".csv";
+
+                    var csv = "";
+                    csv += '"Title","DOI","Month","Year"\n';
+                    for (var i = 0; i < articleData.length; i++) {
+
+                        csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
+                    }
+                    
+                    try {
+                        fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), csv, 'utf-8');
+                        response_body.status = "success";
+
+                    } catch (e) {
+                        console.log("Error:", e.message);
+                        response_body.status = "error";
+                        response_body.csv_url = null;
+                    }
+                    
+                    socket.emit("downloadArticleData_response", response_body);
+
+                });
+
+                
     }); // io event handler ends
+    
     return router;
 };
