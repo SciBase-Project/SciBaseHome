@@ -61,6 +61,7 @@ module.exports = function(io) {
     });
     /* GET home page. */
     router.get('/datacenter', function(req, res, next) {
+
         var dataset_list = [{
                 title: "Scimago Dataset (1999 - 2014)",
                 description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
@@ -143,10 +144,24 @@ module.exports = function(io) {
                 category: "scibase-dataset"
             },
         ];
+        var filterSearch = {};
+        filterSearch.journal = "all";
+        filterSearch.author = "all";
+        filterSearch.country = "all";
+        filterSearch.year = "all";
+        util.search_article(filterSearch, function(result){
+            if(!result){
+                console.log("Error loading search_article");
+            }
 
-        res.render('datacenter', {
-            datasets: dataset_list
+            res.render('datacenter', {
+                datasets: dataset_list,
+                dataset : result
+            });
         });
+        
+
+        
     });
 
     /* GET home page. */

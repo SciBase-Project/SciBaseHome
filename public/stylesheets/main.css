@@ -1797,6 +1797,11 @@ Blog with right sidebar
   margin-top:15px;
 }
 
+#blog{
+  background-color:rgb(249,249,249);
+  padding:0px 0px;
+  min-height: 50vh;
+}
 #blog .container .row .buttons button {
   padding: 15px;
   width: 200px;
@@ -2780,10 +2785,8 @@ span.stButton_gradient,
 
 /*Article_Search Page*/
 
-#article-search{
-  border-top:2px SOLID rgb(0, 183, 255);
-  background-color: rgb(249,249,249);
-  padding:20px 0px;
+.article-search{
+  padding-top:20px;
 }
 .test-select{
   width: 80%;
@@ -2862,4 +2865,18 @@ span.stButton_gradient,
   margin-left: -24px;
   top: 50%;
   margin-top: -24px;
+}
+.nav-tabs>li.active>a{
+  border: 1px solid rgb(0, 183, 255) !important;
+  border-bottom: 1px solid rgb(249, 249, 249) !important;
+  font-size:18px;
+  letter-spacing: 2px;
+  color: rgb(0, 183, 255);
+}
+.nav-tabs>li>a{
+  border-bottom: 1px solid rgb(0, 183, 255) !important;
+  background-color:rgb(249, 249, 249) !important;
+  font-size:16px;
+  transition: all 0.5s;
+  color: #000;
 }
