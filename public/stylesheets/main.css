@@ -1797,6 +1797,11 @@ Blog with right sidebar
   margin-top:15px;
 }
 
+#blog{
+  background-color:rgb(249,249,249);
+  padding:0px 0px;
+  min-height: 50vh;
+}
 #blog .container .row .buttons button {
   padding: 15px;
   width: 200px;
@@ -2776,4 +2781,102 @@ span.stButton_gradient,
 }
 .vertical-center .count h3 span{
   color:#000;
+}
+
+/*Article_Search Page*/
+
+.article-search{
+  padding-top:20px;
+}
+.test-select{
+  width: 80%;
+}
+.selection-row{
+  /*background-color:rgb(236,236,236);*/
+  
+  margin: 0px;
+}
+#article-table{
+  border:2px SOLID #ccc;
+  /*border-radius:5%;*/
+  background-color: #fff;
+  -webkit-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  font-size:14px;
+  margin-top: 10px;
+}
+#article-table td{
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 22px !important;
+  color: #000;
+  padding: 20px;
+}
+#article-table th{
+  padding:20px;
+  font-family: 'Lato', sans-serif;
+  font-size:15px;
+  line-height: 24px !important;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+#article-table th > a:focus,
+#article-table th > a:hover{
+  color: #fff;
+}
+.table-row{
+  margin:20px 0px;
+  /*background-color:rgb(249, 249, 249);*/
+}
+.dynatable-search > input {
+  border: 2px solid rgb(226,226,226);
+  border-radius: 4px;
+  width:200px;
+  font-size:15px;
+  font-weight: 350;
+  line-height: 24px;
+}
+.dynatable-per-page-select{
+  border: 2px solid rgb(226,226,226);
+  border-radius: 4px;
+  width:100px;
+  font-size:15px;
+  font-weight: 350;
+  line-height: 24px;
+}
+#article-search .loading {
+  position: relative;
+  left: 0;
+  top: 0;
+  bottom: -30px;
+  right: 0;
+  background: #fafafa;
+  text-align: center;
+}
+
+#article-search .loading > i {
+  font-size: 48px;
+  height: 48px;
+  line-height: 48px;
+  color: #00aeef;
+  position: relative;
+  left: 50%;
+  margin-left: -24px;
+  top: 50%;
+  margin-top: -24px;
+}
+.nav-tabs>li.active>a{
+  border: 1px solid rgb(0, 183, 255) !important;
+  border-bottom: 1px solid rgb(249, 249, 249) !important;
+  font-size:18px;
+  letter-spacing: 2px;
+  color: rgb(0, 183, 255);
+}
+.nav-tabs>li>a{
+  border-bottom: 1px solid rgb(0, 183, 255) !important;
+  background-color:rgb(249, 249, 249) !important;
+  font-size:16px;
+  transition: all 0.5s;
+  color: #000;
 }

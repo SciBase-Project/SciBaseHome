@@ -58,53 +58,146 @@
     <section id="blog" class="padding-top padding-bottom">
         <div class="container">
             <div class="row">
-                <div class="buttons" style="text-align: center;"> 
-                    <button class="scibase-button">SciBase Datasets</button>
-                    <button class="aminer-button">AMiner</button>
-                    <button class="scimago-button">Scimago</button>
-                    <a href="/query_builder"><button class="dynamic-button">Dynamic Generator</button></a>
+                <div class="col-sm-12">
+                  <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a data-toggle="tab" href="#home">Articles</a></li>
+                    <li><a data-toggle="tab" href="#menu1">Other Datasets</a></li>
+                  </ul>
                 </div>
-                <div class="masonery_area">
-                    {{#each datasets}}
-                        <div class="col-md-3 col-sm-4 data-box {{category}} none">
+            </div>
+          
+            <div class="tab-content">
+                <div class="tab-pane fade in active article-search" id="home">
+                    <div class="row selection-row">
+                        <div class = "container">
+                            <div class="col-sm-3">
+                                <select class="test-select" id="journal">
+                                    <option value = "all" selected>All Journals</option>
+                                    {{#each dataset.journal_data}}
+                                        <option value="{{name}}"> {{name}} </option>
+                                    {{else}}
+                                        <option value="0">No data</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="test-select" id="author">
+                                    <option value = "all" selected>All Authors</option>
+                                    {{#each dataset.author_data}}
+                                        <option value="{{name}}"> {{name}} </option>
+                                    {{else}}
+                                        <option value="0">No data</option>
+                                    {{/each}}
+                                </select>
+                            </div> 
+                            <div class="col-sm-3">
+                                <select class="test-select" id="country">
+                                    <option value = "all" selected>All Countries</option>
+                                    {{#each dataset.country_data}}
+                                        <option value="{{name}}"> {{name}} </option>
+                                    {{else}}
+                                        <option value="0">No data</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="test-select" id="year">
+                                    <option value = "all" selected>All Years</option>
+                                    {{#each dataset.year_data}}
+                                        <option value="{{year}}"> {{year}} </option>
+                                    {{else}}
+                                        <option value="0">No data</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row" style = "margin-top:10px;">
+                        <div class="container">
+                            <button class="btn btn-md btn-primary pull-right" id="download-data"><span class="fa fa-download"></span> Download Data</button>
+                            <a href="#"  id="downloadHidden" style="display:none;" download></a>
+                        </div>
+                    </div>
+                  <!--  <div class="loading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div> -->
+                    <div class="row table-row">
+                        <div class="container">
+                            <table id="article-table" class="table table-hover">
+                                <thead>
+                                  <tr>
+                                    <th>TITLE</th>
+                                    <th>DOI</th>
+                                    <th>MONTH</th>
+                                    <th>YEAR</th>
+                                    
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each dataset.article_data}}
+                                      <tr>
+                                        <td>{{title}}</td>
+                                        <td>{{doi}}</td>
+                                        <td>{{month}}</td>
+                                        <td>{{year}}</td>
+                                        
+                                      </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row tab-pane fade padding-top" id="menu1">
+                    <div class="buttons" style="text-align: center;"> 
+                        <button class="scibase-button">SciBase Datasets</button>
+                        <button class="aminer-button">AMiner</button>
+                        <button class="scimago-button">Scimago</button>
+                        <a href="/query_builder"><button class="dynamic-button">Dynamic Generator</button></a>
+                    </div>
+                    <div class="masonery_area">
+                        {{#each datasets}}
+                            <div class="col-md-3 col-sm-4 data-box {{category}} none">
+                                <div class="single-blog two-column">
+                                    <div class="post-content overflow first-set">
+                                        <h2 class="post-title bold data-box-title">{{title}}</h2>
+                                        <p class="data-box-description">
+                                            {{description}}
+                                        </p>
+                                        <a href="{{download_link}}" class="read-more" title="{{size}}">Download ({{format}})</a>
+                                        <div class="post-bottom overflow">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/each}}
+
+                        
+                        <!--<div class="col-md-3 col-sm-4 data-box dynamic-dataset none">
                             <div class="single-blog two-column">
-                                <div class="post-content overflow first-set">
-                                    <h2 class="post-title bold data-box-title">{{title}}</h2>
-                                    <p class="data-box-description">
-                                        {{description}}
-                                    </p>
-                                    <a href="{{download_link}}" class="read-more" title="{{size}}">Download ({{format}})</a>
+                                <div class="post-content overflow">
+                                    <ul class="nav nav-justified post-nav">
+                                    </ul>
+                                    <h2 class="post-title bold data-box-title">Dynamic Generator</h2>
+                                    <p class="data-box-description">Now you can download a dynamic dataset from our database.</p>
+                                    <a href="/custom_datasets" class="read-more">Click here!</a>
                                     <div class="post-bottom overflow">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {{/each}}
+                        </div> -->
 
-                    
-                    <!--<div class="col-md-3 col-sm-4 data-box dynamic-dataset none">
-                        <div class="single-blog two-column">
-                            <div class="post-content overflow">
-                                <ul class="nav nav-justified post-nav">
-                                </ul>
-                                <h2 class="post-title bold data-box-title">Dynamic Generator</h2>
-                                <p class="data-box-description">Now you can download a dynamic dataset from our database.</p>
-                                <a href="/custom_datasets" class="read-more">Click here!</a>
-                                <div class="post-bottom overflow">
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
-                    <div class="col-md-3 col-sm-4 data-box extra-dataset none">
-                        <div class="single-blog two-column">
-                            <div class="post-content overflow">
-                                <ul class="nav nav-justified post-nav">
-                                </ul>
-                                <h2 class="post-title bold data-box-title">Amnier API Details</h2>
-                                <p class="data-box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                                <a href="/aminerAPI" class="read-more">Click here!</a>
-                                <div class="post-bottom overflow">
+                        <div class="col-md-3 col-sm-4 data-box extra-dataset none">
+                            <div class="single-blog two-column">
+                                <div class="post-content overflow">
+                                    <ul class="nav nav-justified post-nav">
+                                    </ul>
+                                    <h2 class="post-title bold data-box-title">Amnier API Details</h2>
+                                    <p class="data-box-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+                                    <a href="/aminerAPI" class="read-more">Click here!</a>
+                                    <div class="post-bottom overflow">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +205,88 @@
                 </div>
             </div>
         </div>
+
     </section>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            var socket = io();
+            $(".test-select").select2({
+                theme:"bootstrap"
+            });
+
+            $('#article-table').dynatable();
+
+            $(".test-select").on("change", function(e){
+                var filterSearch = {};
+                filterSearch.journal = $("#journal").val();
+                filterSearch.author = $("#author").val();
+                filterSearch.country = $("#country").val();
+                filterSearch.year = $("#year").val();
+                console.log("here");
+                socket.emit('filterSearch_request', filterSearch);
+                console.log("emmited");
+
+            });
+            var articleData = {{{parseJson dataset.article_data}}};
+            
+            socket.on('filterSearch_response', function(filterResult){
+                console.log("responded");
+                articleData = filterResult.article_data;
+
+                var select2AuthorVal = $("#author").val();
+
+                var select2AuthorList= '<option value="all">All Authors</option>';
+                $.each(filterResult.author_data, function(i, item){
+                    select2AuthorList += '<option value="'+item.name+'"';
+                    select2AuthorList += (item.name == select2AuthorVal)?'selected':' ';
+                    select2AuthorList += '>'+item.name+'</option>';
+                });
+                
+                $("#author").html(" ").promise().done(function(){
+                    $("#author").html(select2AuthorList);
+                });
+
+                var select2YearVal= $("#year").val();
+                var select2YearList= '<option value="all">All Years</option>';
+                $.each(filterResult.year_data, function(i, item){
+                    select2YearList += '<option value="'+item.year+'"';
+                    select2YearList += (item.year == select2YearVal)?'selected':' ';
+                    select2YearList += '>'+item.year+'</option>';
+                });
+                
+                $("#year").html(" ").promise().done(function(){
+                    $("#year").html(select2YearList);
+                });
+
+                var dynatable = $('#article-table').dynatable({
+                    dataset : {
+                        records : filterResult.article_data
+                    }
+                }).data('dynatable');
+
+                dynatable.settings.dataset.originalRecords = filterResult.article_data;
+                dynatable.process();
+
+
+
+
+            });
+            
+            $("#download-data").click(function(){
+                    socket.emit('downloadArticleData_request', articleData);
+                    console.log("sent download request");
+                });
+            socket.on("downloadArticleData_response", function(response){
+                console.log("recieved download response");
+                $("#downloadHidden").attr("href",response.csv_url);
+                $("#downloadHidden")[0].click();
+            });
+
+        });
+    </script>
     <!--/#blog-->
 
     <footer id="footer">
@@ -167,5 +341,3 @@
         </div>
     </footer>
     <!--/#footer-->
-
-    <script type="text/javascript" src="/javascripts/datacenter.js"></script>
