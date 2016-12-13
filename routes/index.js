@@ -450,23 +450,6 @@ module.exports = function(io) {
         res.render('aminerAPI', {});
     });
 
-    router.get('/article_search', function(req, res, next) {
-        var filterSearch = {};
-        filterSearch.journal = "all";
-        filterSearch.author = "all";
-        filterSearch.country = "all";
-        filterSearch.year = "all";
-        util.search_article(filterSearch, function(result){
-            if(!result){
-                console.log("Error loading search_article");
-            }
-
-            res.render('article_search',{
-                dataset : result
-            });
-        });
-    });
-
     io.on("connection", function(socket) {
             console.log("A user connected");
 
