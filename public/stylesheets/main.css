@@ -2789,7 +2789,7 @@ span.stButton_gradient,
   padding-top:20px;
 }
 .test-select{
-  width: 80%;
+  min-width: 80% !important;
 }
 .selection-row{
   /*background-color:rgb(236,236,236);*/
