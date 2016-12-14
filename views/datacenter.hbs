@@ -60,14 +60,14 @@
             <div class="row">
                 <div class="col-sm-12">
                   <ul class="nav nav-tabs nav-justified">
-                    <li class="active"><a data-toggle="tab" href="#home">Articles</a></li>
-                    <li><a data-toggle="tab" href="#menu1">Other Datasets</a></li>
+                    <li class="active"><a data-toggle="tab" href="#other-datasets">Other Datasets</a></li>
+                    <li><a data-toggle="tab" href="#articles">Articles</a></li>
                   </ul>
                 </div>
             </div>
           
             <div class="tab-content">
-                <div class="tab-pane fade in active article-search" id="home">
+                <div class="tab-pane fade article-search" id="articles">
                     <div class="row selection-row">
                         <div class = "container">
                             <div class="col-sm-3">
@@ -149,7 +149,7 @@
                     </div>
                 </div>
 
-                <div class="row tab-pane fade padding-top" id="menu1">
+                <div class="row tab-pane fade in active padding-top" id="other-datasets">
                     <div class="buttons" style="text-align: center;"> 
                         <button class="scibase-button">SciBase Datasets</button>
                         <button class="aminer-button">AMiner</button>
@@ -207,7 +207,9 @@
         </div>
 
     </section>
-
+    
+    <script type="text/javascript" src="/javascripts/select2.full.min.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.dynatable.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
