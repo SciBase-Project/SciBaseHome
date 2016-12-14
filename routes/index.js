@@ -14,6 +14,12 @@ module.exports = function(io) {
     hbs.registerHelper('parseJson', function(context){
         return JSON.stringify(context);
     });
+
+    hbs.registerHelper('capitalize', function(str){
+        return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+            return $1.toUpperCase();
+        });
+    });
     
     // this is a new comment here
 

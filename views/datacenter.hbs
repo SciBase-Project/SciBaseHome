@@ -84,7 +84,7 @@
                                 <select class="test-select" id="author">
                                     <option value = "all" selected>All Authors</option>
                                     {{#each dataset.author_data}}
-                                        <option value="{{name}}"> {{name}} </option>
+                                        <option value="{{name}}"> {{capitalize name}} </option>
                                     {{else}}
                                         <option value="0">No data</option>
                                     {{/each}}
@@ -94,7 +94,7 @@
                                 <select class="test-select" id="country">
                                     <option value = "all" selected>All Countries</option>
                                     {{#each dataset.country_data}}
-                                        <option value="{{name}}"> {{name}} </option>
+                                        <option value="{{name}}"> {{capitalize name}} </option>
                                     {{else}}
                                         <option value="0">No data</option>
                                     {{/each}}
@@ -212,13 +212,20 @@
     <script type="text/javascript" src="/javascripts/jquery.dynatable.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
+        
+        function capitalize(str) {
+            return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+                return $1.toUpperCase();
+            });
+        }
+
         $(document).ready(function(){
 
             var socket = io();
             $(".test-select").select2({
                 theme:"bootstrap"
             });
-
+            $(".test-select>option").css("textTransform", "capitalize");
             $('#article-table').dynatable();
 
             $(".test-select").on("change", function(e){
@@ -244,7 +251,7 @@
                 $.each(filterResult.author_data, function(i, item){
                     select2AuthorList += '<option value="'+item.name+'"';
                     select2AuthorList += (item.name == select2AuthorVal)?'selected':' ';
-                    select2AuthorList += '>'+item.name+'</option>';
+                    select2AuthorList += '>'+capitalize(item.name)+'</option>';
                 });
                 
                 $("#author").html(" ").promise().done(function(){
@@ -266,11 +273,15 @@
                 var dynatable = $('#article-table').dynatable({
                     dataset : {
                         records : filterResult.article_data
+                    },
+                    features:{
+                        pushState:false
                     }
                 }).data('dynatable');
 
                 dynatable.settings.dataset.originalRecords = filterResult.article_data;
                 dynatable.process();
+                $(".test-select").css("textTransform", "capitalize");
 
 
 
