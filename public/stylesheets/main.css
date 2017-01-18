@@ -539,12 +539,11 @@ ul.sub-menu {
 
 #home-slider .main-slider {
   position: relative;
-  height: 450px;
+  
 }
 
 #home-slider .slide-text{
-  position: absolute;
-  top: 50px;
+  
   left: 0;
   width: 450px;
 }
@@ -555,7 +554,7 @@ ul.sub-menu {
 }
 
 #home-slider .slider-hill {
-  position: absolute;
+  
   right: 0;
   bottom: 0;
 }
@@ -611,12 +610,10 @@ ul.sub-menu {
 
 
 #home-slider h1{
-  margin-top: 100px;
-  margin-bottom: 25px;
 }
 
 #home-slider .btn-common {
-  margin-top: 20px;
+
 }
 
 #home-slider .preloader {

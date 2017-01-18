@@ -35,6 +35,7 @@ var data = [
 var layout = {
   autosize: true, 
   hovermode: "closest", 
+  title : "Timeline of articles",
   xaxis: {
     autorange: true, 
     range: [1983, 2016], 

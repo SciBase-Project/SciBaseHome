@@ -48,25 +48,51 @@
                 </form>
             </div>
         </div>
-    </div>
 </header>
 <!--/#header-->
 
 <section id="home-slider">
     <div class="container">
-        <div class="row">
             <div class="main-slider">
-                <div class="slide-text">
+            <div class="row">
+                <div class="col-md-6">
+                      <div class="slide-text">
                     <h1>Welcome to SciBase!</h1>
                     <p>A study in Machine Learning, Repository and the first complete Web-Dictionary of Scholastic Information System</p>
                 </div>
-                <a href="http://pesitsouth.pes.edu/camms"><img src="images/home/slider/hill.png" class="slider-hill" alt="slider image"></a>
+                </div>
+                <div class="col-md-6">
+                      <a href="http://pesitsouth.pes.edu/camms"><img src="images/home/slider/hill.png" class="slider-hill" alt="slider image"></a>
+                </div>
+            </div>
+              
+              
               <!--   <img src="images/home/slider/house.png" class="slider-house" alt="slider image">
                 <img src="images/home/slider/sun.png" class="slider-sun" alt="slider image">
                 <img src="images/home/slider/birds1.png" class="slider-birds1" alt="slider image">
                 <img src="images/home/slider/birds2.png" class="slider-birds2" alt="slider image"> -->
             </div>
-        </div>
+<div class="row">
+    
+                      <div class="col-md-6 col-md-offset-3 text-center">
+                <!--<a href="/login" class="btn btn-common">Login</a>
+                <a href="/register" class="btn btn-common">Register</a>-->
+                <div>
+                    <h2 class="post-title center">View charts for any journal</h2>
+                    <br>
+                    <form method="POST" action="/public_articles">
+                      <select class="form-control">
+  <option>1</option>
+  <option>2</option>
+  <option>3</option>
+  <option>4</option>
+  <option>5</option>
+</select>
+                    </form>
+                </div>
+              </div>
+              </div>
+              <br>
         <div class="row">
         <div class="col-md-6">
         <div id="plotly-div1"></div>
@@ -91,8 +117,6 @@
         <div id="plotly-div5"></div>
 </div>
 </div>
-        </div>
-
         <script src="/javascripts/3.js"></script>
         <script src="/javascripts/11.js">
         </script>
@@ -100,8 +124,10 @@
         
         <script src="/javascripts/13.js"></script>
         <script src="/javascripts/20.js"></script>
-    </div>
     <div class="preloader"><i class="fa fa-sun-o fa-spin"></i></div>
+        </div>
+
+
 </section>
 <!--/#home-slider-->
 

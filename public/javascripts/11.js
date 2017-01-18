@@ -36,11 +36,10 @@ var layout = {
   hovermode: "closest", 
   legend: {
     x: 0.5, 
-    y: -0.2, 
+    y: -0.25, 
     orientation: "h", 
     traceorder: "normal", 
     xanchor: "center", 
-    yanchor: "top"
   }, 
   showlegend: true, 
   title: "Citation count vs Year", 
