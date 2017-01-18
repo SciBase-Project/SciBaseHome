@@ -5,7 +5,22 @@ module.exports = function(io) {
     var fs = require("fs");
     var path = require("path");
     var util = require("../lib/util");
+    var hbs = require('hbs');
 
+    hbs.registerHelper('toUpperCase', function(str){
+        return str.toUpperCase();
+    });
+
+    hbs.registerHelper('parseJson', function(context){
+        return JSON.stringify(context);
+    });
+
+    hbs.registerHelper('capitalize', function(str){
+        return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+            return $1.toUpperCase();
+        });
+    });
+    
     // this is a new comment here
 
     var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
@@ -52,6 +67,7 @@ module.exports = function(io) {
     });
     /* GET home page. */
     router.get('/datacenter', function(req, res, next) {
+
         var dataset_list = [{
                 title: "Scimago Dataset (1999 - 2014)",
                 description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
@@ -135,15 +151,24 @@ module.exports = function(io) {
 
             },
         ];
-
-        res.render('datacenter', {
-            datasets: dataset_list,
-            helpers: {
-                toUpperCase: function(str) {
-                    return str.toUpperCase();
-                }
+        var filterSearch = {};
+        filterSearch.journal = "all";
+        filterSearch.author = "all";
+        filterSearch.country = "all";
+        filterSearch.year = "all";
+        util.search_article(filterSearch, function(result){
+            if(!result){
+                console.log("Error loading search_article");
             }
+
+            res.render('datacenter', {
+                datasets: dataset_list,
+                dataset : result
+            });
         });
+        
+
+        
     });
 
     /* GET home page. */
@@ -432,5 +457,51 @@ module.exports = function(io) {
         res.render('aminerAPI', {});
     });
 
+    io.on("connection", function(socket) {
+            console.log("A user connected");
+
+                socket.on('filterSearch_request', function(filter) {
+                    console.log("Socket connected");
+                    console.log(filter);
+                    util.search_article(filter, function(filterResult){
+                        //console.log("filterResult", filterResult);
+                        socket.emit("filterSearch_response", filterResult);
+                        console.log("Socket emitted");
+                    });
+                   
+                }); // socket event handler ends
+
+                socket.on('downloadArticleData_request', function(articleData){
+                    console.log("Downloading");
+                    var file_name_base = util.randomString(20);
+
+                    var response_body = {};
+                    
+                    response_body.csv_url = "files/papers/" + file_name_base + ".csv";
+
+                    var csv = "";
+                    csv += '"Title","DOI","Month","Year"\n';
+                    for (var i = 0; i < articleData.length; i++) {
+
+                        csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
+                    }
+                    
+                    try {
+                        fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), csv, 'utf-8');
+                        response_body.status = "success";
+
+                    } catch (e) {
+                        console.log("Error:", e.message);
+                        response_body.status = "error";
+                        response_body.csv_url = null;
+                    }
+                    
+                    socket.emit("downloadArticleData_response", response_body);
+
+                });
+
+                
+    }); // io event handler ends
+    
     return router;
 };
