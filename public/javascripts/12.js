@@ -1,24 +1,5 @@
-// You can reproduce this figure in plotly.js with the following code!
 
-// Learn more about plotly.js here: https://plot.ly/javascript/getting-started
-
-/* Here's an example minimal HTML template
- *
- * <!DOCTYPE html>
- *   <head>
- *     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
- *   </head>
- *   <body>
- *   <!-- Plotly chart will be drawn inside this div -->
- *   <div id="plotly-div"></div>
- *     <script>
- *     // JAVASCRIPT CODE GOES HERE
- *     </script>
- *   </body>
- * </html>
- */
-
-var data = [
+var data3 = [
   {
     direction: "counterclockwise", 
     hoverinfo: "label+value+text+percent", 
@@ -33,7 +14,7 @@ var data = [
     valuessrc: "harshavamsi:10:9aa193"
   }
 ];
-var layout = {
+var layout3 = {
   autosize: true, 
   hovermode: "closest", 
   legend: {
@@ -42,4 +23,4 @@ var layout = {
   }, 
   title: "Total citation count vs total article count with internationality score"
 };
-Plotly.plot('plotly-div3', data, layout);
+Plotly.plot('plotly-div3', data3, layout3);
