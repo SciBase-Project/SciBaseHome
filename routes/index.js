@@ -6,6 +6,17 @@ module.exports = function(io) {
     var path = require("path");
     var util = require("../lib/util");
     var hbs = require('hbs');
+    var mongoose = require("mongoose");
+  
+
+    var schema = mongoose.Schema;
+
+    var counterSchema = new schema({
+        name : String,
+        hits : Number
+    },{collection : "counts"});
+
+    var countsModel = mongoose.model("countsModel", counterSchema);
 
     hbs.registerHelper('toUpperCase', function(str){
         return str.toUpperCase();
@@ -34,33 +45,116 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+            
+          }else{
+           
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+
         util.getStats(function(result) {
 
-            console.log("Result: ",result);
-            result.title = "SciBase";
+            countsModel.findOne({"name" : "HITS"}, function(err, doc){
+                if(doc){
+                    result.hits = doc.hits;
+                }else{
+                    result.hits = 0;
+                }
 
-            result.JournalCsvUrl = "files/papers/Journals.csv";
-            result.ArticleCsvUrl = "files/papers/Articles.csv";
-            result.AuthorCsvUrl = "files/papers/Authors.csv";
-            result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+                console.log("Result: ",result);
+                result.title = "SciBase";
 
-            util.generateArticleCsv();
-            util.generateJournalCsv();
-            util.generateAuthorCsv();
-            util.generateInstitutionCsv();
+                result.JournalCsvUrl = "files/papers/Journals.csv";
+                result.ArticleCsvUrl = "files/papers/Articles.csv";
+                result.AuthorCsvUrl = "files/papers/Authors.csv";
+                result.InstitutionCsvUrl = "files/papers/Institutions.csv";
 
-            res.render('index', result);
+                util.generateArticleCsv();
+                util.generateJournalCsv();
+                util.generateAuthorCsv();
+                util.generateInstitutionCsv();
 
+                res.render('index', result);
+
+                });
             });
+            
     });
 
     router.get('/team', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+            
+          }else{
+           
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
         res.render('team', {
             title: 'SciBase'
         });
     });
 
     router.get('/publications', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+            
+          }else{
+           
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+
         res.render('publications', {
             title: 'SciBase'
         });
@@ -160,11 +254,19 @@ module.exports = function(io) {
             if(!result){
                 console.log("Error loading search_article");
             }
+            countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
 
-            res.render('datacenter', {
-                datasets: dataset_list,
-                dataset : result
+                if(doc){
+                    dataset_list.articlesDownloadHits = doc.hits;
+                }else{
+                    dataset_list.articlesDownloadHits = 0;
+                }
+                res.render('datacenter', {
+                    datasets: dataset_list,
+                    dataset : result
+                });
             });
+            
         });
         
 
@@ -237,7 +339,33 @@ module.exports = function(io) {
     });
 
     router.get('/query_builder', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+            
+          }else{
+           
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+
         util.getNodes(function(result){
+
 
         
 
@@ -472,6 +600,32 @@ module.exports = function(io) {
                 }); // socket event handler ends
 
                 socket.on('downloadArticleData_request', function(articleData){
+
+                    countsModel.findOne({ 'name': "ARTICLESDOWNLOAD" }, function (err, doc) {
+                      if(doc){
+                        var conditions = { name: 'ARTICLESDOWNLOAD' }
+                          , update = { $inc: { hits: 1 }}
+                          , options = { multi: false };
+
+                        countsModel.update(conditions, update, options, callback);
+                        function callback (err, numAffected) {
+                            if(err){
+                                console.log("UNABLE TO UPDATE ARTICLESDOWNLOAD");
+                            }
+                        }
+                        
+                      }else{
+                       
+                        console.log("Error : ", err);
+                        console.log("Creating a new Entry for ARTICLESDOWNLOAD");
+                        countsModel.create({name: "ARTICLESDOWNLOAD", hits: 0}, function(err, doc) {
+                            if(err){
+                                console.log("UNABLE TO CREATE ARTICLESDOWNLOAD", err);
+                            }
+                        });
+                      }
+                    });
+
                     console.log("Downloading");
                     var file_name_base = util.randomString(20);
 
