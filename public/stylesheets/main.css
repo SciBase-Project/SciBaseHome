@@ -755,7 +755,7 @@ ul.sub-menu {
   background-image: url(../images/home/tour-bg.png);
   background-color: #fbfafa;
   background-repeat: repeat-x;
-  height: 130px;
+  height: 100px;
   background-position: center;
   display: table;
   position: static;
@@ -2876,4 +2876,8 @@ span.stButton_gradient,
   font-size:16px;
   transition: all 0.5s;
   color: #000;
+}
+.single-border-bottom{
+  /*border: 1px solid rgb(0, 183, 255) !important;*/
+  border-bottom: 1px solid rgb(0, 183, 255) !important;
 }

@@ -53,13 +53,13 @@
     <!--/#header-->
     
     <section id="page-breadcrumb">
-        <div class="vertical-center sun">
+        <div class="vertical-center sun single-border-bottom">
              <div class="container">
                 <div class="row">
                     <div class="action">
                         <div class="col-sm-12">
                             <h1 class="title">Publications</h1>
-                            <p>Our research papers published.</p>
+                            <!--<p>Our research papers published.</p> -->
                         </div>
                     </div>
                 </div>
@@ -71,11 +71,13 @@
     <section id="blog" class="padding-bottom">
         <div class="container">
             <div class="row">
-                <div class="timeline-blog overflow padding-top">
+                <div class="timeline-blog overflow">
                     <div class="timeline-date text-center">
-                        <a href="#" class="btn btn-common uppercase">Submitted/Under Review</a>
+                        <!--<a href="#" class="btn btn-common uppercase">Submitted/Under Review</a>
+                        <a href="#" class="btn btn-common uppercase">Papers</a> -->
                     </div>
                     <div class="timeline-divider overflow padding-bottom">
+                        <div class="col-sm-12">
                         <div class="col-sm-6 padding-right arrow-right wow fadeInLeft" data-wow-duration="1000ms" data-wow-delay="300ms">
                             <div class="single-blog timeline">
                                 <!-- <div class="single-blog-wrapper">
@@ -88,118 +90,119 @@
                                 </div -->
                                 <div class="post-content overflow">
                                     <h2 class="post-title bold"><a href="blogdetails.html">DSRS: Estimation and Forecasting of Journal Influence in the Science and Technology Domain via a Lightweight Quantitative Approach</a></h2>
+                                    <h4>Authors: Snehanshu Saha, Neelam Jangid, Archana Mathur, Anand M</h4>
                                     <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
                                     <p>The evaluation of journals based on their influence is of interest for numerous reasons. Various methods of computing a score have been proposed for measuring the scientific influence of scholarly journals. Typically the computation of any of these scores involves compiling the citation information pertaining to the journal under consideration. This involves significant overhead since the article citation information of not only the journal under consideration but also that of other journals for the recent few years need to be stored. Our work is motivated by the idea of developing a computationally lightweight approach that does not require any data storage, yet yields a score which is useful for measuring the importance of journals. In this paper, a regression analysis based method is proposed to calculate Journal Influence Score. Proposed model is validated using historical data from the SCImago portal. The results show that the error is small between rankings obtained using the proposed method and the SCImago Journal Rank, thus proving that the proposed approach is a feasible and effective method of calculating scientific impact of journals.</p>
                                     <p>
                                     <script type="text/javascript" language="Javascript">
 
-var v1 = "";
-var v2 = "";
-var v3 = "";
-var v4 = "";
-var v5 = "";
-var v6 = "";
-var B0 = 0.0923715257441432;
-var B1 = 0.00585705300923252;
-var B2 = 0.000426180365273499;
-var B3 = -0.0000164176688297669;
-var B4 = 0.000128464253845954;
-var B5 = -0.000402520147148778;
-var B6 = 0.331746855609088;
-var answer = 0;
+                                    var v1 = "";
+                                    var v2 = "";
+                                    var v3 = "";
+                                    var v4 = "";
+                                    var v5 = "";
+                                    var v6 = "";
+                                    var B0 = 0.0923715257441432;
+                                    var B1 = 0.00585705300923252;
+                                    var B2 = 0.000426180365273499;
+                                    var B3 = -0.0000164176688297669;
+                                    var B4 = 0.000128464253845954;
+                                    var B5 = -0.000402520147148778;
+                                    var B6 = 0.331746855609088;
+                                    var answer = 0;
 
 
-function Reset () {
+                                    function Reset () {
 
-document.getElementById("v1").value = "";
-document.getElementById("v2").value = "";
-document.getElementById("v3").value = "";
-document.getElementById("v4").value = "";
-document.getElementById("v5").value = "";
-document.getElementById("v6").value = "";
-document.getElementById("answer").value = "";
+                                    document.getElementById("v1").value = "";
+                                    document.getElementById("v2").value = "";
+                                    document.getElementById("v3").value = "";
+                                    document.getElementById("v4").value = "";
+                                    document.getElementById("v5").value = "";
+                                    document.getElementById("v6").value = "";
+                                    document.getElementById("answer").value = "";
 
-}
+                                    }
 
-function Calculate () {
+                                    function Calculate () {
 
-v1=document.getElementById("v1").value;
-v2=document.getElementById("v2").value;
-v3=document.getElementById("v3").value;
-v4=document.getElementById("v4").value;
-v5=document.getElementById("v5").value;
-v6=document.getElementById("v6").value;
-
-
-if (v1==null || v1==""||isNaN(v1))
-  {
-  alert("H-Index must be filled out / H-Index must be Numeric ");
-  return;
-  }
-else if (v2==null || v2==""||isNaN(v2))
-  {
-  alert("Total Docs. (Current Year) must be filled out / Total Docs. (Current Year) must be Numeric");
-return;  
-}
-else if (v3==null || v3==""||isNaN(v3))
-  {
-  alert("Total Refs. must be filled out / Total Refs. must be Numeric");
-return; 
- }
-else if (v4==null || v4==""||isNaN(v4))
-  {
-  alert("Total Cites (3years) must be filled out / Total Cites (3years) must be Numeric");
-return;  
-}
-else if (v5==null || v5==""||isNaN(v5))
-  {
-  alert("Citable Docs. (3years) must be filled out / Citable Docs. (3years) must be Numeric");
-return; 
- }
-else if (v6==null || v6==""||isNaN(v6))
-  {
-  alert("Cites / Doc. (2years) must be filled out / Cites / Doc. (2years) must be Numeric");
-return;  
-}
+                                    v1=document.getElementById("v1").value;
+                                    v2=document.getElementById("v2").value;
+                                    v3=document.getElementById("v3").value;
+                                    v4=document.getElementById("v4").value;
+                                    v5=document.getElementById("v5").value;
+                                    v6=document.getElementById("v6").value;
 
 
-answer = B0+ v1*B1 + v2*B2 + v3*B3 + v4*B4 + v5*B5 + v6*B6;
-answer = answer.toFixed(3)
+                                    if (v1==null || v1==""||isNaN(v1))
+                                      {
+                                      alert("H-Index must be filled out / H-Index must be Numeric ");
+                                      return;
+                                      }
+                                    else if (v2==null || v2==""||isNaN(v2))
+                                      {
+                                      alert("Total Docs. (Current Year) must be filled out / Total Docs. (Current Year) must be Numeric");
+                                    return;  
+                                    }
+                                    else if (v3==null || v3==""||isNaN(v3))
+                                      {
+                                      alert("Total Refs. must be filled out / Total Refs. must be Numeric");
+                                    return; 
+                                     }
+                                    else if (v4==null || v4==""||isNaN(v4))
+                                      {
+                                      alert("Total Cites (3years) must be filled out / Total Cites (3years) must be Numeric");
+                                    return;  
+                                    }
+                                    else if (v5==null || v5==""||isNaN(v5))
+                                      {
+                                      alert("Citable Docs. (3years) must be filled out / Citable Docs. (3years) must be Numeric");
+                                    return; 
+                                     }
+                                    else if (v6==null || v6==""||isNaN(v6))
+                                      {
+                                      alert("Cites / Doc. (2years) must be filled out / Cites / Doc. (2years) must be Numeric");
+                                    return;  
+                                    }
 
 
-document.getElementById("answer").value=answer;
+                                    answer = B0+ v1*B1 + v2*B2 + v3*B3 + v4*B4 + v5*B5 + v6*B6;
+                                    answer = answer.toFixed(3)
 
-}
 
-</script>
+                                    document.getElementById("answer").value=answer;
 
-<form>
-<h2><font color="green">Journal Influence Factor Calculation</font></h2> <br> 
-<fieldset style="width:500px">
-<legend><h3>Enter Input Parameter</h3></legend>
-<b>H-Index </b><input type="text" id="v1"> <br><br>
-<b>Total Docs. (Current Year)</b> <input type="text" id="v2"> <br><br>
-<b>Total Refs.</b> <input type="text" id="v3" > <br><br>
-<b>Total Cites (3years)</b> <input type="text" id="v4" > <br><br>
-<b>Citable Docs. (3years)</b> <input type="text" id="v5" > <br><br>
-<b>Cites / Doc. (2years)</b> <input type="text" id="v6" > <br>
-</fieldset>
-<br><button type="button" onclick="Calculate()">Calculate Journal Influence Factor</button>
-<button type="button" onclick="Reset()">Reset Values</button>
+                                    }
 
-<br><br>
-<fieldset style="width:500px">
-<legend><h3>OUTPUT</h3></legend>
-<b>Journal Influence Factor</b> <input type="text" id="answer" readonly>
-</fieldset>
+                                    </script>
 
-<!-- <br>
-<h5><i><font size="3" color="blue"><u>Tool Created By</u> <br> NEELAM<br>M.Tech.||CSE||PESIT South Campus, Bangalore</font></i></h5> -->
-</form>
-</p>
+                                    <form>
+                                    <h2><font color="green">Journal Influence Factor Calculation</font></h2> <br> 
+                                    <fieldset style="width:500px">
+                                    <legend><h3>Enter Input Parameter</h3></legend>
+                                    <b>H-Index </b><input type="text" id="v1"> <br><br>
+                                    <b>Total Docs. (Current Year)</b> <input type="text" id="v2"> <br><br>
+                                    <b>Total Refs.</b> <input type="text" id="v3" > <br><br>
+                                    <b>Total Cites (3years)</b> <input type="text" id="v4" > <br><br>
+                                    <b>Citable Docs. (3years)</b> <input type="text" id="v5" > <br><br>
+                                    <b>Cites / Doc. (2years)</b> <input type="text" id="v6" > <br>
+                                    </fieldset>
+                                    <br><button type="button" onclick="Calculate()">Calculate Journal Influence Factor</button>
+                                    <button type="button" onclick="Reset()">Reset Values</button>
+
+                                    <br><br>
+                                    <fieldset style="width:500px">
+                                    <legend><h3>OUTPUT</h3></legend>
+                                    <b>Journal Influence Factor</b> <input type="text" id="answer" readonly>
+                                    </fieldset>
+
+                                    <!-- <br>
+                                    <h5><i><font size="3" color="blue"><u>Tool Created By</u> <br> NEELAM<br>M.Tech.||CSE||PESIT South Campus, Bangalore</font></i></h5> -->
+                                    </form>
+                                    </p>
                                     <a href="static_files/papers/paper1.pdf" class="read-more" download>View More</a>
                                     <div class="post-bottom overflow">
-                                        <span class="post-date pull-left">Submitted</span>
+                                       <!-- <span class="post-date pull-left">Submitted</span> -->
                                         <!-- <span class="comments-number pull-right"><a href="#">3 comments</a></span> -->
                                     </div>
                                 </div>
@@ -217,45 +220,104 @@ document.getElementById("answer").value=answer;
                                 </div> -->
                                 <div class="post-content overflow">
                                     <h2 class="post-title bold"><a href="blogdetails.html#">ScientoBASE: A Framework and Model for Computing Scholastic Indicators of non-local influence of Journals via Native Data Acquisition algorithms</a></h2>
+                                    <h4>Authors: Gouri Ginde, Snehanshu Saha, Archana Mathur, Sukrit Venkatagiri</h4>
                                     <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
-                                    <p>Defining and measuring internationality as a function of influence diffusion of scientific journals is an open
-problem. There exists no metric to rank journals based on the extent or scale of internationality. Measuring internationality is qualitative, vague, open to interpretation and is limited by vested interests. With the tremendous increase
-in the number of journals in various fields and the unflinching desire of academics across the globe to publish in
-”international” journals, it has become an absolute necessity to evaluate, rank and categorize journals based on internationality. Authors, in the current work have defined internationality as a measure of influence that transcends across
-geographic boundaries. There are concerns raised by the authors about unethical practices reflected in the process
-of journal publication whereby scholarly influence of a select few are artificially boosted, primarily by resorting to
-editorial manoeuvres. To counter the impact of such tactics, authors have come up with a new method that defines and
-measures internationality by eliminating such local effects when computing the influence of journals. A new metric,
-Non-Local Influence Quotient (NLIQ) is proposed as one such parameter for internationality computation along with
-another novel metric, Other-Citation Quotient as the complement of the ratio of self-citation and total citation. In
-addition, SNIP and International Collaboration Ratio are used as two other parameters. As these journal parameters
-are not readily available in one place, algorithms to scrape these metrics are written and documented as a part of the
-current manuscript. Cobb-Douglas production function is utilized as a model to compute JIMI (Journal Internationality Modeling Index). Current work elucidates the metric acquisition algorithms while delivering arguments in favor of
-the suitability of the proposed model. Acquired data is corroborated by different supervised learning techniques. As
-part of future work, the authors present a bigger picture, RAGIS- Reputation And Global Influence Score, that will be
-computed to facilitate the formation of clusters of journals of high, moderate and low internationality.</p>
+                                    <p>
+                                        Defining and measuring internationality as a function of influence diffusion of scientific journals is an open
+                                        problem. There exists no metric to rank journals based on the extent or scale of internationality. Measuring internationality is qualitative, vague, open to interpretation and is limited by vested interests. With the tremendous increase
+                                        in the number of journals in various fields and the unflinching desire of academics across the globe to publish in
+                                        ”international” journals, it has become an absolute necessity to evaluate, rank and categorize journals based on internationality. Authors, in the current work have defined internationality as a measure of influence that transcends across
+                                        geographic boundaries. There are concerns raised by the authors about unethical practices reflected in the process
+                                        of journal publication whereby scholarly influence of a select few are artificially boosted, primarily by resorting to
+                                        editorial manoeuvres. To counter the impact of such tactics, authors have come up with a new method that defines and
+                                        measures internationality by eliminating such local effects when computing the influence of journals. A new metric,
+                                        Non-Local Influence Quotient (NLIQ) is proposed as one such parameter for internationality computation along with
+                                        another novel metric, Other-Citation Quotient as the complement of the ratio of self-citation and total citation. In
+                                        addition, SNIP and International Collaboration Ratio are used as two other parameters. As these journal parameters
+                                        are not readily available in one place, algorithms to scrape these metrics are written and documented as a part of the
+                                        current manuscript. Cobb-Douglas production function is utilized as a model to compute JIMI (Journal Internationality Modeling Index). Current work elucidates the metric acquisition algorithms while delivering arguments in favor of
+                                        the suitability of the proposed model. Acquired data is corroborated by different supervised learning techniques. As
+                                        part of future work, the authors present a bigger picture, RAGIS- Reputation And Global Influence Score, that will be
+                                        computed to facilitate the formation of clusters of journals of high, moderate and low internationality.
+                                    </p>
                                     <a href="static_files/papers/paper2.pdf" class="read-more" download>View More</a>
                                     <div class="post-bottom overflow">
-                                        <span class="post-date pull-left">Published</span>
+                                        <!--<span class="post-date pull-left">Published</span>-->
                                         <!-- <span class="comments-number pull-right"><a href="#">3 comments</a></span> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="col-sm-6 padding-left padding-top arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
+                        </div>
+                        <div class="col-sm-12">
+                        <div class="col-sm-6 padding-right arrow-right wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
                             <div class="single-blog timeline">
                                 <div class="post-content overflow">
-                                    <h2 class="post-title bold">Visualisation of massive data from scholarly Article and Journal Database: A Novel Scheme.</h2>
-                                    <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
-                                    <p>Scholarly articles publishing and getting cited has become a way of life for academicians. These scholarly publications shape up the career growth of not only the authors but also of the country, continent and the technological domains. Author affiliations, country and other information of an author coupled with data analytics can provide useful and insightful results. However, massive and complete data is required to perform this research. Google scholar which is a comprehensive and free repository of scholarly articles has been used as a data source for this purpose. Data scraped from Google scholar when stored as a graph and visualized in the form of nodes and relationships, can offer discerning and concealed information. Such as, evident domain shift of an author, various research domains spread for an author, prediction of emerging domain and sub domains, detection of journal and author level citation cartel behaviours etc. The data from graph database is also used in computation of scholastic indicators for the journals. Eventually, econometric model, named Cobb Douglas model is used to compute the journal’s Modeling Internationality Index based on these scholastic indicators.</p>
-                                    <a href="static_files/papers/Visualisation.pdf" class="read-more" download>View More</a>
+                                    <h2 class="post-title bold">RREF:Reference nesting in Scientific Literature and
+                                        Scholastic Diversity Score: A graph mining approach</h2>
+                                    <h4>Authors: Gouri Ginde, Snehanshu Saha, Aditya Agarwal, Arijit Mukherjee, Archana Mathur</h4>
+                                    <p>
+                                        Citation network analysis of scholarly articles and journals
+                                        has already been explored in depth and the subtlety of the
+                                        differences between citations and references has also been
+                                        recognized. The articles listed under the references sec-
+                                        tion of an article contribute to the citation count of the ref-
+                                        erenced article. Analyzing citations of an article or a jour-
+                                        nal of that article, which is a bottom up approach, provides
+                                        a varied degree of information, such as, patterns of spread
+                                        and influence of them in the academic world. However,
+                                        analysis of references provides a top down approach. The
+                                        reference network is represented as a graph; the nodes of
+                                        this graph represent articles and the directed connection
+                                        between the nodes represent the referenced relationship
+                                        forming a Nested Reference Network (NRN). The refer-
+                                        ence network analysis can help in exploring the history
+                                        of any famous or influential article of a journal. Identi-
+                                        fying various important articles in the reference network
+                                        of such an article, using graph theory, helps pin point the
+                                        path breaking articles which contributed in the subject/do-
+                                        main evolution. Text Analysis on keywords of multiple ref-
+                                        erence network of many highly cited articles of a scholar
+                                        is used in generating readership profile for that scholar.
+                                        Further, text analysis and natural language processing is
+                                        used in introducing and computing Scholastic Diversity
+                                        Score, a novel concept. An interface, which provides di-
+                                        versity, readership profile and history of information mined
+                                        through graph theory and text analysis, should be a handy
+                                        tool for young researchers looking for a range of back-
+                                        ground material in the early stages of his/her research ca-
+                                        reer. This tool can be easily scaled up using Neo4j graph
+                                        database for data storage and mining in future. Scholastic
+                                        Diversity Score, a potentially rich discovery from data that
+                                        may turn out to be inspirational and could feature promi-
+                                        nently in the Scientometrics literature in future.
+                                    </p>
+                                    <a href="static_files/papers/RREF.pdf" class="read-more" download>View More</a>
                                     <div class="post-bottom overflow">
-                                        <span class="post-date pull-left">Published</span>
+                                        <!--<span class="post-date pull-left">Published</span>-->
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-sm-6 padding-left padding-top arrow-left wow fadeInRight" data-wow-duration="1000ms" data-wow-delay="300ms">
+                            <div class="single-blog timeline">
+                                <div class="post-content overflow">
+                                    <h2 class="post-title bold">Visualisation of massive data from scholarly Article and Journal Database: A Novel Scheme.</h2>
+                                    <h4>Author: Gouri Ginde </h4>
+                                    <!-- <h3 class="post-author"><a href="#">Posted by micron News</a></h3> -->
+                                    <p>Scholarly articles publishing and getting cited has become a way of life for academicians. These scholarly publications shape up the career growth of not only the authors but also of the country, continent and the technological domains. Author affiliations, country and other information of an author coupled with data analytics can provide useful and insightful results. However, massive and complete data is required to perform this research. Google scholar which is a comprehensive and free repository of scholarly articles has been used as a data source for this purpose. Data scraped from Google scholar when stored as a graph and visualized in the form of nodes and relationships, can offer discerning and concealed information. Such as, evident domain shift of an author, various research domains spread for an author, prediction of emerging domain and sub domains, detection of journal and author level citation cartel behaviours etc. The data from graph database is also used in computation of scholastic indicators for the journals. Eventually, econometric model, named Cobb Douglas model is used to compute the journal’s Modeling Internationality Index based on these scholastic indicators.</p>
+                                    <a href="static_files/papers/Visualisation.pdf" class="read-more" download>View More</a>
+                                    <div class="post-bottom overflow">
+                                        <!--<span class="post-date pull-left">Published</span>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        
+
+
 
                         <!-- <div class="col-sm-6 padding-right arrow-right wow fadeInLeft" data-wow-duration="1000ms" data-wow-delay="300ms">
                             <div class="single-blog timeline">
