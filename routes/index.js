@@ -7,8 +7,8 @@ module.exports = function(io) {
     var util = require("../lib/util");
     var hbs = require('hbs');
     var mongoose = require("mongoose");
+    var svgCaptcha = require("svg-captcha");
   
-
     var schema = mongoose.Schema;
 
     var counterSchema = new schema({
@@ -62,7 +62,7 @@ module.exports = function(io) {
            
             console.log("Error : ", err);
             console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
                 if(err){
                     console.log("UNABLE TO CREATE HITS", err);
                 }
@@ -117,7 +117,7 @@ module.exports = function(io) {
            
             console.log("Error : ", err);
             console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
                 if(err){
                     console.log("UNABLE TO CREATE HITS", err);
                 }
@@ -147,7 +147,7 @@ module.exports = function(io) {
            
             console.log("Error : ", err);
             console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
                 if(err){
                     console.log("UNABLE TO CREATE HITS", err);
                 }
@@ -356,7 +356,7 @@ module.exports = function(io) {
            
             console.log("Error : ", err);
             console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 0}, function(err, doc) {
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
                 if(err){
                     console.log("UNABLE TO CREATE HITS", err);
                 }
@@ -618,7 +618,7 @@ module.exports = function(io) {
                        
                         console.log("Error : ", err);
                         console.log("Creating a new Entry for ARTICLESDOWNLOAD");
-                        countsModel.create({name: "ARTICLESDOWNLOAD", hits: 0}, function(err, doc) {
+                        countsModel.create({name: "ARTICLESDOWNLOAD", hits: 1}, function(err, doc) {
                             if(err){
                                 console.log("UNABLE TO CREATE ARTICLESDOWNLOAD", err);
                             }
