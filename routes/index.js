@@ -245,6 +245,9 @@ module.exports = function(io) {
 
             },
         ];
+
+        var captcha = svgCaptcha.create();
+
         var filterSearch = {};
         filterSearch.journal = "all";
         filterSearch.author = "all";
@@ -263,7 +266,8 @@ module.exports = function(io) {
                 }
                 res.render('datacenter', {
                     datasets: dataset_list,
-                    dataset : result
+                    dataset : result,
+                    captcha : captcha
                 });
             });
             
@@ -587,6 +591,12 @@ module.exports = function(io) {
 
     io.on("connection", function(socket) {
             console.log("A user connected");
+
+                socket.on('request_captcha', function(){
+                    var captcha = svgCaptcha.create();
+                    socket.emit("response_captcha", captcha);
+                    console.log("Captcha generated");
+                });
 
                 socket.on('filterSearch_request', function(filter) {
                     console.log("Socket connected");
