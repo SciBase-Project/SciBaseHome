@@ -15,4 +15,5 @@ var AminerSchema = new mongoose.Schema({
 },
     { collection : 'aminer' });
 
+
 mongoose.model('Aminer', AminerSchema);
