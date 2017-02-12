@@ -36,8 +36,8 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
-        util.getStats(function(result) {
-            updateCsv.findOne({ 'name': "update" }, function(err, doc) { //
+        util.generateJournalList(function(journals) { //fetch list of journals everytime
+            updateCsv.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
                     var curr_date = new Date();
                     mongo_date = doc.update_next
@@ -77,7 +77,7 @@ module.exports = function(io) {
                 } else {
 
                     console.log("Error : ", err);
-                    console.log("Creating a new Entry");
+                    console.log("Creating a new Entry"); // creating for the first time only
                     updateCsv.create({ name: "update" }, function(err, doc) {
                         if (err) {
                             console.log("UNABLE TO CREATE date", err);
@@ -85,15 +85,15 @@ module.exports = function(io) {
                     });
                 }
             });
+        });
+
+        util.getStats(function(result) {
             console.log("Result: ", result);
             result.title = "SciBase";
             result.JournalCsvUrl = "files/papers/Journals.csv";
             result.ArticleCsvUrl = "files/papers/Articles.csv";
             result.AuthorCsvUrl = "files/papers/Authors.csv";
             result.InstitutionCsvUrl = "files/papers/Institutions.csv";
-            var journals = []
-            journals = util.generateJournalList(function(journals) {}); //fetch list of journals everytime
-
             res.render('index', { 'result': result, 'journals': journals });
 
         });
