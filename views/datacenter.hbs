@@ -172,7 +172,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-success" id="submit-captcha">Submit</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" id="#hide-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
                       </div>
                     </div>
 
@@ -331,7 +331,9 @@
 				ctrStaticRequested = 1;
                 datasetId = $(this).attr("id");
 			});
-
+            $("#captcha-modal").on('hidden.bs.modal', function () {
+                $("#captcha-text").val("");
+            });
             socket.on("response_captcha", function(response){
                 $("#captcha-container").html(response.data);
 
@@ -352,8 +354,9 @@
                         //socket.emit('downloadArticleData_request', articleData);
                         console.log("sent download request");
                         $("#captcha-modal").modal("hide");
-							ctrStaticRequested = 0;
-							ctrArticleRequested = 0;
+                        ("#captcha-text").val("");
+						ctrStaticRequested = 0;
+						ctrArticleRequested = 0;
                     }else{
                         console.log("Access Denied");
                         $("#captcha-text-container").addClass("has-error");
