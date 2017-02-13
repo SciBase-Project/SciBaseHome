@@ -674,6 +674,32 @@ module.exports = function(io) {
 
                 });
                 socket.on("downloadDatasetData_request", function(dataset_id){
+
+                    countsModel.findOne({ 'name': "DATASETDOWNLOAD" }, function (err, doc) {
+                      if(doc){
+                        var conditions = { name: 'DATASETDOWNLOAD' }
+                          , update = { $inc: { hits: 1 }}
+                          , options = { multi: false };
+
+                        countsModel.update(conditions, update, options, callback);
+                        function callback (err, numAffected) {
+                            if(err){
+                                console.log("UNABLE TO UPDATE DATASETDOWNLOAD");
+                            }
+                        }
+
+                      }else{
+
+                        console.log("Error : ", err);
+                        console.log("Creating a new Entry for DATASETDOWNLOAD");
+                        countsModel.create({name: "DATASETDOWNLOAD", hits: 1}, function(err, doc) {
+                            if(err){
+                                console.log("UNABLE TO CREATE DATASETDOWNLOAD", err);
+                            }
+                        });
+                      }
+                    });
+
                     var downloadLinks = {
                      scibaseAcm : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz" ,
                      scibaseIndian : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz" ,
