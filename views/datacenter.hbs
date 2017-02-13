@@ -160,6 +160,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>-->
                       <div class="modal-body">
+                      	<button type="button" class="close" data-dismiss="modal">&times;</button>
                         <div class="row">
                             <div class="col-sm-12" id="captcha-container">
                                 {{{captcha.data}}}
@@ -167,12 +168,15 @@
                             <div class="col-sm-12 form-group has-feedback" id="captcha-text-container">
                                 <input type = "text" class="input input-sm form-control" placeholder = "Enter the above text" id="captcha-text">
                             </div>
+                            <div class="col-sm-12" id="captcha-error">
+                            	<i class="text-danger" style="display:none;font-size:70%">Invalid Captcha. Please re-enter.</i>
+                            </div>
                         </div>
 
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="submit-captcha">Submit</button>
-                        <button type="button" id="#hide-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submit-captcha">Submit</button>
+                       <!-- <button type="button" id="#hide-modal" class="btn btn-danger" data-dismiss="modal">Close</button>-->
                       </div>
                     </div>
 
@@ -333,17 +337,18 @@
 			});
             $("#captcha-modal").on('hidden.bs.modal', function () {
                 $("#captcha-text").val("");
+                $("#captcha-error .text-danger").css("display", "none");
+                $("#captcha-text-container").removeClass("has-error");
             });
             socket.on("response_captcha", function(response){
                 $("#captcha-container").html(response.data);
 
                 $("#captcha-modal").modal();
 
-                $("#captcha-modal #submit-captcha").click(function(){
+                $("#captcha-modal #submit-captcha").off().click(function(){
                     var t = $("#captcha-text").val();
                     var s = $.trim(t);
-
-                    if(s === response.text){
+                    if(s == response.text){
                         console.log("Access Granted");
 						if(ctrArticleRequested == 1){
 			               socket.emit('downloadArticleData_request', articleData);
@@ -354,12 +359,14 @@
                         //socket.emit('downloadArticleData_request', articleData);
                         console.log("sent download request");
                         $("#captcha-modal").modal("hide");
-                        ("#captcha-text").val("");
 						ctrStaticRequested = 0;
 						ctrArticleRequested = 0;
                     }else{
                         console.log("Access Denied");
                         $("#captcha-text-container").addClass("has-error");
+                        $("#captcha-text").val("");
+                        $("#captcha-error .text-danger").css("display", "block");
+
                     }
                 });
             });
