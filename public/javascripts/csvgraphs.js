@@ -21,7 +21,7 @@ $(document).ready(function() {
                 $(".graph4").attr('id', id4);
                 $(".sub").show();
                 $(".main").hide();
-                path = "../public/files/graphcsv/" + journals[val] + ".csv"
+                path = "../files/graphcsv/" + journals[val] + ".csv"
                 name1 = 'graph-' + val + '1';
                 name2 = 'graph-' + val + '2';
                 name3 = 'graph-' + val + '3';
@@ -182,7 +182,7 @@ var data = [];
 var arr = [];
 var options = ["Choose", "All Journal Data"];
 var journals = ["random", "random"]
-path = "../public/files/graphcsv/Journals.csv"
+path = "../files/graphcsv/Journals.csv"
 Papa.parse(path, {
     download: true,
     complete: function(results) {
@@ -205,7 +205,7 @@ Papa.parse(path, {
 });
 
 
-Plotly.d3.csv('../public/files/graphcsv/generateAllArticleIntScore.csv', function(err, rows) {
+Plotly.d3.csv('../files/graphcsv/generateAllArticleIntScore.csv', function(err, rows) {
     var POP_TO_PX_SIZE = 2e10;
     var trace1 = {
         mode: 'markers',
@@ -239,7 +239,7 @@ Plotly.d3.csv('../public/files/graphcsv/generateAllArticleIntScore.csv', functio
     Plotly.plot('my-graph1', [trace1], layout1, { showLink: false });
 });
 
-Plotly.d3.csv('../public/files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
+Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
     var POP_TO_PX_SIZE = 2e10;
     var trace2 = {
         mode: 'markers',
@@ -277,7 +277,7 @@ Plotly.d3.csv('../public/files/graphcsv/generateAllArticleCitvsYear.csv', functi
     Plotly.plot('my-graph2', [trace2], layout2, { showLink: false });
 });
 
-Plotly.d3.csv('../public/files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
+Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
     var POP_TO_PX_SIZE = 2e10;
     var trace3 = {
         mode: 'markers',
@@ -316,7 +316,7 @@ Plotly.d3.csv('../public/files/graphcsv/generateAllArticleCitvsYear.csv', functi
     Plotly.plot('my-graph3', [trace3], layout3, { showLink: false });
 });
 
-Plotly.d3.csv('../public/files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
+Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
     var POP_TO_PX_SIZE = 2e10;
     var trace4 = {
         mode: 'markers',

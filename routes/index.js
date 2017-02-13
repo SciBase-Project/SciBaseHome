@@ -83,6 +83,15 @@ module.exports = function(io) {
                             console.log("UNABLE TO CREATE date", err);
                         }
                     });
+                    util.generateArticleCsv(); //call these functions for the first time
+                    util.generateJournalCsv();
+                    util.generateAuthorCsv();
+                    util.generateInstitutionCsv();
+                    util.generateAllArticleIntScoreCsv();
+                    util.generateAllArticleCitvsYearCsv();
+                    for (k = 0; k < journals.length; k++) {
+                        util.generateArticleCitvsYearCsv(journals[k]);
+                    }
                 }
             });
         });
