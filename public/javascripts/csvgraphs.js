@@ -252,14 +252,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err,
     layout2 = {
         autosize: true,
         hovermode: 'closest',
-        legend: {
-            x: 0.5,
-            y: -0.25,
-            orientation: "h",
-            traceorder: "normal",
-            xanchor: "center",
-        },
-        showlegend: true,
         title: "Citation count vs Year",
         xaxis: {
             autorange: true,
@@ -290,14 +282,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err,
     var layout3 = {
         autosize: true,
         hovermode: "closest",
-        legend: {
-            x: 0.5,
-            y: -0.25,
-            orientation: "h",
-            traceorder: "normal",
-            xanchor: "center"
-        },
-        showlegend: true,
         title: "Article count vs Year",
         xaxis: {
             autorange: true,

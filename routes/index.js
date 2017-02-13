@@ -103,7 +103,7 @@ module.exports = function(io) {
             result.ArticleCsvUrl = "files/papers/Articles.csv";
             result.AuthorCsvUrl = "files/papers/Authors.csv";
             result.InstitutionCsvUrl = "files/papers/Institutions.csv";
-            res.render('index', { 'result': result, 'journals': journals });
+            res.render('index', result);
 
         });
     });
