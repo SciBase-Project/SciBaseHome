@@ -206,13 +206,15 @@ Papa.parse(path, {
 
 
 Plotly.d3.csv('../files/graphcsv/generateAllArticleIntScore.csv', function(err, rows) {
-    var POP_TO_PX_SIZE = 2e10;
     var trace1 = {
         mode: 'markers',
         type: 'scatter',
         x: rows.map(function(row) { return row['TotalCitationCount'] }),
         y: rows.map(function(row) { return row['TotalArticleCount'] }),
-        text: rows.map(function(row) { return row['Name'] }),
+        text: rows.map(function(row) {
+            str = row['Name'] + " " + row['InternationalityScore']
+            return str
+        }),
         marker: {
             sizemode: 'area',
             size: rows.map(function(row) { return row['InternationalityScore'] * 200 }),
@@ -240,7 +242,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleIntScore.csv', function(err, 
 });
 
 Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
-    var POP_TO_PX_SIZE = 2e10;
     var trace2 = {
         mode: 'markers',
         type: 'bar',
@@ -270,7 +271,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err,
 });
 
 Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err, rows) {
-    var POP_TO_PX_SIZE = 2e10;
     var trace3 = {
         mode: 'markers',
         type: 'bar',
