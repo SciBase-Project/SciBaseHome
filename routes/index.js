@@ -6,6 +6,17 @@ module.exports = function(io) {
     var path = require("path");
     var util = require("../lib/util");
     var hbs = require('hbs');
+    var mongoose = require("mongoose");
+    var svgCaptcha = require("svg-captcha");
+
+    var schema = mongoose.Schema;
+
+    var counterSchema = new schema({
+        name : String,
+        hits : Number
+    },{collection : "counts"});
+
+    var countsModel = mongoose.model("countsModel", counterSchema);
 
     hbs.registerHelper('toUpperCase', function(str){
         return str.toUpperCase();
@@ -20,7 +31,7 @@ module.exports = function(io) {
             return $1.toUpperCase();
         });
     });
-    
+
     // this is a new comment here
 
     var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
@@ -34,33 +45,116 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+
         util.getStats(function(result) {
 
-            console.log("Result: ",result);
-            result.title = "SciBase";
+            countsModel.findOne({"name" : "HITS"}, function(err, doc){
+                if(doc){
+                    result.hits = doc.hits;
+                }else{
+                    result.hits = 0;
+                }
 
-            result.JournalCsvUrl = "files/papers/Journals.csv";
-            result.ArticleCsvUrl = "files/papers/Articles.csv";
-            result.AuthorCsvUrl = "files/papers/Authors.csv";
-            result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+                console.log("Result: ",result);
+                result.title = "SciBase";
 
-            util.generateArticleCsv();
-            util.generateJournalCsv();
-            util.generateAuthorCsv();
-            util.generateInstitutionCsv();
+                result.JournalCsvUrl = "files/papers/Journals.csv";
+                result.ArticleCsvUrl = "files/papers/Articles.csv";
+                result.AuthorCsvUrl = "files/papers/Authors.csv";
+                result.InstitutionCsvUrl = "files/papers/Institutions.csv";
 
-            res.render('index', result);
+                util.generateArticleCsv();
+                util.generateJournalCsv();
+                util.generateAuthorCsv();
+                util.generateInstitutionCsv();
 
+                res.render('index', result);
+
+                });
             });
+
     });
 
     router.get('/team', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
         res.render('team', {
             title: 'SciBase'
         });
     });
 
     router.get('/publications', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+
         res.render('publications', {
             title: 'SciBase'
         });
@@ -71,7 +165,8 @@ module.exports = function(io) {
         var dataset_list = [{
                 title: "Scimago Dataset (1999 - 2014)",
                 description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
-                download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
+                //download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
+                id : "scimagoDataset1",
                 internal: true,
                 format: "XLSX",
                 size: "16.1 MB",
@@ -79,7 +174,8 @@ module.exports = function(io) {
             }, {
                 title: "Scimago Dataset (Archive at the time of January 2010)",
                 description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
-                download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
+                //download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
+                id : "scimagoDataset2",
                 internal: true,
                 format: "XLSX",
                 size: "2.8 MB",
@@ -87,7 +183,8 @@ module.exports = function(io) {
             }, {
                 title: "AMiner Paper",
                 description: "This file saves the paper information and the citation network.",
-                download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
+                //download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
+                id : "aminerPaper",
                 internal: false,
                 format: "CSV",
                 size: "509 MB",
@@ -95,7 +192,8 @@ module.exports = function(io) {
             }, {
                 title: "AMiner Author",
                 description: "This file saves the author information.",
-                download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
+                //download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
+                id : "aminerAuthor",
                 internal: false,
                 format: "CSV",
                 size: "167 MB",
@@ -103,7 +201,8 @@ module.exports = function(io) {
             }, {
                 title: "AMiner Co-author",
                 description: "This file saves the collaboration network among the authors in the second file.",
-                download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
+                //download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
+                id : "aminerCo",
                 internal: false,
                 format: "CSV",
                 size: "31.5 MB",
@@ -111,7 +210,8 @@ module.exports = function(io) {
             }, {
                 title: "ACM Journals",
                 description: "This dataset consists of 40 ACM Journals with all the Articles and related information.",
-                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
+                //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
+                id : "scibaseAcm",
                 internal: false,
                 format: "JSON",
                 size: "60 MB",
@@ -119,7 +219,8 @@ module.exports = function(io) {
             }, {
                 title: "Indian Journals",
                 description: "This dataset consists of a fewer number of Indian Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
-                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
+                //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
+                id : "scibaseIndian",
                 internal: false,
                 format: "JSON",
                 size: "118 KB",
@@ -127,7 +228,8 @@ module.exports = function(io) {
             }, {
                 title: "International Journals",
                 description: "This dataset consists of a International Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
-                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
+                //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
+                id : "scibaseInt",
                 internal: false,
                 format: "JSON",
                 size: "5.3 MB",
@@ -135,7 +237,8 @@ module.exports = function(io) {
             }, {
                 title: "Scholastic Indices",
                 description: "This is a dataset which has the scholastic indices such as Other Citation Count, Non Local Influence Quotient, SNIP and International Collaboration Ratio for the 40 ACM Journals.",
-                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
+                //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
+                id : "scibaseSchol",
                 internal: false,
                 format: "CSV",
                 size: "4 KB",
@@ -143,7 +246,8 @@ module.exports = function(io) {
             }, {
                 title: "Terence Tao Dataset",
                 description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Terence Tao, an Australian-American mathematician and a co-recipient of the 2006 Fields Medal and the 2014 Breakthrough Prize in Mathematics.",
-                download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+               //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                id : "scibaseTerence",
                 internal: false,
                 format: "JSON",
                 size: "137 MB",
@@ -151,6 +255,9 @@ module.exports = function(io) {
 
             },
         ];
+
+        var captcha = svgCaptcha.create();
+
         var filterSearch = {};
         filterSearch.journal = "all";
         filterSearch.author = "all";
@@ -160,15 +267,24 @@ module.exports = function(io) {
             if(!result){
                 console.log("Error loading search_article");
             }
+            countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
 
-            res.render('datacenter', {
-                datasets: dataset_list,
-                dataset : result
+                if(doc){
+                    dataset_list.articlesDownloadHits = doc.hits;
+                }else{
+                    dataset_list.articlesDownloadHits = 0;
+                }
+                res.render('datacenter', {
+                    datasets: dataset_list,
+                    dataset : result,
+                    captcha : captcha
+                });
             });
-        });
-        
 
-        
+        });
+
+
+
     });
 
     /* GET home page. */
@@ -237,14 +353,40 @@ module.exports = function(io) {
     });
 
     router.get('/query_builder', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+
         util.getNodes(function(result){
 
-        
+
+
 
         // socket.io events
         io.on("connection", function(socket) {
             console.log("A user connected");
-                   
+
        //console.log("this");
         //console.log(result);
             /**
@@ -272,25 +414,25 @@ module.exports = function(io) {
                         indexOfNode = (nodesRec.indexOf(statement[i-1]) + 1);
                         return_param += ( nodesRec[indexOfNode]+".`"+statement[i]+"`" );
                         if(i < statement.length - 1)
-                            return_param += ","; 
+                            return_param += ",";
                     }else{
                         if(nodesRec.indexOf(statement[i]) == -1){
                             nodesRec.push(statement[i]);
                             nodesRec.push(temp[i/2]);
-                            
+
                             if(i>0){
                                 item = {}
                                 item["statement"] = "MATCH (n:`"+statement[i-2]+"`)-[r]->(`"+statement[i]+"`) RETURN DISTINCT TYPE(r)";
                                 jsonRelationship.push(item);
                             }
-                           
+
                         }
-                        
-                        
+
+
                     }
 
                 }
-                
+
                 var jsonQuery = {
                     "statements" : jsonRelationship
                 };
@@ -311,7 +453,7 @@ module.exports = function(io) {
                     }, function(err, response, body) {
                         //console.log(body.results[0].data.length);
                         if (!err && response.statusCode === 200) {
-                            
+
                             for(var i=0;i<body.results.length; i++){
                                 if(body.results[i].data.length != 0){
                                     console.log("this " + body.results[i].data[0].row[0]);
@@ -320,28 +462,28 @@ module.exports = function(io) {
                                 } else{
                                     relationships.push("contains");
                                 }
-                                
+
                             }
-                            
+
                             for(var j = 0, k=0; j<nodesRec.length; j+=2){
 
                                 matching_param +=((j==0)?("("+nodesRec[j+1]+":`"+nodesRec[j]+"`)"):("-[:"+relationships[k++]+"]->"+"("+nodesRec[j+1]+":`"+nodesRec[j]+"`)"));
 
                             }
-                
 
-                            
+
+
 
                             query = "MATCH "+matching_param+" RETURN " +return_param;
 
-                            
+
 
                             var request_json = {
                                 "statements": [{
                                     "statement": query
                                 }]
                             };
-                            
+
                             var res = request({
                                 url: NEO4J_API_URL,
                                 method: "POST",
@@ -398,7 +540,7 @@ module.exports = function(io) {
 
                         console.log(err);
                     }
-                        
+
                 }); // relationships request ends
 
             }); // socket event handler ends
@@ -460,6 +602,12 @@ module.exports = function(io) {
     io.on("connection", function(socket) {
             console.log("A user connected");
 
+                socket.on('request_captcha', function(){
+                    var captcha = svgCaptcha.create();
+                    socket.emit("response_captcha", captcha);
+                    console.log("Captcha generated");
+                });
+
                 socket.on('filterSearch_request', function(filter) {
                     console.log("Socket connected");
                     console.log(filter);
@@ -468,15 +616,41 @@ module.exports = function(io) {
                         socket.emit("filterSearch_response", filterResult);
                         console.log("Socket emitted");
                     });
-                   
+
                 }); // socket event handler ends
 
                 socket.on('downloadArticleData_request', function(articleData){
+
+                    countsModel.findOne({ 'name': "ARTICLESDOWNLOAD" }, function (err, doc) {
+                      if(doc){
+                        var conditions = { name: 'ARTICLESDOWNLOAD' }
+                          , update = { $inc: { hits: 1 }}
+                          , options = { multi: false };
+
+                        countsModel.update(conditions, update, options, callback);
+                        function callback (err, numAffected) {
+                            if(err){
+                                console.log("UNABLE TO UPDATE ARTICLESDOWNLOAD");
+                            }
+                        }
+
+                      }else{
+
+                        console.log("Error : ", err);
+                        console.log("Creating a new Entry for ARTICLESDOWNLOAD");
+                        countsModel.create({name: "ARTICLESDOWNLOAD", hits: 1}, function(err, doc) {
+                            if(err){
+                                console.log("UNABLE TO CREATE ARTICLESDOWNLOAD", err);
+                            }
+                        });
+                      }
+                    });
+
                     console.log("Downloading");
                     var file_name_base = util.randomString(20);
 
                     var response_body = {};
-                    
+
                     response_body.csv_url = "files/papers/" + file_name_base + ".csv";
 
                     var csv = "";
@@ -485,7 +659,7 @@ module.exports = function(io) {
 
                         csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
                     }
-                    
+
                     try {
                         fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), csv, 'utf-8');
                         response_body.status = "success";
@@ -495,13 +669,60 @@ module.exports = function(io) {
                         response_body.status = "error";
                         response_body.csv_url = null;
                     }
-                    
+
                     socket.emit("downloadArticleData_response", response_body);
 
                 });
+                socket.on("downloadDatasetData_request", function(dataset_id){
 
-                
+                    countsModel.findOne({ 'name': "DATASETDOWNLOAD" }, function (err, doc) {
+                      if(doc){
+                        var conditions = { name: 'DATASETDOWNLOAD' }
+                          , update = { $inc: { hits: 1 }}
+                          , options = { multi: false };
+
+                        countsModel.update(conditions, update, options, callback);
+                        function callback (err, numAffected) {
+                            if(err){
+                                console.log("UNABLE TO UPDATE DATASETDOWNLOAD");
+                            }
+                        }
+
+                      }else{
+
+                        console.log("Error : ", err);
+                        console.log("Creating a new Entry for DATASETDOWNLOAD");
+                        countsModel.create({name: "DATASETDOWNLOAD", hits: 1}, function(err, doc) {
+                            if(err){
+                                console.log("UNABLE TO CREATE DATASETDOWNLOAD", err);
+                            }
+                        });
+                      }
+                    });
+
+                    var downloadLinks = {
+                     scibaseAcm : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz" ,
+                     scibaseIndian : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz" ,
+                     scibaseInt : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
+                     scibaseSchol : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
+                     scibaseTerence : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                     aminerPaper : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
+                     aminerAuthor : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
+                     aminerCo : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
+                     scimagoDataset1 : "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
+                     scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx"
+                    };
+
+                    var response_body = {};
+                    response_body.link = "#";
+                   // console.log("DatasetID : ", dataset_id);
+                   // console.log("value "+ downloadLinks[dataset_id]);
+                    response_body.link = downloadLinks[dataset_id] ;
+
+                    socket.emit("downloadDatasetData_response", response_body);
+                });
+
     }); // io event handler ends
-    
+
     return router;
 };
