@@ -254,6 +254,17 @@ module.exports = function(io) {
                 category: "scibase-dataset"
 
             },
+            {
+                title: " University and Country Mapping",
+                description: "This is a database of Universities around the world scraped from univ.cc website. The listing of Institutions is based on the \"World List of Universities 1997\" published by the International Association of Universities (IAU) and links discovered. This data is latest as on 1 Jan 2017.",
+               //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                id : "scibaseUniversity",
+                internal: false,
+                format: "JSON",
+                size: "137 MB",
+                category: "scibase-dataset"
+
+            }
         ];
 
         var captcha = svgCaptcha.create();
@@ -710,7 +721,8 @@ module.exports = function(io) {
                      aminerAuthor : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
                      aminerCo : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
                      scimagoDataset1 : "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
-                     scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx"
+                     scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
+                     scibaseUniversity : "static_files/datasets/University and Country mapping.json"
                     };
 
                     var response_body = {};
