@@ -47,7 +47,7 @@ $(document).ready(function() {
                     layout0 = {
                         autosize: true,
                         hovermode: 'closest',
-
+                        title: "Article count vs Citation Count",
                         xaxis: {
                             autorange: true,
                             domain: [0, 1],
@@ -212,7 +212,7 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleIntScore.csv', function(err, 
         x: rows.map(function(row) { return row['TotalCitationCount'] }),
         y: rows.map(function(row) { return row['TotalArticleCount'] }),
         text: rows.map(function(row) {
-            str = row['Name'] + " " + row['InternationalityScore']
+            str = row['Name'] + "<br>" + row['InternationalityScore']
             return str
         }),
         marker: {
@@ -222,9 +222,8 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleIntScore.csv', function(err, 
     };
 
     var layout1 = {
-        autosize: true,
         hovermode: "closest",
-        title: "Total citation count vs total article count with internationality score",
+        title: "Total citation count vs total article count" + "<br> with internationality score ",
         xaxis: {
             autorange: true,
             range: [-2075.59709325, 33446.7218862],
@@ -251,7 +250,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err,
     };
 
     layout2 = {
-        autosize: true,
         hovermode: 'closest',
         title: "Citation count vs Year",
         xaxis: {
@@ -280,7 +278,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err,
     };
 
     var layout3 = {
-        autosize: true,
         hovermode: "closest",
         title: "Article count vs Year",
         xaxis: {
@@ -315,7 +312,6 @@ Plotly.d3.csv('../files/graphcsv/generateAllArticleCitvsYear.csv', function(err,
     };
 
     var layout4 = {
-        autosize: true,
         hovermode: "closest",
         legend: {
             x: 1.00343949045,
