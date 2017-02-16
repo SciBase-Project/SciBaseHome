@@ -6,8 +6,11 @@ module.exports = function(io) {
     var path = require("path");
     var util = require("../lib/util");
     var hbs = require('hbs');
+<<<<<<< HEAD
+    var updateCsv = require('../models/csv');
+    var mongoose = require('mongoose');
+=======
     var mongoose = require("mongoose");
-var updateCsv = require('../models/csv');
     var svgCaptcha = require("svg-captcha");
 
     var schema = mongoose.Schema;
@@ -18,8 +21,9 @@ var updateCsv = require('../models/csv');
     },{collection : "counts"});
 
     var countsModel = mongoose.model("countsModel", counterSchema);
+>>>>>>> master
 
-    hbs.registerHelper('toUpperCase', function(str){
+    hbs.registerHelper('toUpperCase', function(str) {
         return str.toUpperCase();
     });
 
@@ -46,30 +50,8 @@ var updateCsv = require('../models/csv');
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
-        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
-          if(doc){
-            var conditions = { name: 'HITS' }
-              , update = { $inc: { hits: 1 }}
-              , options = { multi: false };
-
-            countsModel.update(conditions, update, options, callback);
-            function callback (err, numAffected) {
-                if(err){
-                    console.log("UNABLE TO UPDATE HITS");
-                }
-            }
-
-          }else{
-
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
-                if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
-                }
-            });
-          }
-util.generateJournalList(function(journals) { //fetch list of journals everytime
+<<<<<<< HEAD
+        util.generateJournalList(function(journals) { //fetch list of journals everytime
             updateCsv.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
                     var curr_date = new Date();
@@ -139,10 +121,61 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
             res.render('index', result);
 
         });
-    });
+=======
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
 
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
         });
 
+        util.getStats(function(result) {
+
+            countsModel.findOne({"name" : "HITS"}, function(err, doc){
+                if(doc){
+                    result.hits = doc.hits;
+                }else{
+                    result.hits = 0;
+                }
+
+                console.log("Result: ",result);
+                result.title = "SciBase";
+
+                result.JournalCsvUrl = "files/papers/Journals.csv";
+                result.ArticleCsvUrl = "files/papers/Articles.csv";
+                result.AuthorCsvUrl = "files/papers/Authors.csv";
+                result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+
+                util.generateArticleCsv();
+                util.generateJournalCsv();
+                util.generateAuthorCsv();
+                util.generateInstitutionCsv();
+
+                res.render('index', result);
+
+                });
+            });
+
+>>>>>>> master
+    });
 
     router.get('/team', function(req, res, next) {
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
@@ -208,6 +241,89 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
     router.get('/datacenter', function(req, res, next) {
 
         var dataset_list = [{
+<<<<<<< HEAD
+            title: "Scimago Dataset (1999 - 2014)",
+            description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
+            download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
+            internal: true,
+            format: "XLSX",
+            size: "16.1 MB",
+            category: "scimago-dataset"
+        }, {
+            title: "Scimago Dataset (Archive at the time of January 2010)",
+            description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
+            download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
+            internal: true,
+            format: "XLSX",
+            size: "2.8 MB",
+            category: "scimago-dataset"
+        }, {
+            title: "AMiner Paper",
+            description: "This file saves the paper information and the citation network.",
+            download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
+            internal: false,
+            format: "CSV",
+            size: "509 MB",
+            category: "aminer-dataset"
+        }, {
+            title: "AMiner Author",
+            description: "This file saves the author information.",
+            download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
+            internal: false,
+            format: "CSV",
+            size: "167 MB",
+            category: "aminer-dataset"
+        }, {
+            title: "AMiner Co-author",
+            description: "This file saves the collaboration network among the authors in the second file.",
+            download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
+            internal: false,
+            format: "CSV",
+            size: "31.5 MB",
+            category: "aminer-dataset"
+        }, {
+            title: "ACM Journals",
+            description: "This dataset consists of 40 ACM Journals with all the Articles and related information.",
+            download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
+            internal: false,
+            format: "JSON",
+            size: "60 MB",
+            category: "scibase-dataset"
+        }, {
+            title: "Indian Journals",
+            description: "This dataset consists of a fewer number of Indian Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
+            download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
+            internal: false,
+            format: "JSON",
+            size: "118 KB",
+            category: "scibase-dataset"
+        }, {
+            title: "International Journals",
+            description: "This dataset consists of a International Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
+            download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
+            internal: false,
+            format: "JSON",
+            size: "5.3 MB",
+            category: "scibase-dataset"
+        }, {
+            title: "Scholastic Indices",
+            description: "This is a dataset which has the scholastic indices such as Other Citation Count, Non Local Influence Quotient, SNIP and International Collaboration Ratio for the 40 ACM Journals.",
+            download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
+            internal: false,
+            format: "CSV",
+            size: "4 KB",
+            category: "scibase-dataset"
+        }, {
+            title: "Terence Tao Dataset",
+            description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Terence Tao, an Australian-American mathematician and a co-recipient of the 2006 Fields Medal and the 2014 Breakthrough Prize in Mathematics.",
+            download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+            internal: false,
+            format: "JSON",
+            size: "137 MB",
+            category: "scibase-dataset"
+
+        }, ];
+=======
                 title: "Scimago Dataset (1999 - 2014)",
                 description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
                 //download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
@@ -314,6 +430,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
         var captcha = svgCaptcha.create();
 
+>>>>>>> master
         var filterSearch = {};
         filterSearch.journal = "all";
         filterSearch.author = "all";
@@ -325,6 +442,11 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
             }
             countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
 
+<<<<<<< HEAD
+            res.render('datacenter', {
+                datasets: dataset_list,
+                dataset: result
+=======
                 if(doc){
                     dataset_list.articlesDownloadHits = doc.hits;
                 }else{
@@ -335,6 +457,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
                     dataset : result,
                     captcha : captcha
                 });
+>>>>>>> master
             });
 
         });
@@ -409,6 +532,67 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
     });
 
     router.get('/query_builder', function(req, res, next) {
+<<<<<<< HEAD
+        util.getNodes(function(result) {
+
+
+
+            // socket.io events
+            io.on("connection", function(socket) {
+                console.log("A user connected");
+
+                //console.log("this");
+                //console.log(result);
+                /**
+                 * When a user enters a Cypher query, the data is sent with query_request
+                 * event of socket.
+                 */
+                socket.on('query_builder__request', function(cols) {
+                    //console.log(result);
+                    var column_names = cols;
+                    var query;
+
+                    var statement = String(column_names).split(/[->,]+/);
+                    // console.log(statement);
+
+
+                    var temp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    var nodesRec = [];
+                    var indexOfNode = -1;
+                    var return_param = "",
+                        matching_param = "";
+                    var jsonRelationship = [];
+
+                    for (var i = 0; i < statement.length; i++) {
+
+                        if (i % 2 != 0) {
+                            indexOfNode = (nodesRec.indexOf(statement[i - 1]) + 1);
+                            return_param += (nodesRec[indexOfNode] + ".`" + statement[i] + "`");
+                            if (i < statement.length - 1)
+                                return_param += ",";
+                        } else {
+                            if (nodesRec.indexOf(statement[i]) == -1) {
+                                nodesRec.push(statement[i]);
+                                nodesRec.push(temp[i / 2]);
+
+                                if (i > 0) {
+                                    item = {}
+                                    item["statement"] = "MATCH (n:`" + statement[i - 2] + "`)-[r]->(`" + statement[i] + "`) RETURN DISTINCT TYPE(r)";
+                                    jsonRelationship.push(item);
+                                }
+
+                            }
+
+
+                        }
+
+                    }
+
+                    var jsonQuery = {
+                        "statements": jsonRelationship
+                    };
+                    // console.log(jsonQuery);
+=======
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -451,27 +635,20 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
              */
             socket.on('query_builder__request', function(cols) {
                 //console.log(result);
-                /**
-                 * When a user enters a Cypher query, the data is sent with query_request
-                 * event of socket.
-                 */
-                socket.on('query_builder__request', function(cols) {
-                    //console.log(result);
-                    var column_names = cols;
-                    var query;
+                var column_names = cols;
+                var query;
 
-                    var statement = String(column_names).split(/[->,]+/);
-                    // console.log(statement);
+                var statement = String(column_names).split(/[->,]+/);
+               // console.log(statement);
 
 
-                    var temp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    var nodesRec = [];
-                    var indexOfNode = -1;
-                    var return_param = "",
-                        matching_param = "";
-                    var jsonRelationship = [];
+                var temp = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                var nodesRec = [];
+                var indexOfNode = -1;
+                var return_param="", matching_param="";
+                var jsonRelationship = [];
 
-                    for (var i = 0; i < statement.length; i++) {
+                for(var i =0; i< statement.length;i++){
 
                     if(i%2 !=0){
                         indexOfNode = (nodesRec.indexOf(statement[i-1]) + 1);
@@ -500,6 +677,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
                     "statements" : jsonRelationship
                 };
                // console.log(jsonQuery);
+>>>>>>> master
 
                     var relationships = [];
 
@@ -517,8 +695,13 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
                         //console.log(body.results[0].data.length);
                         if (!err && response.statusCode === 200) {
 
+<<<<<<< HEAD
+                            for (var i = 0; i < body.results.length; i++) {
+                                if (body.results[i].data.length != 0) {
+=======
                             for(var i=0;i<body.results.length; i++){
                                 if(body.results[i].data.length != 0){
+>>>>>>> master
                                     console.log("this " + body.results[i].data[0].row[0]);
                                     console.log("length " + body.results[i].data.length);
                                     relationships.push(body.results[i].data[0].row[0]);
@@ -527,8 +710,11 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
                                 }
 
                             }
+<<<<<<< HEAD
+=======
 
                             for(var j = 0, k=0; j<nodesRec.length; j+=2){
+>>>>>>> master
 
                             for (var j = 0, k = 0; j < nodesRec.length; j += 2) {
 
@@ -536,12 +722,20 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
                             }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> master
 
 
 
-                            query = "MATCH "+matching_param+" RETURN " +return_param;
+<<<<<<< HEAD
+                            query = "MATCH " + matching_param + " RETURN " + return_param;
 
 
+=======
+>>>>>>> master
 
                             var request_json = {
                                 "statements": [{
@@ -603,10 +797,15 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
                         } else {
 
+<<<<<<< HEAD
+                            console.log(err);
+                        }
+=======
                         console.log(err);
                     }
 
                 }); // relationships request ends
+>>>>>>> master
 
                     }); // relationships request ends
 
@@ -670,6 +869,24 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
     io.on("connection", function(socket) {
         console.log("A user connected");
 
+        socket.on('filterSearch_request', function(filter) {
+            console.log("Socket connected");
+            console.log(filter);
+            util.search_article(filter, function(filterResult) {
+                //console.log("filterResult", filterResult);
+                socket.emit("filterSearch_response", filterResult);
+                console.log("Socket emitted");
+            });
+
+<<<<<<< HEAD
+        }); // socket event handler ends
+
+        socket.on('downloadArticleData_request', function(articleData) {
+            console.log("Downloading");
+            var file_name_base = util.randomString(20);
+
+            var response_body = {};
+=======
                 socket.on('request_captcha', function(){
                     var captcha = svgCaptcha.create();
                     socket.emit("response_captcha", captcha);
@@ -720,9 +937,33 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
                     var response_body = {};
 
                     response_body.csv_url = "files/papers/" + file_name_base + ".csv";
+>>>>>>> master
 
-            var response_body = {};
+            response_body.csv_url = "files/papers/" + file_name_base + ".csv";
 
+<<<<<<< HEAD
+            var csv = "";
+            csv += '"Title","DOI","Month","Year"\n';
+            for (var i = 0; i < articleData.length; i++) {
+
+                csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
+            }
+
+            try {
+                fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), csv, 'utf-8');
+                response_body.status = "success";
+
+            } catch (e) {
+                console.log("Error:", e.message);
+                response_body.status = "error";
+                response_body.csv_url = null;
+            }
+
+            socket.emit("downloadArticleData_response", response_body);
+
+        });
+
+=======
                         csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
                     }
 
@@ -788,6 +1029,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
                     socket.emit("downloadDatasetData_response", response_body);
                 });
+>>>>>>> master
 
     }); // io event handler ends
 
