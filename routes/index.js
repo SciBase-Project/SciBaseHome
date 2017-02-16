@@ -528,7 +528,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
                             }
 
-                            for(var j = 0, k=0; j<nodesRec.length; j+=2){
+                            
 
                             for (var j = 0, k = 0; j < nodesRec.length; j += 2) {
 
@@ -606,8 +606,6 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
                         console.log(err);
                     }
 
-                }); // relationships request ends
-
                     }); // relationships request ends
 
                 }); // socket event handler ends
@@ -615,6 +613,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
             res.render('query_builder', { dataModel: result });
         });
+    });
     });
 
     router.get('/login', function(req, res, next) {
@@ -668,7 +667,7 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
     });
 
     io.on("connection", function(socket) {
-        console.log("A user connected");
+            console.log("A user connected");
 
                 socket.on('request_captcha', function(){
                     var captcha = svgCaptcha.create();
@@ -721,7 +720,9 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
 
                     response_body.csv_url = "files/papers/" + file_name_base + ".csv";
 
-            var response_body = {};
+                    var csv = "";
+                    csv += '"Title","DOI","Month","Year"\n';
+                    for (var i = 0; i < articleData.length; i++) {
 
                         csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
                     }
@@ -792,4 +793,4 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
     }); // io event handler ends
 
     return router;
-};
+    };
