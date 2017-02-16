@@ -46,6 +46,7 @@ var updateCsv = require('../models/csv');
 
     /* GET home page. */
     router.get('/', function(req, res, next) {
+        
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -69,7 +70,9 @@ var updateCsv = require('../models/csv');
                 }
             });
           }
-util.generateJournalList(function(journals) { //fetch list of journals everytime
+        });
+        
+        util.generateJournalList(function(journals) { //fetch list of journals everytime
             updateCsv.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
                     var curr_date = new Date();
@@ -130,18 +133,24 @@ util.generateJournalList(function(journals) { //fetch list of journals everytime
         });
 
         util.getStats(function(result) {
-            console.log("Result: ", result);
-            result.title = "SciBase";
-            result.JournalCsvUrl = "files/papers/Journals.csv";
-            result.ArticleCsvUrl = "files/papers/Articles.csv";
-            result.AuthorCsvUrl = "files/papers/Authors.csv";
-            result.InstitutionCsvUrl = "files/papers/Institutions.csv";
-            res.render('index', result);
-
+            // Get Site visit counts..
+            countsModel.findOne({"name" : "HITS"}, function(err, doc){
+                if(doc){
+                    result.hits = doc.hits;
+                }else{
+                     result.hits = 0;
+                }
+                console.log("Result: ", result);
+                result.title = "SciBase";
+                result.JournalCsvUrl = "files/papers/Journals.csv";
+                result.ArticleCsvUrl = "files/papers/Articles.csv";
+                result.AuthorCsvUrl = "files/papers/Authors.csv";
+                result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+                res.render('index', result);
+            });
         });
-    });
 
-        });
+});
 
 
     router.get('/team', function(req, res, next) {
