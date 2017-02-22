@@ -7,7 +7,7 @@ module.exports = function(io) {
     var util = require("../lib/util");
     var hbs = require('hbs');
     var mongoose = require("mongoose");
-var updateCsv = require('../models/csv');
+    var updateCsv = require('../models/csv');
     var svgCaptcha = require("svg-captcha");
 
     var schema = mongoose.Schema;
@@ -140,17 +140,24 @@ var updateCsv = require('../models/csv');
                 }else{
                      result.hits = 0;
                 }
-                console.log("Result: ", result);
-                result.title = "SciBase";
-                result.JournalCsvUrl = "files/papers/Journals.csv";
-                result.ArticleCsvUrl = "files/papers/Articles.csv";
-                result.AuthorCsvUrl = "files/papers/Authors.csv";
-                result.InstitutionCsvUrl = "files/papers/Institutions.csv";
-                res.render('index', result);
+                countsModel.findOne({"name" : "DATASETDOWNLOAD"},function(err, doc){
+                    if(doc){
+                        result.articlesDownloadHits = doc.hits;
+                    }else{
+                        result.articlesDownloadHits = 0;
+                    }
+
+                    console.log("Result: ", result);
+                    result.title = "SciBase";
+                    result.JournalCsvUrl = "files/papers/Journals.csv";
+                    result.ArticleCsvUrl = "files/papers/Articles.csv";
+                    result.AuthorCsvUrl = "files/papers/Authors.csv";
+                    result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+                    res.render('index', result);
+                });
             });
         });
-
-});
+    });
 
 
     router.get('/team', function(req, res, next) {
@@ -315,13 +322,11 @@ var updateCsv = require('../models/csv');
                 id : "scibaseUniversity",
                 internal: false,
                 format: "JSON",
-                size: "137 MB",
+                size: "680 KB",
                 category: "scibase-dataset"
 
             }
         ];
-
-        var captcha = svgCaptcha.create();
 
         var filterSearch = {};
         filterSearch.journal = "all";
@@ -332,22 +337,25 @@ var updateCsv = require('../models/csv');
             if (!result) {
                 console.log("Error loading search_article");
             }
-            countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
+            // countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
 
-                if(doc){
-                    dataset_list.articlesDownloadHits = doc.hits;
-                }else{
-                    dataset_list.articlesDownloadHits = 0;
-                }
-                res.render('datacenter', {
-                    datasets: dataset_list,
-                    dataset : result,
-                    captcha : captcha
-                });
+            //     if(doc){
+            //         dataset_list.articlesDownloadHits = doc.hits;
+            //     }else{
+            //         dataset_list.articlesDownloadHits = 0;
+            //     }
+            //     res.render('datacenter', {
+            //         datasets: dataset_list,
+            //         dataset : result,
+            //         captcha : captcha
+            //     });
+            // });
+            res.render('datacenter', {
+                datasets: dataset_list,
+                dataset : result
+
             });
-
         });
-
 
 
     });
@@ -673,6 +681,15 @@ var updateCsv = require('../models/csv');
 
     router.get('/aminerAPI', function(req, res, next) {
         res.render('aminerAPI', {});
+    });
+
+    router.get('/rref',function(req, res, next){
+
+        var cy = cytoscape({
+          container: $('#cy')
+        });
+        
+        res.render('rref',{});
     });
 
     io.on("connection", function(socket) {

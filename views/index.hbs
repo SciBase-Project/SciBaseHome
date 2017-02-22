@@ -1,4 +1,13 @@
     <header id="header">
+    <div id="hit-counts" class="text-center animated flipInX">
+        <p>Visits</p>
+        <span> {{hits}} </span>
+        <hr>
+        <a href="/datacenter" style="color: #00f;">
+            <p style="font-size: 16px; weight: 400">Downloads</p>
+            <span> {{articlesDownloadHits}} </span>
+        </a>
+    </div>
     <div class="navbar navbar-inverse" role="banner">
         <div class="container">
                              <a class="navbar-brand" href="/">
@@ -431,18 +440,14 @@
             </div>
             </div>
             <div class="row">
-            <div class="col-sm-12">
-                <div class="text-center pull-right">
-                    <p>TOTAL SITE VISITS : {{hits}}</p>
-                </div>
-            </div>
-            <div class="col-sm-12">
+                <div class="col-sm-12">
                     <div class="copyright-text text-center">
                         <p>&copy; SciBase | PES Institute of Technology - Bangalore South Campus. All Rights Reserved.</p>
                     </div>
                 </div>
+             </div>
         </div>
-        </div>
+    </div>
 </footer>
 
 

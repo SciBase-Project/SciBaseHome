@@ -2901,3 +2901,43 @@ span.stButton_gradient,
     /*border: 1px solid rgb(0, 183, 255) !important;*/
     border-bottom: 1px solid rgb(0, 183, 255) !important;
 }
+
+#hit-counts{
+    position:absolute;
+    top:0px;
+    right:0px;
+    width: 120px;
+    padding:20px;
+    color: #00f;
+    border-top:none;
+    z-index: +1;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(43,67,217,1);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(43,67,217,1);
+    box-shadow: 0px 0px 5px 0px rgba(43,67,217,1);
+
+    -webkit-animation-duration: 2s;
+    -webkit-animation-delay: 3s;
+    -moz-animation-duration: 2s;
+    -moz-animation-delay: 3s;
+    animation-duration: 2s;
+    animation-delay: 3s;
+
+}
+
+@media screen and (max-width: 760px) {
+    #hit-counts{
+        display: none;
+    }
+}
+
+
+#hit-counts p{
+    font-size:20px;
+    font-weight:500;
+}
+#hit-counts span{
+    display: block;
+    color: #000;
+    font-weight: 400;
+    letter-spacing: 2px;
+}

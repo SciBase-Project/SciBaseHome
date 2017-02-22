@@ -23,6 +23,7 @@ jQuery(function($) {'use strict';
 
 		$('.main-slider').addClass('animate-in');
 		$('.preloader').remove();
+		// $("#hit-counts").show();
 		//End Preloader
 
 		if( $('.masonery_area').length ) {
