@@ -683,15 +683,6 @@ module.exports = function(io) {
         res.render('aminerAPI', {});
     });
 
-    router.get('/rref',function(req, res, next){
-
-        var cy = cytoscape({
-          container: $('#cy')
-        });
-        
-        res.render('rref',{});
-    });
-
     io.on("connection", function(socket) {
             console.log("A user connected");
 
