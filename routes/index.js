@@ -45,7 +45,7 @@ var updateCsv = require('../models/csv');
 
 
     /* GET home page. */
-    router.get('/', function(req, res, next) {
+    router.get('/', function(req, res) {
         
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
@@ -85,11 +85,12 @@ var updateCsv = require('../models/csv');
                         console.log(
                             Math.floor(diff / 60e3)
                         );
+                        console.log("Update needed")
                         util.generateArticleCsv(); //call these functions once every 15 days.
                         util.generateJournalCsv();
                         util.generateAuthorCsv();
                         util.generateInstitutionCsv();
-                        util.generateAllArticleIntScoreCsv();
+                       // util.generateAllArticleIntScoreCsv();
                         util.generateAllArticleCitvsYearCsv();
                         for (k = 0; k < journals.length; k++) {
                             util.generateArticleCitvsYearCsv(journals[k]);
@@ -123,7 +124,7 @@ var updateCsv = require('../models/csv');
                     util.generateJournalCsv();
                     util.generateAuthorCsv();
                     util.generateInstitutionCsv();
-                    util.generateAllArticleIntScoreCsv();
+                    //util.generateAllArticleIntScoreCsv();
                     util.generateAllArticleCitvsYearCsv();
                     for (k = 0; k < journals.length; k++) {
                         util.generateArticleCitvsYearCsv(journals[k]);
