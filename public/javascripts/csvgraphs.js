@@ -205,25 +205,25 @@ Papa.parse(path, {
 });
 
 
-Plotly.d3.csv('../files/graphcsv/generateAllArticleIntScore.csv', function(err, rows) {
+Plotly.d3.csv('../files/graphcsv/ScholasticIndices.csv', function(err, rows) {
     var trace1 = {
         mode: 'markers',
         type: 'scatter',
-        x: rows.map(function(row) { return row['TotalCitationCount'] }),
-        y: rows.map(function(row) { return row['TotalArticleCount'] }),
+        x: rows.map(function(row) { return row['Self citation'] }),
+        y: rows.map(function(row) { return row['Total Citation'] }),
         text: rows.map(function(row) {
-            str = row['Name'] + "<br>" + row['InternationalityScore']
+            str = row['Journal name'] + "<br>" + row['JIMI']
             return str
         }),
         marker: {
             sizemode: 'area',
-            size: rows.map(function(row) { return row['InternationalityScore'] * 200 }),
+            size: rows.map(function(row) { return row['JIMI'] * 200 }),
         }
     };
 
     var layout1 = {
         hovermode: "closest",
-        title: "Total citation count vs total article count" + "<br> with internationality score ",
+        title: "Self citation count vs total citation count" + "<br> with internationality score ",
         xaxis: {
             autorange: true,
             range: [-2075.59709325, 33446.7218862],
