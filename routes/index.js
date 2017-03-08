@@ -446,25 +446,8 @@ var updateCsv = require('../models/csv');
 
         util.getNodes(function(result){
 
-
-
-
-        // socket.io events
-        io.on("connection", function(socket) {
-            console.log("A user connected");
-
-       //console.log("this");
-        //console.log(result);
-            /**
-             * When a user enters a Cypher query, the data is sent with query_request
-             * event of socket.
-             */
-            socket.on('query_builder__request', function(cols) {
-                //console.log(result);
-                /**
-                 * When a user enters a Cypher query, the data is sent with query_request
-                 * event of socket.
-                 */
+            io.on("connection", function(socket) {
+                console.log("A user connected");
                 socket.on('query_builder__request', function(cols) {
                     //console.log(result);
                     var column_names = cols;
@@ -623,7 +606,6 @@ var updateCsv = require('../models/csv');
 
             res.render('query_builder', { dataModel: result });
         });
-    });
     });
 
     router.get('/login', function(req, res, next) {
