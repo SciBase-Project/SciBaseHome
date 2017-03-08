@@ -326,6 +326,16 @@ module.exports = function(io) {
                 size: "680 KB",
                 category: "scibase-dataset"
 
+            },
+            {
+                title: "Vidya Sagar Dataset",
+                description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Vidya Sagar and other few noted scholar.",
+                id : "scibaseVidyasagar",
+                internal: false,
+                format: "JSON",
+                size: "48.7MB",
+                category: "scibase-dataset"
+
             }
         ];
 
@@ -796,7 +806,8 @@ module.exports = function(io) {
                      aminerCo : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
                      scimagoDataset1 : "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
                      scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
-                     scibaseUniversity : "static_files/datasets/University and Country mapping.json"
+                     scibaseUniversity : "static_files/datasets/University and Country mapping.json",
+                     scibaseVidyasagar : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/Author+Data.zip"
                     };
 
                     var response_body = {};
