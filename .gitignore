@@ -30,5 +30,5 @@ node_modules
 npm-debug.log
 
 #public/files/graphcsv/*
-
+public/files/papers/*
 .env
