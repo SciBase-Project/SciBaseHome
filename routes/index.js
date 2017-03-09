@@ -45,8 +45,8 @@ var updateCsv = require('../models/csv');
 
 
     /* GET home page. */
-    router.get('/', function(req, res) {
-        
+    router.get('/', function(req, res,next) {
+
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -56,7 +56,7 @@ var updateCsv = require('../models/csv');
             countsModel.update(conditions, update, options, callback);
             function callback (err, numAffected) {
                 if(err){
-                    console.log("UNABLE TO UPDATE HITS");
+                    next(error)
                 }
             }
 
@@ -66,12 +66,12 @@ var updateCsv = require('../models/csv');
             console.log("Creating a new Entry");
             countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
                 if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
+                    next(err);
                 }
             });
           }
         });
-        
+
         util.generateJournalList(function(journals) { //fetch list of journals everytime
             updateCsv.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
@@ -81,7 +81,7 @@ var updateCsv = require('../models/csv');
                     console.log(curr_date)
                     console.log(diff)
                     console.log(mongo_date)
-                    if (diff > 1296000e3) { //check if date difference greater than 15 days. 
+                    if (diff > 1296000e3) { //check if date difference greater than 15 days.
                         console.log(
                             Math.floor(diff / 60e3)
                         );
@@ -103,7 +103,7 @@ var updateCsv = require('../models/csv');
 
                         function callback(err, numAffected) {
                             if (err) {
-                                console.log("UNABLE TO UPDATE date");
+                                next(err)
                             }
                         }
                     } else {
@@ -117,7 +117,7 @@ var updateCsv = require('../models/csv');
                     console.log("Creating a new Entry"); // creating for the first time only
                     updateCsv.create({ name: "update" }, function(err, doc) {
                         if (err) {
-                            console.log("UNABLE TO CREATE date", err);
+                            next(err)
                         }
                     });
                     util.generateArticleCsv(); //call these functions for the first time
@@ -538,7 +538,7 @@ var updateCsv = require('../models/csv');
 
                             }
 
-                            
+
 
                             for (var j = 0, k = 0; j < nodesRec.length; j += 2) {
 

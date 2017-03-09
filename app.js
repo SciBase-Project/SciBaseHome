@@ -47,10 +47,9 @@ app.use('/api/aminer', require('./routes/api/aminer'));
 app.get('/aminer.html', function (req, res) { res.sendFile( __dirname + "/views/" + "aminer.html" ); });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function(req, res) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
 });
 
 // error handlers
