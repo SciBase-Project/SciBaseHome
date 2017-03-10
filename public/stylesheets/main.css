@@ -270,7 +270,9 @@ h3 {
 #header .navbar-nav.navbar-right>li:last-child {
     margin-right: 20px;
 }
-
+.navbar-right{
+    margin-right: 5px;
+}
 #header .navbar-nav.navbar-right>li a {
     color: #000;
     font-size: 12px;
@@ -2906,8 +2908,8 @@ span.stButton_gradient,
     position:absolute;
     top:0px;
     right:0px;
-    width: 120px;
-    padding:20px;
+    width: 100px;
+    padding:10px;
     color: #00f;
     border-top:none;
     z-index: +1;
@@ -2924,7 +2926,7 @@ span.stButton_gradient,
 
 }
 
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 992px) {
     #hit-counts{
         display: none;
     }
