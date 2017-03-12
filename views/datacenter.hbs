@@ -259,7 +259,11 @@
                 theme:"bootstrap"
             });
             $(".test-select>option").css("textTransform", "capitalize");
-            $('#article-table').dynatable();
+            $('#article-table').dynatable({
+                features:{
+                    pushState : false
+                }
+            });
 
             $(".test-select").on("change", function(e){
                 var filterSearch = {};
