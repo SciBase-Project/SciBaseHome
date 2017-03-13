@@ -28,7 +28,7 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
-public/files/graphcsv/*
+
 
 public/files/papers/*
 .env
