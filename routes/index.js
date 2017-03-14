@@ -7,7 +7,6 @@ module.exports = function(io) {
     var util = require("../lib/util");
     var hbs = require('hbs');
     var mongoose = require("mongoose");
-    var updateCsv = require('../models/csv');
     var svgCaptcha = require("svg-captcha");
 
     var schema = mongoose.Schema;
