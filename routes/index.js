@@ -7,7 +7,6 @@ module.exports = function(io) {
     var util = require("../lib/util");
     var hbs = require('hbs');
     var mongoose = require("mongoose");
-var updateCsv = require('../models/csv');
     var svgCaptcha = require("svg-captcha");
 
     var schema = mongoose.Schema;
@@ -19,6 +18,12 @@ var updateCsv = require('../models/csv');
 
     var countsModel = mongoose.model("countsModel", counterSchema);
 
+    var updateCsv = new schema({
+        name : String,
+    	update_next: { type: Date, default : Date.now },
+    },{collection : "counts"});
+
+    var updateCsvModel = mongoose.model("updateCsvModel", updateCsv);
     hbs.registerHelper('toUpperCase', function(str){
         return str.toUpperCase();
     });
@@ -72,10 +77,11 @@ var updateCsv = require('../models/csv');
           }
         });
 
-        util.generateJournalList(function(journals) { //fetch list of journals everytime
-            updateCsv.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
+        util.generateJournalList(function(journals) {
+            var curr_date = new Date();//fetch list of journals everytime
+            updateCsvModel.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
-                    var curr_date = new Date();
+
                     mongo_date = doc.update_next
                     var diff = curr_date - mongo_date;
                     console.log(curr_date)
@@ -99,7 +105,7 @@ var updateCsv = require('../models/csv');
                             update = { $add: ["$update_next", 15 * 24 * 60 * 60000] },
                             options = { multi: false };
 
-                        updateCsv.update(conditions, update, options, callback);
+                        updateCsvModel.update(conditions, update, options, callback);
 
                         function callback(err, numAffected) {
                             if (err) {
@@ -115,7 +121,8 @@ var updateCsv = require('../models/csv');
 
                     console.log("Error : ", err);
                     console.log("Creating a new Entry"); // creating for the first time only
-                    updateCsv.create({ name: "update" }, function(err, doc) {
+                    curr_date.setDate(curr_date.getDate()+15)
+                    updateCsvModel.create({ name: "update", update_next : curr_date }, function(err, doc) {
                         if (err) {
                             next(err)
                         }
