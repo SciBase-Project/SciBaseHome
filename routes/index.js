@@ -8,8 +8,8 @@ module.exports = function(io) {
     var hbs = require('hbs');
     var mongoose = require("mongoose");
     var svgCaptcha = require("svg-captcha");
-    // var async = require("async");
-    // var circular = require("circular-json");
+    var async = require("async");
+    var circular = require("circular-json");
 
     var schema = mongoose.Schema;
 
@@ -685,54 +685,54 @@ module.exports = function(io) {
         res.render('aminerAPI', {});
     });
 
-    /*
+    
     // Create nested structure for D3.js library.
-    var createJson = function(j, level){
-        item = {};
-        console.log("Level "+level);
-        item["name"] = j.details.title;
-        console.log("This title is " + item["name"]);
-        item["children"]=[];
-        if(j.referenced_articles != null && level<2){
-            var ch = [];
-            async.each(j.referenced_articles, function(o, callback){
+    // var createJson = function(j, level){
+    //     item = {};
+    //     console.log("Level "+level);
+    //     item["name"] = j.details.title;
+    //     console.log("This title is " + item["name"]);
+    //     item["children"]=[];
+    //     if(j.referenced_articles != null){
+    //         var ch = [];
+    //         async.each(j.referenced_articles, function(o, callback){
                 
-                console.log("looping for "+o.details.name);
-                ch.push(createJson(o, level+1));
-                console.log("BACK AT LEVEL "+ level);
-                // console.log("children is "+ circular.stringify(ch));
+    //             console.log("looping for "+o.details.name);
+    //             ch.push(createJson(o, level+1));
+    //             console.log("BACK AT LEVEL "+ level);
+    //             // console.log("children is "+ circular.stringify(ch));
                 
-            });
-            console.log("children at level "+level+" are");
-            // console.log(ch);
-            item["children"]=ch;
-            // console.log("ITEM IS " + circular.stringify(item["children"]));
-            // console.log("Copied ch" + JSON.stringify(item["children"], replacer));
-        }
+    //         });
+    //         console.log("children at level "+level+" are");
+    //         // console.log(ch);
+    //         item["children"]=ch;
+    //         // console.log("ITEM IS " + circular.stringify(item["children"]));
+    //         // console.log("Copied ch" + JSON.stringify(item["children"], replacer));
+    //     }
 
-        return item;
-    }
-    */
+    //     return item;
+    // }
+    
     router.get('/rref', function(req, res, next) {
 
         /*Following is the code for generating nested structure containing just name and references
           This will be required in creating tree structure using D3.js library.*/
-        /*fs.readFile('public/files/Article 4v2.json', {encoding : "utf8"},(err, data) => {
-            if (err) throw err;
-            var obj = JSON.parse(data);
-            console.log("HERE");
-            var created = createJson(obj, 0);
+        // fs.readFile('public/files/Article 4v2.json', {encoding : "utf8"},(err, data) => {
+        //     if (err) throw err;
+        //     var obj = JSON.parse(data);
+        //     console.log("HERE");
+        //     var created = createJson(obj, 0);
 
-            try {
-                fs.writeFileSync("public/files/testfile.json", circular.stringify(created), 'utf-8');
-            } catch (e) {
-                console.log("Error:", e.message);
-            }
-            console.log(created);
-          // console.log("Created:\n" + circular.stringify(created));
-            // console.log(created);
+        //     try {
+        //         fs.writeFileSync("public/files/testfile.json", circular.stringify(created), 'utf-8');
+        //     } catch (e) {
+        //         console.log("Error:", e.message);
+        //     }
+        //     console.log(created);
+        //   // console.log("Created:\n" + circular.stringify(created));
+        //     // console.log(created);
 
-        }); **/
+        // }); 
 
         var firstArticle ={};
         fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{
@@ -770,9 +770,67 @@ module.exports = function(io) {
         
     });
 
+    router.get('/graph_animation', function(req, res, next){
+        var firstNode = {
+            id : "0",
+            label : "5452187",
+            color:{
+                border : "#a80008",
+                background:"#a80008",
+                highlight : "#a80008"
+            },
+            title : "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
+        };
+        var edgePair = {};
+        var graph = {};
+        graph.nodes = firstNode;
+        graph.edges = edgePair;
+
+
+        res.render('graph_animation',{graph : graph});
+    });
+
     io.on("connection", function(socket) {
             console.log("A user connected");
 
+                socket.on('graph_request', function(id){
+                    var colors = ["#266348","#6242f4","#00a838","#1c2820","#a80008"];
+                    var hierarchy = id.split("-");
+                    fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{
+                        if(err) throw err;
+                        var obj = JSON.parse(data);
+                        var l = 0;
+                        for(var j=1; j<hierarchy.length; j++){
+                            obj = obj.referenced_articles[parseInt(hierarchy[j])];
+                            l++;
+                        }
+                        var nodes = [];
+                        var edgePairs = [];
+                        for(var i=0; obj.referenced_articles && i<obj.referenced_articles.length; i++){
+                            item = {};
+                            item["label"] = obj.referenced_articles[i].details.articleId;
+                            item["id"] = id+"-"+i;
+                            item["color"]={
+                                border : colors[l],
+                                background : colors[l],
+                                highlight : colors[l]
+                            };
+                            item["title"] = obj.referenced_articles[i].details.title;
+
+                            edgePairItem = {};
+                            edgePairItem.from = id;
+                            edgePairItem.to = item["id"];
+                            nodes.push(item);
+                            edgePairs.push(edgePairItem);
+                        }
+                        var graph = {};
+                        graph.nodes = nodes;
+                        graph.edges = edgePairs;
+
+                        socket.emit('graph_response', graph);
+                    });
+
+                });
                 socket.on('rref_request', function(id){
                     var hierarchy = id.split("-");
                     fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{

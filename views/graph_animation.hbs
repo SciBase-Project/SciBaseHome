@@ -1,0 +1,101 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
+
+ <style type="text/css">
+        #mynetwork {
+            width: 100%;
+            height: 100vh;
+        }
+        #preloader{
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100vh;
+            display : block;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        #preloader > i{
+            position: absolute;
+            top : 0;
+            left : 48%;
+            font-size : 50px;
+        }
+
+ </style>
+
+ <div id="mynetwork"></div>
+ <div id="preloader"><i class="fa fa-spinner fa-spin"></i></div>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+    // create an array with nodes
+    var nodes = new vis.DataSet();
+    nodes.add({{{parseJson graph.nodes}}});
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+
+    ]);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+    	nodes:{
+    		shape : "circle",
+		    borderWidth: 1,
+		    borderWidthSelected: 2,
+		    brokenImage:undefined,
+		    chosen: true,
+		    font: {
+		      color: '#fff',
+		    }
+		}
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+
+    var socket = io();
+
+    $(document).ready(function(){
+        
+    	console.log(nodes);
+    	$("#add").click(function(){
+    		var temp = [
+    			{'id':'2', 'label' : 'Node 2'},
+    			{'id':'3', 'label' : 'Node 3'},
+    			{'id':'4', 'label' : 'Node 4'}
+    		];
+    		nodes.add(temp);
+    		edges.add([
+    			{from : '1', to: '2'},
+    			{from : '1', to: '3'},
+    			{from : '1', to: '4'}
+    		]);
+    	});
+
+    	network.on("click", function(args){
+    		if(args.nodes.length){
+    			console.log(args.nodes);
+    			socket.emit('graph_request', args.nodes[0]);
+                $("#preloader").css("display", "block");
+    		}
+    	});
+    	socket.on('graph_response', function(g){
+    		nodes.add(g.nodes);
+    		//console.log("Added " + g.nodes);
+    		edges.add(g.edges);
+            $("#preloader").css("display", "none");
+
+    	});
+
+
+        $("#preloader").css("display", "none");
+    });
+</script>
