@@ -734,6 +734,22 @@ module.exports = function(io) {
 
         // }); 
 
+        var firstNode = {
+            id : "G",
+            label : "5452187",
+            color:{
+                border : "#a80008",
+                background:"#a80008",
+                highlight : "#a80008"
+            },
+            title : "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
+        };
+        var edgePair = {};
+        var graph = {};
+        graph.nodes = firstNode;
+        graph.edges = edgePair;
+
+
         var firstArticle ={};
         fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{
             if(err) throw err;
@@ -763,31 +779,11 @@ module.exports = function(io) {
             }
             firstArticle["referenced_articles"] = ch;
             // console.log(firstArticle);
-            res.render('rref', {data : firstArticle});
+            res.render('rref', {data : firstArticle, graph : graph});
             
         });
         
         
-    });
-
-    router.get('/graph_animation', function(req, res, next){
-        var firstNode = {
-            id : "0",
-            label : "5452187",
-            color:{
-                border : "#a80008",
-                background:"#a80008",
-                highlight : "#a80008"
-            },
-            title : "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
-        };
-        var edgePair = {};
-        var graph = {};
-        graph.nodes = firstNode;
-        graph.edges = edgePair;
-
-
-        res.render('graph_animation',{graph : graph});
     });
 
     io.on("connection", function(socket) {
