@@ -21,7 +21,7 @@ module.exports = function(io) {
     var updateCsv = new schema({
         name : String,
     	update_next: { type: Date, default : Date.now },
-    },{collection : "counts"});
+    },{collection : "updatecsvs"});
 
     var updateCsvModel = mongoose.model("updateCsvModel", updateCsv);
     hbs.registerHelper('toUpperCase', function(str){
@@ -101,8 +101,10 @@ module.exports = function(io) {
                         for (k = 0; k < journals.length; k++) {
                             util.generateArticleCitvsYearCsv(journals[k]);
                         }
+                        curr_date.setDate(curr_date.getDate()+15)
+                        console.log(curr_date)
                         var conditions = { name: 'update' },
-                            update = { $add: ["$update_next", 15 * 24 * 60 * 60000] },
+                            update = { $set: {"update_next": curr_date} },
                             options = { multi: false };
 
                         updateCsvModel.update(conditions, update, options, callback);
