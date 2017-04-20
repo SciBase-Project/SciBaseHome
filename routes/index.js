@@ -8,8 +8,8 @@ module.exports = function(io) {
     var hbs = require('hbs');
     var mongoose = require("mongoose");
     var svgCaptcha = require("svg-captcha");
-    var async = require("async");
-    var circular = require("circular-json");
+    // var async = require("async");
+    // var circular = require("circular-json");
 
     var schema = mongoose.Schema;
 
