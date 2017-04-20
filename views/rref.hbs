@@ -128,103 +128,6 @@
 </section>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-    var socket = io();
-</script>
-
-<script>
-  owlStart = function(c){
-    $(c).owlCarousel({
-      loop:false,
-      margin:10,
-      nav:true,
-      navText: [
-        "<i class='icon-chevron-left icon-white'><</i>",
-        "<i class='icon-chevron-right icon-white'>></i>"
-      ],
-      responsive:{
-          0:{
-              items:1
-          },
-          600:{
-              items:3
-          },
-          1000:{
-              items:5
-          }
-      }
-  });
-
-  
-}
-
-owlStart('.owl-root');
-
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-
-
-  $(".item-ref").click(function(){
-    $(this).css("background-color","#c6efff");
-    var id = $(this).attr("id");
-    socket.emit('rref_request', id);
-  });
-
-});
-
- socket.on('rref_response', function(res){
-
-    var childToAppend = '<div class="child-ref"> \
-    <div class="container-fluid"> \
-      <div class="col-sm-12 title-bar"> \
-        '+res.dirStructure +
-      '</div> \
-      <div class="container-fluid text-center"> \
-        <h2>'+res.title+'</h2> \
-      </div> \
-      <div class="row"> \
-      <div class="container-fluid"> \
-        <div class="col-sm-12"> \
-          <div class="col-sm-8 col-sm-offset-4 article-details"> \
-            <p><h3><b>Authors :</b> '+res.authors+'</h3></p> \
-            <p><h3><b>ArticleId :</b> '+res.articleId+'</h3></p> \
-            <p><h3><b>Publisher :</b> '+res.publisher+'</h3></p> \
-            <p><h3><b>DOI :</b>'+res.doi+'</h3></p> \
-          </div> \
-        </div> \
-        <div class="col-sm-12"> \
-        <h3>References </h3><hr>\
-        <div class="owl-carousel carousel'+res.level+' owl-theme text-center">';
-
-    for(var i=0; i<res.referenced_articles.length; i++){
-      childToAppend += '<div class="item-ref container-fluid ref-container" id="'+res.referenced_articles[i].id+'"> \
-      <div class="ref-title">'+res.referenced_articles[i].articleId+'</div> \
-      <div class="ref-text">'+res.referenced_articles[i].title+'</div> </div>';
-    }
-
-    childToAppend+='</div></div></div></div></div></div>';
-
-    $("#rref-paper-references").append(childToAppend).promise().done(function(){
-      owlStart('.carousel'+res.level);
-      // console.log("Started Carausel for "+ '.carousel'+res.level);
-    });
-
-    var count = 0;
-    $(".item-ref").click(function(){
-      $(this).css("background-color","#c6efff");
-      var id = $(this).attr("id");
-      count++;
-      // console.log("REQUESTING RREF with id : " + id +" Count : " + count++);
-      if(count == 1){
-        socket.emit('rref_request', id);
-      }
-    });
-
-
-  });
-</script>
 
 
 
@@ -245,74 +148,6 @@ $(document).ready(function(){
 
   </div>
 </div>
-
-<script type="text/javascript">
-    // create an array with nodes
-    var nodes = new vis.DataSet();
-    nodes.add({{{parseJson graph.nodes}}});
-
-    // create an array with edges
-    var edges = new vis.DataSet([
-
-    ]);
-
-    // create a network
-    var container = document.getElementById('mynetwork');
-
-    // provide the data in the vis format
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-    var options = {
-      nodes:{
-        shape : "circle",
-        borderWidth: 1,
-        borderWidthSelected: 2,
-        brokenImage:undefined,
-        chosen: true,
-        font: {
-          color: '#fff',
-        }
-    }
-    };
-
-    // initialize your network!
-    var network = new vis.Network(container, data, options);
-    // console.log(network.getViewPosition());
-
-    $(document).ready(function(){
-      //console.log(nodes);
-      network.once('initRedraw', function() {
-        network.moveTo({
-          scale : 1.0,
-          offset : {x: 400, y:300},
-          animation : true
-        });
-        // console.log(network.getViewPosition());
-      });
-      network.on("click", function(args){
-        if(args.nodes.length){
-          // console.log(args.nodes);
-          socket.emit('graph_request', args.nodes[0]);
-                $("#preloader").css("display", "block");
-        }
-      });
-      $("#preloader").css("display", "none");
-
-    });
-
-    socket.on('graph_response', function(g){
-      // console.log("GRAPH RESPONDED");
-      nodes.add(g.nodes);
-      //console.log("Added " + g.nodes);
-      edges.add(g.edges);
-          $("#preloader").css("display", "none");
-    });
-
-
-</script>
-
 
 <footer id="footer">
     <div class="container">
@@ -373,3 +208,170 @@ $(document).ready(function(){
     </div>
 </div>
 <!--/#footer-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  owlStart = function(c){
+    $(c).owlCarousel({
+      loop:false,
+      margin:10,
+      nav:true,
+      navText: [
+        "<i class='icon-chevron-left icon-white'><</i>",
+        "<i class='icon-chevron-right icon-white'>></i>"
+      ],
+      responsive:{
+          0:{
+              items:1
+          },
+          600:{
+              items:3
+          },
+          1000:{
+              items:5
+          }
+      }
+  });
+
+  
+}
+
+ // create an array with nodes
+    var nodes = new vis.DataSet();
+    nodes.add({{{parseJson graph.nodes}}});
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+
+    ]);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+      nodes:{
+        shape : "circle",
+        borderWidth: 1,
+        borderWidthSelected: 2,
+        brokenImage:undefined,
+        chosen: true,
+        font: {
+          color: '#fff',
+        }
+    }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+    // console.log(network.getViewPosition());
+
+
+owlStart('.owl-root');
+
+$(document).ready(function(){
+
+  var socket = io();
+  //console.log(nodes);
+  network.once('initRedraw', function() {
+    network.moveTo({
+      scale : 1.0,
+      offset : {x: 400, y:300},
+      animation : true
+    });
+    // console.log(network.getViewPosition());
+  });
+  $("#preloader").css("display", "none");
+
+
+  $('[data-toggle="tooltip"]').tooltip();
+
+
+  network.on("click", function(args){
+    if(args.nodes.length){
+      // console.log(args.nodes);
+      console.log("GRAPH EMMITTED");
+      socket.emit('graph_request', args.nodes[0]);
+      $("#preloader").css("display", "block");
+    }
+  });
+
+  $(".item-ref").click(function(){
+    $(this).css("background-color","#c6efff");
+    var id = $(this).attr("id");
+    socket.emit('rref_request', id);
+  });
+
+
+  socket.on('graph_response', function(g){
+    // console.log("GRAPH RESPONDED");
+    nodes.add(g.nodes);
+    //console.log("Added " + g.nodes);
+    edges.add(g.edges);
+        $("#preloader").css("display", "none");
+  });
+
+  socket.on('rref_response', function(res){
+
+    var childToAppend = '<div class="child-ref"> \
+    <div class="container-fluid"> \
+      <div class="col-sm-12 title-bar"> \
+        '+res.dirStructure +
+      '</div> \
+      <div class="container-fluid text-center"> \
+        <h2>'+res.title+'</h2> \
+      </div> \
+      <div class="row"> \
+      <div class="container-fluid"> \
+        <div class="col-sm-12"> \
+          <div class="col-sm-8 col-sm-offset-4 article-details"> \
+            <p><h3><b>Authors :</b> '+res.authors+'</h3></p> \
+            <p><h3><b>ArticleId :</b> '+res.articleId+'</h3></p> \
+            <p><h3><b>Publisher :</b> '+res.publisher+'</h3></p> \
+            <p><h3><b>DOI :</b>'+res.doi+'</h3></p> \
+          </div> \
+        </div> \
+        <div class="col-sm-12"> \
+        <h3>References </h3><hr>\
+        <div class="owl-carousel carousel'+res.level+' owl-theme text-center">';
+
+    for(var i=0; i<res.referenced_articles.length; i++){
+      childToAppend += '<div class="item-ref container-fluid ref-container" id="'+res.referenced_articles[i].id+'"> \
+      <div class="ref-title">'+res.referenced_articles[i].articleId+'</div> \
+      <div class="ref-text">'+res.referenced_articles[i].title+'</div> </div>';
+    }
+
+    childToAppend+='</div></div></div></div></div></div>';
+
+    $("#rref-paper-references").append(childToAppend).promise().done(function(){
+      owlStart('.carousel'+res.level);
+      // console.log("Started Carausel for "+ '.carousel'+res.level);
+    });
+
+    var count = 0;
+    $(".item-ref").click(function(){
+      $(this).css("background-color","#c6efff");
+      var id = $(this).attr("id");
+      count++;
+      // console.log("REQUESTING RREF with id : " + id +" Count : " + count++);
+      if(count == 1){
+        socket.emit('rref_request', id);
+      }
+    });
+
+
+  });
+
+
+
+});
+
+ 
+</script>
+
