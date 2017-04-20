@@ -131,6 +131,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    var socket = io();
+</script>
+
+<script>
   owlStart = function(c){
     $(c).owlCarousel({
       loop:false,
@@ -159,16 +163,19 @@
 owlStart('.owl-root');
 
 $(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip(); 
-  var socket = io();
+  $('[data-toggle="tooltip"]').tooltip();
+
+
   $(".item-ref").click(function(){
     $(this).css("background-color","#c6efff");
     var id = $(this).attr("id");
     socket.emit('rref_request', id);
   });
-  socket.on('rref_response', function(res){
-    //console.log(res);
-    //alert(res.title);
+
+});
+
+ socket.on('rref_response', function(res){
+
     var childToAppend = '<div class="child-ref"> \
     <div class="container-fluid"> \
       <div class="col-sm-12 title-bar"> \
@@ -195,25 +202,28 @@ $(document).ready(function(){
       childToAppend += '<div class="item-ref container-fluid ref-container" id="'+res.referenced_articles[i].id+'"> \
       <div class="ref-title">'+res.referenced_articles[i].articleId+'</div> \
       <div class="ref-text">'+res.referenced_articles[i].title+'</div> </div>';
-      console.log("here");
     }
 
     childToAppend+='</div></div></div></div></div></div>';
 
     $("#rref-paper-references").append(childToAppend).promise().done(function(){
       owlStart('.carousel'+res.level);
-      console.log("Started Carausel for "+ '.carousel'+res.level);
+      // console.log("Started Carausel for "+ '.carousel'+res.level);
     });
 
+    var count = 0;
     $(".item-ref").click(function(){
       $(this).css("background-color","#c6efff");
       var id = $(this).attr("id");
-      socket.emit('rref_request', id);
+      count++;
+      // console.log("REQUESTING RREF with id : " + id +" Count : " + count++);
+      if(count == 1){
+        socket.emit('rref_request', id);
+      }
     });
 
 
   });
-});
 </script>
 
 
@@ -269,10 +279,7 @@ $(document).ready(function(){
 
     // initialize your network!
     var network = new vis.Network(container, data, options);
-    console.log(network.getViewPosition());
-
-   
-    var socket = io();
+    // console.log(network.getViewPosition());
 
     $(document).ready(function(){
       //console.log(nodes);
@@ -282,22 +289,25 @@ $(document).ready(function(){
           offset : {x: 400, y:300},
           animation : true
         });
-        console.log(network.getViewPosition());
+        // console.log(network.getViewPosition());
       });
       network.on("click", function(args){
         if(args.nodes.length){
-          console.log(args.nodes);
+          // console.log(args.nodes);
           socket.emit('graph_request', args.nodes[0]);
                 $("#preloader").css("display", "block");
         }
       });
-      socket.on('graph_response', function(g){
-        nodes.add(g.nodes);
-        //console.log("Added " + g.nodes);
-        edges.add(g.edges);
-            $("#preloader").css("display", "none");
-      });
       $("#preloader").css("display", "none");
+
+    });
+
+    socket.on('graph_response', function(g){
+      // console.log("GRAPH RESPONDED");
+      nodes.add(g.nodes);
+      //console.log("Added " + g.nodes);
+      edges.add(g.edges);
+          $("#preloader").css("display", "none");
     });
 
 
