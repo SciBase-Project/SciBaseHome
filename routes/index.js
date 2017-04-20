@@ -8,6 +8,8 @@ module.exports = function(io) {
     var hbs = require('hbs');
     var mongoose = require("mongoose");
     var svgCaptcha = require("svg-captcha");
+    var async = require("async");
+    var circular = require("circular-json");
 
     var schema = mongoose.Schema;
 
@@ -685,9 +687,192 @@ module.exports = function(io) {
         res.render('aminerAPI', {});
     });
 
+    
+    // Create nested structure for D3.js library.
+    // var createJson = function(j, level){
+    //     item = {};
+    //     console.log("Level "+level);
+    //     item["name"] = j.details.title;
+    //     console.log("This title is " + item["name"]);
+    //     item["children"]=[];
+    //     if(j.referenced_articles != null){
+    //         var ch = [];
+    //         async.each(j.referenced_articles, function(o, callback){
+                
+    //             console.log("looping for "+o.details.name);
+    //             ch.push(createJson(o, level+1));
+    //             console.log("BACK AT LEVEL "+ level);
+    //             // console.log("children is "+ circular.stringify(ch));
+                
+    //         });
+    //         console.log("children at level "+level+" are");
+    //         // console.log(ch);
+    //         item["children"]=ch;
+    //         // console.log("ITEM IS " + circular.stringify(item["children"]));
+    //         // console.log("Copied ch" + JSON.stringify(item["children"], replacer));
+    //     }
+
+    //     return item;
+    // }
+    
+    router.get('/rref', function(req, res, next) {
+
+        /*Following is the code for generating nested structure containing just name and references
+          This will be required in creating tree structure using D3.js library.*/
+        // fs.readFile('public/files/Article 4v2.json', {encoding : "utf8"},(err, data) => {
+        //     if (err) throw err;
+        //     var obj = JSON.parse(data);
+        //     console.log("HERE");
+        //     var created = createJson(obj, 0);
+
+        //     try {
+        //         fs.writeFileSync("public/files/testfile.json", circular.stringify(created), 'utf-8');
+        //     } catch (e) {
+        //         console.log("Error:", e.message);
+        //     }
+        //     console.log(created);
+        //   // console.log("Created:\n" + circular.stringify(created));
+        //     // console.log(created);
+
+        // }); 
+
+        var firstNode = {
+            id : "G",
+            label : "5452187",
+            color:{
+                border : "#a80008",
+                background:"#a80008",
+                highlight : "#a80008"
+            },
+            title : "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
+        };
+        var edgePair = {};
+        var graph = {};
+        graph.nodes = firstNode;
+        graph.edges = edgePair;
+
+
+        var firstArticle ={};
+        fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{
+            if(err) throw err;
+            var obj = JSON.parse(data);
+            // console.log("DEATAILS KEYS");
+            // console.log(Object.keys(obj.details.authors[0]));
+
+            firstArticle["title"] = obj.details.title;
+            firstArticle["articleId"] = obj.details.articleId;
+            firstArticle["publisher"] = obj.details.publisher;
+            firstArticle["doi"] = obj.details.doi;
+            var a="";
+            for(var i=0; i<obj.details.authors.length; i++){
+                console.log("HERE");
+                a += obj.details.authors[i].name ;//+ (i==obj.details.authors.length - 1)?'':',';
+                a+= (i==obj.details.authors.length - 1)?" ":", ";
+            }
+            firstArticle["authors"] = a;
+
+            var ch = [];
+            for(var i=0; i<obj.referenced_articles.length; i++){
+                item = {};
+                item["title"] = obj.referenced_articles[i].details.title;
+                item["articleId"] = obj.referenced_articles[i].details.articleId;
+                item["id"] = "0-"+i;
+                ch.push(item);
+            }
+            firstArticle["referenced_articles"] = ch;
+            // console.log(firstArticle);
+            res.render('rref', {data : firstArticle, graph : graph});
+            
+        });
+        
+        
+    });
+
     io.on("connection", function(socket) {
             console.log("A user connected");
 
+                socket.on('graph_request', function(id){
+                    var colors = ["#266348","#6242f4","#00a838","#1c2820","#a80008"];
+                    var hierarchy = id.split("-");
+                    fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{
+                        if(err) throw err;
+                        var obj = JSON.parse(data);
+                        var l = 0;
+                        for(var j=1; j<hierarchy.length; j++){
+                            obj = obj.referenced_articles[parseInt(hierarchy[j])];
+                            l++;
+                        }
+                        var nodes = [];
+                        var edgePairs = [];
+                        for(var i=0; obj.referenced_articles && i<obj.referenced_articles.length; i++){
+                            item = {};
+                            item["label"] = obj.referenced_articles[i].details.articleId;
+                            item["id"] = id+"-"+i;
+                            item["color"]={
+                                border : colors[l],
+                                background : colors[l],
+                                highlight : colors[l]
+                            };
+                            item["title"] = obj.referenced_articles[i].details.title;
+
+                            edgePairItem = {};
+                            edgePairItem.from = id;
+                            edgePairItem.to = item["id"];
+                            nodes.push(item);
+                            edgePairs.push(edgePairItem);
+                        }
+                        var graph = {};
+                        graph.nodes = nodes;
+                        graph.edges = edgePairs;
+
+                        socket.emit('graph_response', graph);
+                    });
+
+                });
+                socket.on('rref_request', function(id){
+                    var hierarchy = id.split("-");
+                    fs.readFile('public/files/Article 4v2.json', {encoding:"utf8"}, (err, data)=>{
+                        if(err) throw err;
+                        var obj = JSON.parse(data);
+                        var dirStructure = " / "+obj.details.title.substr(0, 20) + "...";
+                        var l = 0;
+                        for(var j=1; j<hierarchy.length; j++){
+                            obj = obj.referenced_articles[parseInt(hierarchy[j])];
+                            dirStructure += " / " + obj.details.title.substr(0, 20) + "...";
+                            l++;
+                        }
+
+                        console.log("dir:\t" + dirStructure);
+                        var returnArticle = {};
+                        returnArticle["title"] = obj.details.title;
+                        returnArticle["articleId"] = obj.details.articleId;
+                        returnArticle["publisher"] = obj.details.publisher;
+                        returnArticle["doi"] = obj.details.doi;
+                        returnArticle["dirStructure"] = dirStructure;
+                        returnArticle["level"] = l;
+
+                        var a="";
+                        for(var i=0; i<obj.details.authors.length; i++){
+                            // console.log("HERE");
+                            a += obj.details.authors[i].name ;//+ (i==obj.details.authors.length - 1)?'':',';
+                            a+= (i==obj.details.authors.length - 1)?" ":", ";
+                        }
+                        returnArticle["authors"] = a;
+
+                        var ch = [];
+                        for(var i=0; obj.referenced_articles && i<obj.referenced_articles.length; i++){
+                            item = {};
+                            item["title"] = obj.referenced_articles[i].details.title;
+                            item["articleId"] = obj.referenced_articles[i].details.articleId;
+                            item["id"] = id+"-"+i;
+                            ch.push(item);
+                        }
+                        returnArticle["referenced_articles"] = ch;
+                        // console.log("ret Article:\n"+JSON.stringify(returnArticle));
+                        socket.emit('rref_response', returnArticle);
+                    });
+
+                });
                 socket.on('request_captcha', function(){
                     var captcha = svgCaptcha.create();
                     socket.emit("response_captcha", captcha);

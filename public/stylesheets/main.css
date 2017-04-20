@@ -17,6 +17,7 @@ body {
     font-size: 14px;
     line-height: 22px;
     color: #000;
+    overflow-x: hidden;
 }
 
 html {
@@ -2942,4 +2943,114 @@ span.stButton_gradient,
     color: #000;
     font-weight: 400;
     letter-spacing: 2px;
+}
+
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+.item-ref{
+    min-height: 220px;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 18px;
+    vertical-align: center;
+    margin : 0px 20px;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+}
+.owl-nav{
+    margin-top : 30px !important;
+    margin-right: 20px !important;
+}
+.owl-dots{
+    display: none;
+}
+.owl-nav div{
+    font-size: 18px;
+    color: #0099ae;
+    border: 1px solid #2e6da4;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    padding: 10px 25px;
+    background-color: #337ab7 !important;
+    height: 30px;
+    width: 50px;
+
+}
+
+
+#rref-paper-references{
+    background-color : #f0f0f0;
+}
+#rref-papers{
+    background-color : #f0f0f0 !important;
+}
+
+
+.article-details{
+    background: transparent !important;
+}
+.article-details b{
+    font-weight: 500 !important;
+}
+
+.root-ref{
+    padding: 80px;
+}
+.child-ref{
+    padding: 80px;
+}
+.root-ref>.container-fluid, .child-ref>.container-fluid{
+    background-color: #fff;
+    border-radius: 10px;
+    padding:0px !important;
+
+}
+.root-ref .title-bar, .child-ref .title-bar{
+    background-color: #337ab7;
+    color: #fff;
+    padding: 20px;
+    -webkit-box-shadow: 0px 6px 5px 0px rgba(51, 122, 183, 0.2);
+    -moz-box-shadow: 0px 6px 5px 0px rgba(51, 122, 183, 0.2);
+    box-shadow: 0px 6px 5px 0px rgba(51, 122, 183, 0.2);
+    margin-bottom: 20px;
+}
+
+.ref-container{
+    padding: 0px !important;
+}
+.ref-container .ref-text{
+    padding:10px;
+}
+.ref-title{
+    background-color: #337ab7;
+    color: #fff;
+    padding: 10px;
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.3);
+}
+
+
+@media only screen and (max-width: 760px){
+    .root-ref, .child-ref{
+        padding: 20px;
+    }
 }
