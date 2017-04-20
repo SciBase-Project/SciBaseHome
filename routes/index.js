@@ -869,6 +869,7 @@ module.exports = function(io) {
                         }
                         returnArticle["referenced_articles"] = ch;
                         // console.log("ret Article:\n"+JSON.stringify(returnArticle));
+                        console.log("SOCKET EMMITTED");
                         socket.emit('rref_response', returnArticle);
                     });
 
