@@ -91,7 +91,7 @@
   <div class="root-ref">
     <div class="container-fluid">
       <div class="col-sm-12 title-bar">
-        /
+        {{data.dirStructure}}
       </div>
       <div class="container-fluid text-center">
         <h2>{{data.title}}</h2>
@@ -200,13 +200,6 @@
         </div>
     </div>
 </footer>
-<div class = "row">
-    <div class="col-sm-12">
-        <div class="pull-right text-center">
-            <p>Total Downloads : {{datasets.articlesDownloadHits}}</p>
-        </div>
-    </div>
-</div>
 <!--/#footer-->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
@@ -302,10 +295,14 @@ $(document).ready(function(){
     }
   });
 
+  var count = 0;
   $(".item-ref").click(function(){
     $(this).css("background-color","#c6efff");
     var id = $(this).attr("id");
-    socket.emit('rref_request_new', id);
+    count++;
+    if(count == 1){ 
+      socket.emit('rref_request_new', id);
+    }
   });
 
 
@@ -361,6 +358,7 @@ $(document).ready(function(){
       count++;
       // console.log("REQUESTING RREF with id : " + id +" Count : " + count++);
       if(count == 1){
+        console.log("REQUESTED");
         socket.emit('rref_request_new', id);
       }
     });
