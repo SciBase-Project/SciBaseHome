@@ -874,6 +874,31 @@ module.exports = function(io) {
                     });
 
                 });
+                socket.on("rref_request_new",function(id){
+                    var hierarchy = id.split("-");
+                    //console.log("Reading File " + 'public/files/TerenceTaoFirstArticle/'+id+'.json');
+                    fs.readFile('public/files/TerenceTaoFirstArticle/'+id+'.json', {encoding:"utf8"}, (err, data)=>{
+                        if(err) throw err;
+                        var obj = JSON.parse(data);
+                        //console.log(obj);
+                        //dirStructure += " / "+ obj.title.substr(0, 20) + "...";
+                        var l = hierarchy.length;
+
+                        //console.log("dir:\t" + dirStructure);
+                        var returnArticle = {};
+                        returnArticle["title"] = obj.title;
+                        returnArticle["articleId"] = obj.articleId;
+                        returnArticle["publisher"] = obj.publisher;
+                        returnArticle["doi"] = obj.doi;
+                        returnArticle["dirStructure"] = "";
+                        returnArticle["authors"] = obj.authors;
+                        returnArticle["level"] = l;
+                        returnArticle["referenced_articles"] = obj.referenced_articles;
+                        // console.log("ret Article:\n"+JSON.stringify(returnArticle));
+                        console.log("SOCKET EMMITTED");
+                        socket.emit('rref_response_new', returnArticle);
+                    });
+                });
                 socket.on('request_captcha', function(){
                     var captcha = svgCaptcha.create();
                     socket.emit("response_captcha", captcha);

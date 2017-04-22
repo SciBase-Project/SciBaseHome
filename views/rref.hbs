@@ -305,7 +305,7 @@ $(document).ready(function(){
   $(".item-ref").click(function(){
     $(this).css("background-color","#c6efff");
     var id = $(this).attr("id");
-    socket.emit('rref_request', id);
+    socket.emit('rref_request_new', id);
   });
 
 
@@ -317,7 +317,7 @@ $(document).ready(function(){
         $("#preloader").css("display", "none");
   });
 
-  socket.on('rref_response', function(res){
+  socket.on('rref_response_new', function(res){
 
     var childToAppend = '<div class="child-ref"> \
     <div class="container-fluid"> \
@@ -361,7 +361,7 @@ $(document).ready(function(){
       count++;
       // console.log("REQUESTING RREF with id : " + id +" Count : " + count++);
       if(count == 1){
-        socket.emit('rref_request', id);
+        socket.emit('rref_request_new', id);
       }
     });
 
