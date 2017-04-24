@@ -791,7 +791,6 @@ module.exports = function(io) {
                         returnArticle["authors"] = obj.authors;
                         returnArticle["level"] = l;
                         returnArticle["referenced_articles"] = obj.referenced_articles;
-                        console.log("SOCKET EMMITTED");
                         socket.emit('rref_response_new', returnArticle);
                     });
                 });

@@ -23,6 +23,9 @@
             left : 48%;
             font-size : 50px;
         }
+        .ref-selected{
+          background-color : rgb(198, 239, 255);
+        }
 
  </style>
 
@@ -49,6 +52,7 @@
                     <li><a href="/publications">Publications</a></li>
                     <li><a href="/datacenter">Data Center</a></li>
                     <li><a href="http://oprs.pesitsouthscibase.org">OPRS</a></li>
+                    <li  class="active"><a href="/rref">RREF</a></li>
                 </ul>
                 </ul>
             </div>
@@ -233,7 +237,8 @@
 
  // create an array with nodes
     var nodes = new vis.DataSet();
-    nodes.add({{{parseJson graph.nodes}}});
+    var graphInitNodes = {{{parseJson graph.nodes}}};
+    nodes.add(graphInitNodes);
 
     // create an array with edges
     var edges = new vis.DataSet([
@@ -282,6 +287,11 @@ $(document).ready(function(){
   });
   $("#preloader").css("display", "none");
 
+   $("#graph_animation").on('hidden.bs.modal', function () {
+            nodes.clear();
+            edges.clear();
+            nodes.add(graphInitNodes);
+    });
 
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -296,12 +306,20 @@ $(document).ready(function(){
   });
 
   var count = 0;
+  var levelCounted = 0;
   $(".item-ref").click(function(){
-    $(this).css("background-color","#c6efff");
+    levelCounted++;
+    if(levelCounted > 1){
+      return;
+    }
     var id = $(this).attr("id");
-    count++;
-    if(count == 1){ 
-      socket.emit('rref_request_new', id);
+    if($("#"+id).hasClass("ref-selected")){
+    }else{
+      $("#"+id).addClass("ref-selected");
+      count++;
+      if(count == 1){ 
+        socket.emit('rref_request_new', id);
+      }
     }
   });
 
@@ -353,13 +371,19 @@ $(document).ready(function(){
 
     var count = 0;
     $(".item-ref").click(function(){
-      $(this).css("background-color","#c6efff");
-      var id = $(this).attr("id");
+      // console.log(count);
       count++;
-      // console.log("REQUESTING RREF with id : " + id +" Count : " + count++);
       if(count == 1){
-        console.log("REQUESTED");
-        socket.emit('rref_request_new', id);
+        var id = $(this).attr("id");
+        if($("#"+id).hasClass("ref-selected")){
+          // console.log("Selected");
+          count--;
+        }else{
+          // console.log("Not Selected");
+          $("#"+id).addClass("ref-selected");
+            // console.log("REQUESTED");
+            socket.emit('rref_request_new', id);
+        }
       }
     });
 
