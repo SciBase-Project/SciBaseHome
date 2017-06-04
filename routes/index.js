@@ -7,7 +7,6 @@ module.exports = function(io) {
     var util = require("../lib/util");
     var hbs = require('hbs');
     var mongoose = require("mongoose");
-var updateCsv = require('../models/csv');
     var svgCaptcha = require("svg-captcha");
 
     var schema = mongoose.Schema;
@@ -19,6 +18,12 @@ var updateCsv = require('../models/csv');
 
     var countsModel = mongoose.model("countsModel", counterSchema);
 
+    var updateCsv = new schema({
+        name : String,
+    	update_next: { type: Date, default : Date.now },
+    },{collection : "updatecsvs"});
+
+    var updateCsvModel = mongoose.model("updateCsvModel", updateCsv);
     hbs.registerHelper('toUpperCase', function(str){
         return str.toUpperCase();
     });
@@ -45,8 +50,8 @@ var updateCsv = require('../models/csv');
 
 
     /* GET home page. */
-    router.get('/', function(req, res) {
-        
+    router.get('/', function(req, res,next) {
+
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -56,7 +61,7 @@ var updateCsv = require('../models/csv');
             countsModel.update(conditions, update, options, callback);
             function callback (err, numAffected) {
                 if(err){
-                    console.log("UNABLE TO UPDATE HITS");
+                    next(error)
                 }
             }
 
@@ -66,22 +71,23 @@ var updateCsv = require('../models/csv');
             console.log("Creating a new Entry");
             countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
                 if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
+                    next(err);
                 }
             });
           }
         });
-        
-        util.generateJournalList(function(journals) { //fetch list of journals everytime
-            updateCsv.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
+
+        util.generateJournalList(function(journals) {
+            var curr_date = new Date();//fetch list of journals everytime
+            updateCsvModel.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
-                    var curr_date = new Date();
+
                     mongo_date = doc.update_next
                     var diff = curr_date - mongo_date;
                     console.log(curr_date)
                     console.log(diff)
                     console.log(mongo_date)
-                    if (diff > 1296000e3) { //check if date difference greater than 15 days. 
+                    if (diff > 1296000e3) { //check if date difference greater than 15 days.
                         console.log(
                             Math.floor(diff / 60e3)
                         );
@@ -95,15 +101,17 @@ var updateCsv = require('../models/csv');
                         for (k = 0; k < journals.length; k++) {
                             util.generateArticleCitvsYearCsv(journals[k]);
                         }
+                        curr_date.setDate(curr_date.getDate()+15)
+                        console.log(curr_date)
                         var conditions = { name: 'update' },
-                            update = { $add: ["$update_next", 15 * 24 * 60 * 60000] },
+                            update = { $set: {"update_next": curr_date} },
                             options = { multi: false };
 
-                        updateCsv.update(conditions, update, options, callback);
+                        updateCsvModel.update(conditions, update, options, callback);
 
                         function callback(err, numAffected) {
                             if (err) {
-                                console.log("UNABLE TO UPDATE date");
+                                next(err)
                             }
                         }
                     } else {
@@ -115,9 +123,10 @@ var updateCsv = require('../models/csv');
 
                     console.log("Error : ", err);
                     console.log("Creating a new Entry"); // creating for the first time only
-                    updateCsv.create({ name: "update" }, function(err, doc) {
+                    curr_date.setDate(curr_date.getDate()+15)
+                    updateCsvModel.create({ name: "update", update_next : curr_date }, function(err, doc) {
                         if (err) {
-                            console.log("UNABLE TO CREATE date", err);
+                            next(err)
                         }
                     });
                     util.generateArticleCsv(); //call these functions for the first time
@@ -141,17 +150,24 @@ var updateCsv = require('../models/csv');
                 }else{
                      result.hits = 0;
                 }
-                console.log("Result: ", result);
-                result.title = "SciBase";
-                result.JournalCsvUrl = "files/papers/Journals.csv";
-                result.ArticleCsvUrl = "files/papers/Articles.csv";
-                result.AuthorCsvUrl = "files/papers/Authors.csv";
-                result.InstitutionCsvUrl = "files/papers/Institutions.csv";
-                res.render('index', result);
+                countsModel.findOne({"name" : "DATASETDOWNLOAD"},function(err, doc){
+                    if(doc){
+                        result.articlesDownloadHits = doc.hits;
+                    }else{
+                        result.articlesDownloadHits = 0;
+                    }
+
+                    console.log("Result: ", result);
+                    result.title = "SciBase";
+                    result.JournalCsvUrl = "files/papers/Journals.csv";
+                    result.ArticleCsvUrl = "files/papers/Articles.csv";
+                    result.AuthorCsvUrl = "files/papers/Authors.csv";
+                    result.InstitutionCsvUrl = "files/papers/Institutions.csv";
+                    res.render('index', result);
+                });
             });
         });
-
-});
+    });
 
 
     router.get('/team', function(req, res, next) {
@@ -316,13 +332,21 @@ var updateCsv = require('../models/csv');
                 id : "scibaseUniversity",
                 internal: false,
                 format: "JSON",
-                size: "137 MB",
+                size: "680 KB",
+                category: "scibase-dataset"
+
+            },
+            {
+                title: "Vidya Sagar Dataset",
+                description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Vidya Sagar and other few noted scholar.",
+                id : "scibaseVidyasagar",
+                internal: false,
+                format: "JSON",
+                size: "48.7MB",
                 category: "scibase-dataset"
 
             }
         ];
-
-        var captcha = svgCaptcha.create();
 
         var filterSearch = {};
         filterSearch.journal = "all";
@@ -333,22 +357,25 @@ var updateCsv = require('../models/csv');
             if (!result) {
                 console.log("Error loading search_article");
             }
-            countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
+            // countsModel.findOne({"name" : "ARTICLESDOWNLOAD"},function(err, doc){
 
-                if(doc){
-                    dataset_list.articlesDownloadHits = doc.hits;
-                }else{
-                    dataset_list.articlesDownloadHits = 0;
-                }
-                res.render('datacenter', {
-                    datasets: dataset_list,
-                    dataset : result,
-                    captcha : captcha
-                });
+            //     if(doc){
+            //         dataset_list.articlesDownloadHits = doc.hits;
+            //     }else{
+            //         dataset_list.articlesDownloadHits = 0;
+            //     }
+            //     res.render('datacenter', {
+            //         datasets: dataset_list,
+            //         dataset : result,
+            //         captcha : captcha
+            //     });
+            // });
+            res.render('datacenter', {
+                datasets: dataset_list,
+                dataset : result
+
             });
-
         });
-
 
 
     });
@@ -446,25 +473,8 @@ var updateCsv = require('../models/csv');
 
         util.getNodes(function(result){
 
-
-
-
-        // socket.io events
-        io.on("connection", function(socket) {
-            console.log("A user connected");
-
-       //console.log("this");
-        //console.log(result);
-            /**
-             * When a user enters a Cypher query, the data is sent with query_request
-             * event of socket.
-             */
-            socket.on('query_builder__request', function(cols) {
-                //console.log(result);
-                /**
-                 * When a user enters a Cypher query, the data is sent with query_request
-                 * event of socket.
-                 */
+            io.on("connection", function(socket) {
+                console.log("A user connected");
                 socket.on('query_builder__request', function(cols) {
                     //console.log(result);
                     var column_names = cols;
@@ -538,7 +548,7 @@ var updateCsv = require('../models/csv');
 
                             }
 
-                            
+
 
                             for (var j = 0, k = 0; j < nodesRec.length; j += 2) {
 
@@ -624,7 +634,6 @@ var updateCsv = require('../models/csv');
             res.render('query_builder', { dataModel: result });
         });
     });
-    });
 
     router.get('/login', function(req, res, next) {
         res.redirect('https://orcid.org/oauth/authorize?client_id=APP-7V6NPHD04FV07E8W&response_type=code&scope=/authenticate&redirect_uri=http://54.201.10.92:3000/loged_in');
@@ -676,8 +685,115 @@ var updateCsv = require('../models/csv');
         res.render('aminerAPI', {});
     });
 
+    router.get('/rref', function(req, res, next) {
+
+        var firstNode = {
+            id : "G",
+            label : "5452187",
+            color:{
+                border : "#a80008",
+                background:"#a80008",
+                highlight : "#a80008"
+            },
+            title : "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
+        };
+        var edgePair = {};
+        var graph = {};
+        graph.nodes = firstNode;
+        graph.edges = edgePair;
+
+
+        var firstArticle ={};
+        fs.readFile('public/files/TerenceTaoFirstArticle/0.json', {encoding:"utf8"}, (err, data)=>{
+            if(err) throw err;
+            var obj = JSON.parse(data);
+            firstArticle["title"] = obj.title;
+            firstArticle["articleId"] = obj.articleId;
+            firstArticle["publisher"] = obj.publisher;
+            firstArticle["doi"] = obj.doi;
+            firstArticle["dirStructure"] = obj.dirStructure;
+            firstArticle["authors"] = obj.authors;
+
+            var ch = [];
+            for(var i=0; i<obj.referenced_articles.length; i++){
+                item = {};
+                item["title"] = obj.referenced_articles[i].title;
+                item["articleId"] = obj.referenced_articles[i].articleId;
+                item["id"] = "0-"+i;
+                ch.push(item);
+            }
+            firstArticle["referenced_articles"] = ch;
+            res.render('rref', {data : firstArticle, graph : graph});
+            
+        });
+        
+        
+    });
+
     io.on("connection", function(socket) {
             console.log("A user connected");
+
+                socket.on('graph_request', function(id){
+                    var colors = ["#266348","#6242f4","#00a838","#1c2820","#a80008"];
+                    var actualId = id.replace('G', '0');
+                    var hierarchy = id.split("-");
+                    fs.readFile('public/files/TerenceTaoFirstArticle/'+actualId+'.json', {encoding:"utf8"}, (err, data)=>{
+                        if(err){
+                            console.log("invalid ID");
+                            return;
+                        }
+                        var obj = JSON.parse(data);
+                        var l = hierarchy.length;
+                        var nodes = [];
+                        var edgePairs = [];
+                        for(var i=0; obj.referenced_articles && i<obj.referenced_articles.length; i++){
+                            item = {};
+                            item["label"] = obj.referenced_articles[i].articleId;
+                            item["id"] = id+"-"+i;
+                            item["color"]={
+                                border : colors[l],
+                                background : colors[l],
+                                highlight : colors[l]
+                            };
+                            item["title"] = obj.referenced_articles[i].title;
+
+                            edgePairItem = {};
+                            edgePairItem.from = id;
+                            edgePairItem.to = item["id"];
+                            nodes.push(item);
+                            edgePairs.push(edgePairItem);
+                        }
+                        var graph = {};
+                        graph.nodes = nodes;
+                        graph.edges = edgePairs;
+
+                        socket.emit('graph_response', graph);
+                    });
+
+                });
+
+                socket.on("rref_request_new",function(id){
+                    var hierarchy = id.split("-");
+                    fs.readFile('public/files/TerenceTaoFirstArticle/'+id+'.json', {encoding:"utf8"}, (err, data)=>{
+                        if(err){
+                            console.log("invalid file request " + id+".json");
+                            return;
+                        }
+                        var obj = JSON.parse(data);
+
+                        var l = hierarchy.length;
+                        var returnArticle = {};
+                        returnArticle["title"] = obj.title;
+                        returnArticle["articleId"] = obj.articleId;
+                        returnArticle["publisher"] = obj.publisher;
+                        returnArticle["doi"] = obj.doi;
+                        returnArticle["dirStructure"] = obj.dirStructure;
+                        returnArticle["authors"] = obj.authors;
+                        returnArticle["level"] = l;
+                        returnArticle["referenced_articles"] = obj.referenced_articles;
+                        socket.emit('rref_response_new', returnArticle);
+                    });
+                });
 
                 socket.on('request_captcha', function(){
                     var captcha = svgCaptcha.create();
@@ -788,7 +904,8 @@ var updateCsv = require('../models/csv');
                      aminerCo : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
                      scimagoDataset1 : "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
                      scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
-                     scibaseUniversity : "static_files/datasets/University and Country mapping.json"
+                     scibaseUniversity : "static_files/datasets/University and Country mapping.json",
+                     scibaseVidyasagar : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/Author+Data.zip"
                     };
 
                     var response_body = {};

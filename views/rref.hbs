@@ -1,0 +1,399 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
+<link rel="stylesheet" href="/stylesheets/owl.carousel.min.css">
+<link rel="stylesheet" href="/stylesheets/owl.theme.default.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.css">
+
+ <style type="text/css">
+        #mynetwork {
+            width: 100%;
+            height: 100vh;
+        }
+        #preloader{
+            position: absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100vh;
+            display : block;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        #preloader > i{
+            position: absolute;
+            top : 0;
+            left : 48%;
+            font-size : 50px;
+        }
+        .ref-selected{
+          background-color : rgb(198, 239, 255);
+        }
+
+ </style>
+
+<header id="header">
+    <div class="navbar navbar-inverse" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="/">
+                    <h1><img src="images/logo.png" alt="logo"></h1>
+                </a>
+
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/team">The Team</a></li>
+                    <li><a href="/publications">Publications</a></li>
+                    <li><a href="/datacenter">Data Center</a></li>
+                    <li><a href="http://oprs.pesitsouthscibase.org">OPRS</a></li>
+                    <li  class="active"><a href="/rref">RREF</a></li>
+                </ul>
+                </ul>
+            </div>
+            <div class="search">
+                <form role="form">
+                    <i class="fa fa-search"></i>
+                    <div class="field-toggle">
+                        <input type="text" class="search-form" autocomplete="off" placeholder="Search">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+<!--/#header-->
+
+
+<section id="page-breadcrumb">
+    <div class="vertical-center sun">
+         <div class="container">
+            <div class="row">
+                <div class="action">
+                    <div class="col-sm-10">
+                      <h1 class="title">RREF</h1>
+                      <p>Structure of the first article of Terence Tao Dataset</p>
+                    </div>
+                    <div class="col-sm-2">
+                      <button class="btn btn-primary btn-md" style="margin-top : 20px;" data-toggle="modal" data-target="#graph_animation">View Graph</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/#action-->
+
+
+
+<section id="rref-papers">
+  <div class="root-ref">
+    <div class="container-fluid">
+      <div class="col-sm-12 title-bar">
+        {{data.dirStructure}}
+      </div>
+      <div class="container-fluid text-center">
+        <h2>{{data.title}}</h2>
+      </div>
+      <div class="row">
+        <div class="container-fluid">
+          <div class="col-sm-12">
+            <div class="col-sm-8 col-sm-offset-4 article-details">
+              <p><h3><b>Authors :</b> {{data.authors}}</h3></p>
+              <p><h3><b>ArticleId :</b> {{data.articleId}}</h3></p>
+              <p><h3><b>Publisher :</b> {{data.publisher}}</h3></p>
+              <p><h3><b>DOI :</b> {{data.doi}}</h3></p>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <h3>References</h3><hr>
+            <div class="owl-carousel owl-root owl-theme text-center">
+              {{#each data.referenced_articles}}
+                <div class="item-ref container-fluid ref-container" id="{{id}}">
+                  <div class="ref-title"> {{articleId}}</div>
+                  <div class="ref-text">{{title}}</div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rref-paper-references">
+
+</section>
+
+
+
+
+
+<div id="graph_animation" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="mynetwork"></div>
+        <div id="preloader"><i class="fa fa-spinner fa-spin"></i></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 text-center bottom-separator">
+                <img src="images/home/under.png" class="img-responsive inline" alt="">
+            </div>
+            <div class="col-md-4 col-sm-6">
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="contact-info bottom">
+                    <h2>Contacts</h2>
+                    <address>
+                    E-mail: <a href="mailto:scibase@pes.edu">scibase@pes.edu</a> <br>
+                    </address>
+
+                    <h2>Address</h2>
+                    <address>
+                    PES Institute of Technology - Bangalore South Campus <br>
+                    Hosur Road, <br>
+                    (1km before Electronic City), <br>
+                    Bangalore KA - 560100 <br>
+                    </address>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="contact-form bottom">
+                    <h2>Send a message</h2>
+                    <form id="main-contact-form" name="contact-form" method="post" action="sendemail.php">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" required="required" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" required="required" placeholder="Email Id">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Your text here"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-submit" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="copyright-text text-center">
+                    <p>&copy; SciBase | PES Institute of Technology - Bangalore South Campus. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--/#footer-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  owlStart = function(c){
+    $(c).owlCarousel({
+      loop:false,
+      margin:10,
+      nav:true,
+      navText: [
+        "<i class='icon-chevron-left icon-white'><</i>",
+        "<i class='icon-chevron-right icon-white'>></i>"
+      ],
+      responsive:{
+          0:{
+              items:1
+          },
+          600:{
+              items:3
+          },
+          1000:{
+              items:5
+          }
+      }
+  });
+
+  
+}
+
+ // create an array with nodes
+    var nodes = new vis.DataSet();
+    var graphInitNodes = {{{parseJson graph.nodes}}};
+    nodes.add(graphInitNodes);
+
+    // create an array with edges
+    var edges = new vis.DataSet([
+
+    ]);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+      nodes:{
+        shape : "circle",
+        borderWidth: 1,
+        borderWidthSelected: 2,
+        brokenImage:undefined,
+        chosen: true,
+        font: {
+          color: '#fff',
+        }
+    }
+    };
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+    // console.log(network.getViewPosition());
+
+
+owlStart('.owl-root');
+
+$(document).ready(function(){
+
+  var socket = io();
+  //console.log(nodes);
+  network.once('initRedraw', function() {
+    network.moveTo({
+      scale : 1.0,
+      offset : {x: 400, y:300},
+      animation : true
+    });
+    // console.log(network.getViewPosition());
+  });
+  $("#preloader").css("display", "none");
+
+   $("#graph_animation").on('hidden.bs.modal', function () {
+            nodes.clear();
+            edges.clear();
+            nodes.add(graphInitNodes);
+    });
+
+  $('[data-toggle="tooltip"]').tooltip();
+
+
+  network.on("click", function(args){
+    if(args.nodes.length){
+      // console.log(args.nodes);
+      console.log("GRAPH EMMITTED");
+      socket.emit('graph_request', args.nodes[0]);
+      $("#preloader").css("display", "block");
+    }
+  });
+
+  var count = 0;
+  var levelCounted = 0;
+  $(".item-ref").click(function(){
+    levelCounted++;
+    if(levelCounted > 1){
+      return;
+    }
+    var id = $(this).attr("id");
+    if($("#"+id).hasClass("ref-selected")){
+    }else{
+      $("#"+id).addClass("ref-selected");
+      count++;
+      if(count == 1){ 
+        socket.emit('rref_request_new', id);
+      }
+    }
+  });
+
+
+  socket.on('graph_response', function(g){
+    // console.log("GRAPH RESPONDED");
+    nodes.add(g.nodes);
+    //console.log("Added " + g.nodes);
+    edges.add(g.edges);
+        $("#preloader").css("display", "none");
+  });
+
+  socket.on('rref_response_new', function(res){
+
+    var childToAppend = '<div class="child-ref"> \
+    <div class="container-fluid"> \
+      <div class="col-sm-12 title-bar"> \
+        '+res.dirStructure +
+      '</div> \
+      <div class="container-fluid text-center"> \
+        <h2>'+res.title+'</h2> \
+      </div> \
+      <div class="row"> \
+      <div class="container-fluid"> \
+        <div class="col-sm-12"> \
+          <div class="col-sm-8 col-sm-offset-4 article-details"> \
+            <p><h3><b>Authors :</b> '+res.authors+'</h3></p> \
+            <p><h3><b>ArticleId :</b> '+res.articleId+'</h3></p> \
+            <p><h3><b>Publisher :</b> '+res.publisher+'</h3></p> \
+            <p><h3><b>DOI :</b>'+res.doi+'</h3></p> \
+          </div> \
+        </div> \
+        <div class="col-sm-12"> \
+        <h3>References </h3><hr>\
+        <div class="owl-carousel carousel'+res.level+' owl-theme text-center">';
+
+    for(var i=0; i<res.referenced_articles.length; i++){
+      childToAppend += '<div class="item-ref container-fluid ref-container" id="'+res.referenced_articles[i].id+'"> \
+      <div class="ref-title">'+res.referenced_articles[i].articleId+'</div> \
+      <div class="ref-text">'+res.referenced_articles[i].title+'</div> </div>';
+    }
+
+    childToAppend+='</div></div></div></div></div></div>';
+
+    $("#rref-paper-references").append(childToAppend).promise().done(function(){
+      owlStart('.carousel'+res.level);
+      // console.log("Started Carausel for "+ '.carousel'+res.level);
+    });
+
+    var count = 0;
+    $(".item-ref").click(function(){
+      // console.log(count);
+      count++;
+      if(count == 1){
+        var id = $(this).attr("id");
+        if($("#"+id).hasClass("ref-selected")){
+          // console.log("Selected");
+          count--;
+        }else{
+          // console.log("Not Selected");
+          $("#"+id).addClass("ref-selected");
+            // console.log("REQUESTED");
+            socket.emit('rref_request_new', id);
+        }
+      }
+    });
+
+
+  });
+
+
+
+});
+
+ 
+</script>
+
