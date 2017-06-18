@@ -53,6 +53,7 @@
                     <li><a href="/datacenter">Data Center</a></li>
                     <li><a href="http://oprs.pesitsouthscibase.org">OPRS</a></li>
                     <li  class="active"><a href="/rref">RREF</a></li>
+                    <li><a href="/vizkit">Vizkit</a></li>
                 </ul>
                 </ul>
             </div>
@@ -232,7 +233,7 @@
       }
   });
 
-  
+
 }
 
  // create an array with nodes
@@ -317,7 +318,7 @@ $(document).ready(function(){
     }else{
       $("#"+id).addClass("ref-selected");
       count++;
-      if(count == 1){ 
+      if(count == 1){
         socket.emit('rref_request_new', id);
       }
     }
@@ -394,6 +395,5 @@ $(document).ready(function(){
 
 });
 
- 
-</script>
 
+</script>
