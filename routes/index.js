@@ -205,6 +205,35 @@ module.exports = function(io) {
         });
     });
 
+    router.get('/vizkit', function(req, res, next) {
+        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
+          if(doc){
+            var conditions = { name: 'HITS' }
+              , update = { $inc: { hits: 1 }}
+              , options = { multi: false };
+
+            countsModel.update(conditions, update, options, callback);
+            function callback (err, numAffected) {
+                if(err){
+                    console.log("UNABLE TO UPDATE HITS");
+                }
+            }
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
+                if(err){
+                    console.log("UNABLE TO CREATE HITS", err);
+                }
+            });
+          }
+        });
+        res.render('vizkit', {
+            title: 'SciBase'
+        });
+    });
     router.get('/publications', function(req, res, next) {
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
