@@ -199,11 +199,7 @@ module.exports = function(io) {
             title: 'SciBase'
         });
     });
-    router.get('/vizkit', function(req, res, next) {
-        res.render('vizkit', {
-            title: 'SciBase'
-        });
-    });
+
 
     router.get('/vizkit', function(req, res, next) {
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
