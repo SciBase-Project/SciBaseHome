@@ -8,14 +8,22 @@ module.exports = function(io) {
     var hbs = require('hbs');
     var mongoose = require("mongoose");
     var svgCaptcha = require("svg-captcha");
-
+var geoip = require('geoip-lite');
     var schema = mongoose.Schema;
-
+var requestIp = require('request-ip');
     var counterSchema = new schema({
         name : String,
         hits : Number
     },{collection : "counts"});
 
+
+ var locationSchema = new schema({
+        ip : String,
+        country : String,
+        city: String
+    },{collection : "location"});
+
+var locationModel = mongoose.model("locationModel", locationSchema);
     var countsModel = mongoose.model("countsModel", counterSchema);
 
     var updateCsv = new schema({
@@ -51,7 +59,23 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/', function(req, res,next) {
+        var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
 
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -171,6 +195,24 @@ module.exports = function(io) {
 
 
     router.get('/team', function(req, res, next) {
+                var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -202,6 +244,23 @@ module.exports = function(io) {
 
 
     router.get('/vizkit', function(req, res, next) {
+                var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -231,6 +290,23 @@ module.exports = function(io) {
         });
     });
     router.get('/publications', function(req, res, next) {
+                var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -262,7 +338,23 @@ module.exports = function(io) {
     });
     /* GET home page. */
     router.get('/datacenter', function(req, res, next) {
+        var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
 
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         var dataset_list = [{
                 title: "Scimago Dataset (1999 - 2014)",
                 description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
@@ -375,6 +467,16 @@ module.exports = function(io) {
                 size: "48.7MB",
                 category: "scibase-dataset"
 
+            },
+                        {
+                title: "Internationality ranking of Journals",
+                description: "This dataset consists the ranking factor for international journals.",
+                id : "internationalrank",
+                internal: false,
+                format: "CSV",
+                size: "8KB",
+                category: "scibase-dataset"
+
             }
         ];
 
@@ -412,7 +514,23 @@ module.exports = function(io) {
 
     /* GET home page. */
     router.get('/custom_datasets', function(req, res, next) {
+        var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
 
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         // socket.io events
         io.on("connection", function(socket) {
             console.log("A user connected");
@@ -476,6 +594,23 @@ module.exports = function(io) {
     });
 
     router.get('/query_builder', function(req, res, next) {
+                var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
+
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
           if(doc){
             var conditions = { name: 'HITS' }
@@ -716,7 +851,23 @@ module.exports = function(io) {
     });
 
     router.get('/rref', function(req, res, next) {
+        var clientIp = requestIp.getClientIp(req);
+        var geo = geoip.lookup(clientIp);
+                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
+          if(doc){
 
+          }else{
+
+            console.log("Error : ", err);
+            console.log("Creating a new Entry");
+            if(geo!=null)
+            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
+                if(err){
+                    next(err);
+                }
+            });
+          }
+        });
         var firstNode = {
             id : "G",
             label : "5452187",
@@ -935,7 +1086,8 @@ module.exports = function(io) {
                      scimagoDataset1 : "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
                      scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
                      scibaseUniversity : "static_files/datasets/University and Country mapping.json",
-                     scibaseVidyasagar : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/Author+Data.zip"
+                     scibaseVidyasagar : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/Author+Data.zip",
+                     internationalrank : "static_files/datasets/internationality0fjournals.csv"
                     };
 
                     var response_body = {};
