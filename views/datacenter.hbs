@@ -12,6 +12,11 @@
 
                     <a class="navbar-brand" href="/">
                         <h1><img src="images/logo.png" alt="logo"></h1>
+                                            <br>
+                    <div>
+                    <img src="images/compsoc.png" alt="logo" class="imgmedia" style="width:20%;margin-left:10%">
+                        
+                    </div>
                     </a>
 
                 </div>
@@ -21,7 +26,7 @@
                         <li><a href="/team">The Team</a></li>
                         <li><a href="/publications">Publications</a></li>
                         <li class="active"><a href="/datacenter">Data Center</a></li>
-                        <li><a href="http://oprs.pesitsouthscibase.org">OPRS</a></li>
+                        <li><a href="http://oprs.sahascibase.org">OPRS</a></li>
                         <li><a href="/rref">RREF</a></li>
 						<li ><a href="/vizkit">Vizkit</a></li>
                     </ul>
@@ -40,7 +45,75 @@
     </header>
     <!--/#header-->
 
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title text-primary text-center"><b>Disclaimer!</b></h4>
+      </div>
+      <div class="modal-body">
+        <p>If you download and use our data, please thank us by citing the following papers:
+        <br>
+        <br>
+        1. 
+        <code>
+@article{ginde2016scientobase,
+  title={ScientoBASE: a framework and model for computing scholastic indicators of non-local influence of journals via native data acquisition algorithms},
+  author={Ginde, Gouri and Saha, Snehanshu and Mathur, Archana and Venkatagiri, Sukrit and Vadakkepat, Sujith and Narasimhamurthy, Anand and Sagar, BS Daya},
+  journal={Scientometrics},
+  volume={108},
+  number={3},
+  pages={1479--1529},
+  year={2016},
+  publisher={Springer Netherlands}
+}
+</code>
+<br>
+<br>
+2. 
+<code>
+@article{saha2016dsrs,
+  title={DSRS: Estimation and forecasting of journal influence in the science and technology domain via a lightweight quantitative approach},
+  author={Saha, Snehanshu and Jangid, Neelam and Mathur, Archana and Narsimhamurthy, Anand M},
+  journal={Collnet Journal of Scientometrics and Information Management},
+  volume={10},
+  number={1},
+  pages={41--70},
+  year={2016},
+  publisher={Routledge}
+}
+</code>
+<br>
+<br>
+3. 
+<code>
+@article{jangid2014ranking,
+  title={Ranking of journals in science and technology domain: A novel and computationally lightweight approach},
+  author={Jangid, Neelam and Saha, Snehanshu and Gupta, Siddhant and Rao, J Mukunda},
+  journal={IERI Procedia},
+  volume={10},
+  pages={57--62},
+  year={2014},
+  publisher={Elsevier}
+}
+</code>
+</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script type="text/javascript">
+    $(window).on('load',function(){
+        $('#myModal').modal('show');
+    });
+</script>
     <section id="page-breadcrumb">
         <div class="vertical-center sun">
              <div class="container">
@@ -383,6 +456,7 @@
             });
 
             socket.on("downloadDatasetData_response", function(response){
+            console.log(response)
                 $("#datasetHidden").attr("href", response.link);
                 $("#datasetHidden")[0].click();
             });
