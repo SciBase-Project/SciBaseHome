@@ -9,7 +9,7 @@ csv.findOneAndRemove({ "name" :'update' },function(err,doc,result){
     if(err)
     console.log(err)
     else {
-        console.log("Removed date from mongodb");
+        console.log("Removed date from mongodb.");
         return -1;
     }
 
