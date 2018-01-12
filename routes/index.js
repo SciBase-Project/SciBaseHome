@@ -8,31 +8,31 @@ module.exports = function(io) {
     var hbs = require('hbs');
     var mongoose = require("mongoose");
     var svgCaptcha = require("svg-captcha");
-var geoip = require('geoip-lite');
+    var geoip = require('geoip-lite');
     var schema = mongoose.Schema;
-var requestIp = require('request-ip');
+    var requestIp = require('request-ip');
     var counterSchema = new schema({
-        name : String,
-        hits : Number
-    },{collection : "counts"});
+        name: String,
+        hits: Number
+    }, { collection: "counts" });
 
 
- var locationSchema = new schema({
-        ip : String,
-        country : String,
+    var locationSchema = new schema({
+        ip: String,
+        country: String,
         city: String
-    },{collection : "location"});
+    }, { collection: "location" });
 
-var locationModel = mongoose.model("locationModel", locationSchema);
+    var locationModel = mongoose.model("locationModel", locationSchema);
     var countsModel = mongoose.model("countsModel", counterSchema);
 
     var updateCsv = new schema({
-        name : String,
-    	update_next: { type: Date, default : Date.now },
-    },{collection : "updatecsvs"});
+        name: String,
+        update_next: { type: Date, default: Date.now },
+    }, { collection: "updatecsvs" });
 
     var updateCsvModel = mongoose.model("updateCsvModel", updateCsv);
-    hbs.registerHelper('toUpperCase', function(str){
+    hbs.registerHelper('toUpperCase', function(str) {
         return str.toUpperCase();
     });
 
@@ -58,51 +58,52 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
 
     /* GET home page. */
-    router.get('/', function(req, res,next) {
+    router.get('/', function(req, res, next) {
         var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
-        });
-        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
-          if(doc){
-            var conditions = { name: 'HITS' }
-              , update = { $inc: { hits: 1 }}
-              , options = { multi: false };
-
-            countsModel.update(conditions, update, options, callback);
-            function callback (err, numAffected) {
-                if(err){
-                    next(error)
-                }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
             }
+        });
+        countsModel.findOne({ 'name': "HITS" }, function(err, doc) {
+            if (doc) {
+                var conditions = { name: 'HITS' },
+                    update = { $inc: { hits: 1 } },
+                    options = { multi: false };
 
-          }else{
+                countsModel.update(conditions, update, options, callback);
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
-                if(err){
-                    next(err);
+                function callback(err, numAffected) {
+                    if (err) {
+                        next(error)
+                    }
                 }
-            });
-          }
+
+            } else {
+
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                countsModel.create({ name: "HITS", hits: 194 }, function(err, doc) {
+                    if (err) {
+                        next(err);
+                    }
+                });
+            }
         });
 
         util.generateJournalList(function(journals) {
-            var curr_date = new Date();//fetch list of journals everytime
+            var curr_date = new Date(); //fetch list of journals everytime
             updateCsvModel.findOne({ 'name': "update" }, function(err, doc) { //check if update exists
                 if (doc) {
 
@@ -120,15 +121,15 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                         util.generateJournalCsv();
                         util.generateAuthorCsv();
                         util.generateInstitutionCsv();
-                       // util.generateAllArticleIntScoreCsv();
+                        // util.generateAllArticleIntScoreCsv();
                         util.generateAllArticleCitvsYearCsv();
                         for (k = 0; k < journals.length; k++) {
                             util.generateArticleCitvsYearCsv(journals[k]);
                         }
-                        curr_date.setDate(curr_date.getDate()+15)
+                        curr_date.setDate(curr_date.getDate() + 15)
                         console.log(curr_date)
                         var conditions = { name: 'update' },
-                            update = { $set: {"update_next": curr_date} },
+                            update = { $set: { "update_next": curr_date } },
                             options = { multi: false };
 
                         updateCsvModel.update(conditions, update, options, callback);
@@ -147,8 +148,8 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
                     console.log("Error : ", err);
                     console.log("Creating a new Entry"); // creating for the first time only
-                    curr_date.setDate(curr_date.getDate()+15)
-                    updateCsvModel.create({ name: "update", update_next : curr_date }, function(err, doc) {
+                    curr_date.setDate(curr_date.getDate() + 15)
+                    updateCsvModel.create({ name: "update", update_next: curr_date }, function(err, doc) {
                         if (err) {
                             next(err)
                         }
@@ -168,16 +169,16 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
         util.getStats(function(result) {
             // Get Site visit counts..
-            countsModel.findOne({"name" : "HITS"}, function(err, doc){
-                if(doc){
+            countsModel.findOne({ "name": "HITS" }, function(err, doc) {
+                if (doc) {
                     result.hits = doc.hits;
-                }else{
-                     result.hits = 0;
+                } else {
+                    result.hits = 0;
                 }
-                countsModel.findOne({"name" : "DATASETDOWNLOAD"},function(err, doc){
-                    if(doc){
+                countsModel.findOne({ "name": "DATASETDOWNLOAD" }, function(err, doc) {
+                    if (doc) {
                         result.articlesDownloadHits = doc.hits;
-                    }else{
+                    } else {
                         result.articlesDownloadHits = 0;
                     }
 
@@ -195,47 +196,48 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
 
     router.get('/team', function(req, res, next) {
-                var clientIp = requestIp.getClientIp(req);
+        var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
 
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
-        });
-        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
-          if(doc){
-            var conditions = { name: 'HITS' }
-              , update = { $inc: { hits: 1 }}
-              , options = { multi: false };
-
-            countsModel.update(conditions, update, options, callback);
-            function callback (err, numAffected) {
-                if(err){
-                    console.log("UNABLE TO UPDATE HITS");
-                }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
             }
+        });
+        countsModel.findOne({ 'name': "HITS" }, function(err, doc) {
+            if (doc) {
+                var conditions = { name: 'HITS' },
+                    update = { $inc: { hits: 1 } },
+                    options = { multi: false };
 
-          }else{
+                countsModel.update(conditions, update, options, callback);
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
-                if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
+                function callback(err, numAffected) {
+                    if (err) {
+                        console.log("UNABLE TO UPDATE HITS");
+                    }
                 }
-            });
-          }
+
+            } else {
+
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                countsModel.create({ name: "HITS", hits: 194 }, function(err, doc) {
+                    if (err) {
+                        console.log("UNABLE TO CREATE HITS", err);
+                    }
+                });
+            }
         });
         res.render('team', {
             title: 'SciBase'
@@ -244,92 +246,94 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
 
     router.get('/vizkit', function(req, res, next) {
-                var clientIp = requestIp.getClientIp(req);
+        var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
-        });
-        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
-          if(doc){
-            var conditions = { name: 'HITS' }
-              , update = { $inc: { hits: 1 }}
-              , options = { multi: false };
-
-            countsModel.update(conditions, update, options, callback);
-            function callback (err, numAffected) {
-                if(err){
-                    console.log("UNABLE TO UPDATE HITS");
-                }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
             }
+        });
+        countsModel.findOne({ 'name': "HITS" }, function(err, doc) {
+            if (doc) {
+                var conditions = { name: 'HITS' },
+                    update = { $inc: { hits: 1 } },
+                    options = { multi: false };
 
-          }else{
+                countsModel.update(conditions, update, options, callback);
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
-                if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
+                function callback(err, numAffected) {
+                    if (err) {
+                        console.log("UNABLE TO UPDATE HITS");
+                    }
                 }
-            });
-          }
+
+            } else {
+
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                countsModel.create({ name: "HITS", hits: 194 }, function(err, doc) {
+                    if (err) {
+                        console.log("UNABLE TO CREATE HITS", err);
+                    }
+                });
+            }
         });
         res.render('vizkit', {
             title: 'SciBase'
         });
     });
     router.get('/publications', function(req, res, next) {
-                var clientIp = requestIp.getClientIp(req);
+        var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
-        });
-        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
-          if(doc){
-            var conditions = { name: 'HITS' }
-              , update = { $inc: { hits: 1 }}
-              , options = { multi: false };
-
-            countsModel.update(conditions, update, options, callback);
-            function callback (err, numAffected) {
-                if(err){
-                    console.log("UNABLE TO UPDATE HITS");
-                }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
             }
+        });
+        countsModel.findOne({ 'name': "HITS" }, function(err, doc) {
+            if (doc) {
+                var conditions = { name: 'HITS' },
+                    update = { $inc: { hits: 1 } },
+                    options = { multi: false };
 
-          }else{
+                countsModel.update(conditions, update, options, callback);
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
-                if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
+                function callback(err, numAffected) {
+                    if (err) {
+                        console.log("UNABLE TO UPDATE HITS");
+                    }
                 }
-            });
-          }
+
+            } else {
+
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                countsModel.create({ name: "HITS", hits: 194 }, function(err, doc) {
+                    if (err) {
+                        console.log("UNABLE TO CREATE HITS", err);
+                    }
+                });
+            }
         });
 
         res.render('publications', {
@@ -340,26 +344,26 @@ var locationModel = mongoose.model("locationModel", locationSchema);
     router.get('/datacenter', function(req, res, next) {
         var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
+            }
         });
         var dataset_list = [{
                 title: "Scimago Dataset (1999 - 2014)",
                 description: "In this section you can find the entire collection of journals covered by Scopus (currently the largest database of academic literature with 21,900 journals from 5,000 publishers) along with their SNIP, IPP and SJR metrics going back to 1999.",
                 //download_link: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
-                id : "scimagoDataset1",
+                id: "scimagoDataset1",
                 internal: true,
                 format: "XLSX",
                 size: "16.1 MB",
@@ -368,7 +372,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "Scimago Dataset (Archive at the time of January 2010)",
                 description: "Due to the fact that journal metrics are calculated from Scopus, the journal metric values cannot be fixed in time. Scopus is dynamic. This dataset is the is the first publicly released set.",
                 //download_link: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
-                id : "scimagoDataset2",
+                id: "scimagoDataset2",
                 internal: true,
                 format: "XLSX",
                 size: "2.8 MB",
@@ -377,7 +381,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "AMiner Paper",
                 description: "This file saves the paper information and the citation network.",
                 //download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
-                id : "aminerPaper",
+                id: "aminerPaper",
                 internal: false,
                 format: "CSV",
                 size: "509 MB",
@@ -386,7 +390,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "AMiner Author",
                 description: "This file saves the author information.",
                 //download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
-                id : "aminerAuthor",
+                id: "aminerAuthor",
                 internal: false,
                 format: "CSV",
                 size: "167 MB",
@@ -395,7 +399,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "AMiner Co-author",
                 description: "This file saves the collaboration network among the authors in the second file.",
                 //download_link: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
-                id : "aminerCo",
+                id: "aminerCo",
                 internal: false,
                 format: "CSV",
                 size: "31.5 MB",
@@ -404,7 +408,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "ACM Journals",
                 description: "This dataset consists of 40 ACM Journals with all the Articles and related information.",
                 //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
-                id : "scibaseAcm",
+                id: "scibaseAcm",
                 internal: false,
                 format: "JSON",
                 size: "60 MB",
@@ -413,7 +417,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "Indian Journals",
                 description: "This dataset consists of a fewer number of Indian Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
                 //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
-                id : "scibaseIndian",
+                id: "scibaseIndian",
                 internal: false,
                 format: "JSON",
                 size: "118 KB",
@@ -422,7 +426,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "International Journals",
                 description: "This dataset consists of a International Journals from diverse domains and respective Articles published in last 3 years (2012 to 2016).",
                 //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
-                id : "scibaseInt",
+                id: "scibaseInt",
                 internal: false,
                 format: "JSON",
                 size: "5.3 MB",
@@ -431,7 +435,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                 title: "Scholastic Indices",
                 description: "This is a dataset which has the scholastic indices such as Other Citation Count, Non Local Influence Quotient, SNIP and International Collaboration Ratio for the 40 ACM Journals.",
                 //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
-                id : "scibaseSchol",
+                id: "scibaseSchol",
                 internal: false,
                 format: "CSV",
                 size: "4 KB",
@@ -439,8 +443,8 @@ var locationModel = mongoose.model("locationModel", locationSchema);
             }, {
                 title: "Terence Tao Dataset",
                 description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Terence Tao, an Australian-American mathematician and a co-recipient of the 2006 Fields Medal and the 2014 Breakthrough Prize in Mathematics.",
-               //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
-                id : "scibaseTerence",
+                //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                id: "scibaseTerence",
                 internal: false,
                 format: "JSON",
                 size: "137 MB",
@@ -450,8 +454,8 @@ var locationModel = mongoose.model("locationModel", locationSchema);
             {
                 title: " University and Country Mapping",
                 description: "This is a database of Universities around the world scraped from univ.cc website. The listing of Institutions is based on the \"World List of Universities 1997\" published by the International Association of Universities (IAU) and links discovered. This data is latest as on 1 Jan 2017.",
-               //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
-                id : "scibaseUniversity",
+                //download_link: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                id: "scibaseUniversity",
                 internal: false,
                 format: "JSON",
                 size: "680 KB",
@@ -461,17 +465,17 @@ var locationModel = mongoose.model("locationModel", locationSchema);
             {
                 title: "Vidya Sagar Dataset",
                 description: "This dataset consists of top four highly cited articles and the nested references for it up to 4 levels of Vidya Sagar and other few noted scholar.",
-                id : "scibaseVidyasagar",
+                id: "scibaseVidyasagar",
                 internal: false,
                 format: "JSON",
                 size: "48.7MB",
                 category: "scibase-dataset"
 
             },
-                        {
+            {
                 title: "Internationality ranking of Journals",
                 description: "This dataset consists the ranking factor for international journals.",
-                id : "internationalrank",
+                id: "internationalrank",
                 internal: false,
                 format: "CSV",
                 size: "8KB",
@@ -504,7 +508,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
             // });
             res.render('datacenter', {
                 datasets: dataset_list,
-                dataset : result
+                dataset: result
 
             });
         });
@@ -516,20 +520,20 @@ var locationModel = mongoose.model("locationModel", locationSchema);
     router.get('/custom_datasets', function(req, res, next) {
         var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
+            }
         });
         // socket.io events
         io.on("connection", function(socket) {
@@ -594,49 +598,50 @@ var locationModel = mongoose.model("locationModel", locationSchema);
     });
 
     router.get('/query_builder', function(req, res, next) {
-                var clientIp = requestIp.getClientIp(req);
+        var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
-        });
-        countsModel.findOne({ 'name': "HITS" }, function (err, doc) {
-          if(doc){
-            var conditions = { name: 'HITS' }
-              , update = { $inc: { hits: 1 }}
-              , options = { multi: false };
-
-            countsModel.update(conditions, update, options, callback);
-            function callback (err, numAffected) {
-                if(err){
-                    console.log("UNABLE TO UPDATE HITS");
-                }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
             }
+        });
+        countsModel.findOne({ 'name': "HITS" }, function(err, doc) {
+            if (doc) {
+                var conditions = { name: 'HITS' },
+                    update = { $inc: { hits: 1 } },
+                    options = { multi: false };
 
-          }else{
+                countsModel.update(conditions, update, options, callback);
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            countsModel.create({name: "HITS", hits: 194}, function(err, doc) {
-                if(err){
-                    console.log("UNABLE TO CREATE HITS", err);
+                function callback(err, numAffected) {
+                    if (err) {
+                        console.log("UNABLE TO UPDATE HITS");
+                    }
                 }
-            });
-          }
+
+            } else {
+
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                countsModel.create({ name: "HITS", hits: 194 }, function(err, doc) {
+                    if (err) {
+                        console.log("UNABLE TO CREATE HITS", err);
+                    }
+                });
+            }
         });
 
-        util.getNodes(function(result){
+        util.getNodes(function(result) {
 
             io.on("connection", function(socket) {
                 console.log("A user connected");
@@ -658,33 +663,33 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
                     for (var i = 0; i < statement.length; i++) {
 
-                    if(i%2 !=0){
-                        indexOfNode = (nodesRec.indexOf(statement[i-1]) + 1);
-                        return_param += ( nodesRec[indexOfNode]+".`"+statement[i]+"`" );
-                        if(i < statement.length - 1)
-                            return_param += ",";
-                    }else{
-                        if(nodesRec.indexOf(statement[i]) == -1){
-                            nodesRec.push(statement[i]);
-                            nodesRec.push(temp[i/2]);
+                        if (i % 2 != 0) {
+                            indexOfNode = (nodesRec.indexOf(statement[i - 1]) + 1);
+                            return_param += (nodesRec[indexOfNode] + ".`" + statement[i] + "`");
+                            if (i < statement.length - 1)
+                                return_param += ",";
+                        } else {
+                            if (nodesRec.indexOf(statement[i]) == -1) {
+                                nodesRec.push(statement[i]);
+                                nodesRec.push(temp[i / 2]);
 
-                            if(i>0){
-                                item = {}
-                                item["statement"] = "MATCH (n:`"+statement[i-2]+"`)-[r]->(`"+statement[i]+"`) RETURN DISTINCT TYPE(r)";
-                                jsonRelationship.push(item);
+                                if (i > 0) {
+                                    item = {}
+                                    item["statement"] = "MATCH (n:`" + statement[i - 2] + "`)-[r]->(`" + statement[i] + "`) RETURN DISTINCT TYPE(r)";
+                                    jsonRelationship.push(item);
+                                }
+
                             }
+
 
                         }
 
-
                     }
 
-                }
-
-                var jsonQuery = {
-                    "statements" : jsonRelationship
-                };
-               // console.log(jsonQuery);
+                    var jsonQuery = {
+                        "statements": jsonRelationship
+                    };
+                    // console.log(jsonQuery);
 
                     var relationships = [];
 
@@ -702,8 +707,8 @@ var locationModel = mongoose.model("locationModel", locationSchema);
                         //console.log(body.results[0].data.length);
                         if (!err && response.statusCode === 200) {
 
-                            for(var i=0;i<body.results.length; i++){
-                                if(body.results[i].data.length != 0){
+                            for (var i = 0; i < body.results.length; i++) {
+                                if (body.results[i].data.length != 0) {
                                     console.log("this " + body.results[i].data[0].row[0]);
                                     console.log("length " + body.results[i].data.length);
                                     relationships.push(body.results[i].data[0].row[0]);
@@ -724,7 +729,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
 
 
-                            query = "MATCH "+matching_param+" RETURN " +return_param;
+                            query = "MATCH " + matching_param + " RETURN " + return_param;
 
 
 
@@ -788,8 +793,8 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
                         } else {
 
-                        console.log(err);
-                    }
+                            console.log(err);
+                        }
 
                     }); // relationships request ends
 
@@ -853,30 +858,30 @@ var locationModel = mongoose.model("locationModel", locationSchema);
     router.get('/rref', function(req, res, next) {
         var clientIp = requestIp.getClientIp(req);
         var geo = geoip.lookup(clientIp);
-                locationModel.findOne({ 'ip': clientIp }, function (err, doc) {
-          if(doc){
+        locationModel.findOne({ 'ip': clientIp }, function(err, doc) {
+            if (doc) {
 
-          }else{
+            } else {
 
-            console.log("Error : ", err);
-            console.log("Creating a new Entry");
-            if(geo!=null)
-            locationModel.create({ip: clientIp,country: geo["country"], city: geo["city"]}, function(err, doc) {
-                if(err){
-                    next(err);
-                }
-            });
-          }
+                console.log("Error : ", err);
+                console.log("Creating a new Entry");
+                if (geo != null)
+                    locationModel.create({ ip: clientIp, country: geo["country"], city: geo["city"] }, function(err, doc) {
+                        if (err) {
+                            next(err);
+                        }
+                    });
+            }
         });
         var firstNode = {
-            id : "G",
-            label : "5452187",
-            color:{
-                border : "#a80008",
-                background:"#a80008",
-                highlight : "#a80008"
+            id: "G",
+            label: "5452187",
+            color: {
+                border: "#a80008",
+                background: "#a80008",
+                highlight: "#a80008"
             },
-            title : "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
+            title: "The Power of Convex Relaxation: Near-Optimal Matrix Completion"
         };
         var edgePair = {};
         var graph = {};
@@ -884,9 +889,9 @@ var locationModel = mongoose.model("locationModel", locationSchema);
         graph.edges = edgePair;
 
 
-        var firstArticle ={};
-        fs.readFile('public/files/TerenceTaoFirstArticle/0.json', {encoding:"utf8"}, (err, data)=>{
-            if(err) throw err;
+        var firstArticle = {};
+        fs.readFile('public/files/TerenceTaoFirstArticle/0.json', { encoding: "utf8" }, (err, data) => {
+            if (err) throw err;
             var obj = JSON.parse(data);
             firstArticle["title"] = obj.title;
             firstArticle["articleId"] = obj.articleId;
@@ -896,15 +901,15 @@ var locationModel = mongoose.model("locationModel", locationSchema);
             firstArticle["authors"] = obj.authors;
 
             var ch = [];
-            for(var i=0; i<obj.referenced_articles.length; i++){
+            for (var i = 0; i < obj.referenced_articles.length; i++) {
                 item = {};
                 item["title"] = obj.referenced_articles[i].title;
                 item["articleId"] = obj.referenced_articles[i].articleId;
-                item["id"] = "0-"+i;
+                item["id"] = "0-" + i;
                 ch.push(item);
             }
             firstArticle["referenced_articles"] = ch;
-            res.render('rref', {data : firstArticle, graph : graph});
+            res.render('rref', { data: firstArticle, graph: graph });
 
         });
 
@@ -912,194 +917,196 @@ var locationModel = mongoose.model("locationModel", locationSchema);
     });
 
     io.on("connection", function(socket) {
-            console.log("A user connected");
+        console.log("A user connected");
 
-                socket.on('graph_request', function(id){
-                    var colors = ["#266348","#6242f4","#00a838","#1c2820","#a80008"];
-                    var actualId = id.replace('G', '0');
-                    var hierarchy = id.split("-");
-                    fs.readFile('public/files/TerenceTaoFirstArticle/'+actualId+'.json', {encoding:"utf8"}, (err, data)=>{
-                        if(err){
-                            console.log("invalid ID");
-                            return;
-                        }
-                        var obj = JSON.parse(data);
-                        var l = hierarchy.length;
-                        var nodes = [];
-                        var edgePairs = [];
-                        for(var i=0; obj.referenced_articles && i<obj.referenced_articles.length; i++){
-                            item = {};
-                            item["label"] = obj.referenced_articles[i].articleId;
-                            item["id"] = id+"-"+i;
-                            item["color"]={
-                                border : colors[l],
-                                background : colors[l],
-                                highlight : colors[l]
-                            };
-                            item["title"] = obj.referenced_articles[i].title;
-
-                            edgePairItem = {};
-                            edgePairItem.from = id;
-                            edgePairItem.to = item["id"];
-                            nodes.push(item);
-                            edgePairs.push(edgePairItem);
-                        }
-                        var graph = {};
-                        graph.nodes = nodes;
-                        graph.edges = edgePairs;
-
-                        socket.emit('graph_response', graph);
-                    });
-
-                });
-
-                socket.on("rref_request_new",function(id){
-                    var hierarchy = id.split("-");
-                    fs.readFile('public/files/TerenceTaoFirstArticle/'+id+'.json', {encoding:"utf8"}, (err, data)=>{
-                        if(err){
-                            console.log("invalid file request " + id+".json");
-                            return;
-                        }
-                        var obj = JSON.parse(data);
-
-                        var l = hierarchy.length;
-                        var returnArticle = {};
-                        returnArticle["title"] = obj.title;
-                        returnArticle["articleId"] = obj.articleId;
-                        returnArticle["publisher"] = obj.publisher;
-                        returnArticle["doi"] = obj.doi;
-                        returnArticle["dirStructure"] = obj.dirStructure;
-                        returnArticle["authors"] = obj.authors;
-                        returnArticle["level"] = l;
-                        returnArticle["referenced_articles"] = obj.referenced_articles;
-                        socket.emit('rref_response_new', returnArticle);
-                    });
-                });
-
-                socket.on('request_captcha', function(){
-                    var captcha = svgCaptcha.create();
-                    socket.emit("response_captcha", captcha);
-                    console.log("Captcha generated");
-                });
-
-                socket.on('filterSearch_request', function(filter) {
-                    console.log("Socket connected");
-                    console.log(filter);
-                    util.search_article(filter, function(filterResult){
-                        //console.log("filterResult", filterResult);
-                        socket.emit("filterSearch_response", filterResult);
-                        console.log("Socket emitted");
-                    });
-
-                }); // socket event handler ends
-
-                socket.on('downloadArticleData_request', function(articleData){
-
-                    countsModel.findOne({ 'name': "ARTICLESDOWNLOAD" }, function (err, doc) {
-                      if(doc){
-                        var conditions = { name: 'ARTICLESDOWNLOAD' }
-                          , update = { $inc: { hits: 1 }}
-                          , options = { multi: false };
-
-                        countsModel.update(conditions, update, options, callback);
-                        function callback (err, numAffected) {
-                            if(err){
-                                console.log("UNABLE TO UPDATE ARTICLESDOWNLOAD");
-                            }
-                        }
-
-                      }else{
-
-                        console.log("Error : ", err);
-                        console.log("Creating a new Entry for ARTICLESDOWNLOAD");
-                        countsModel.create({name: "ARTICLESDOWNLOAD", hits: 1}, function(err, doc) {
-                            if(err){
-                                console.log("UNABLE TO CREATE ARTICLESDOWNLOAD", err);
-                            }
-                        });
-                      }
-                    });
-
-                    console.log("Downloading");
-                    var file_name_base = util.randomString(20);
-
-                    var response_body = {};
-
-                    response_body.csv_url = "files/papers/" + file_name_base + ".csv";
-
-                    var csv = "";
-                    csv += '"Title","DOI","Month","Year"\n';
-                    for (var i = 0; i < articleData.length; i++) {
-
-                        csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
-                    }
-
-                    try {
-                        fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), csv, 'utf-8');
-                        response_body.status = "success";
-
-                    } catch (e) {
-                        console.log("Error:", e.message);
-                        response_body.status = "error";
-                        response_body.csv_url = null;
-                    }
-
-                    socket.emit("downloadArticleData_response", response_body);
-
-                });
-                socket.on("downloadDatasetData_request", function(dataset_id){
-
-                    countsModel.findOne({ 'name': "DATASETDOWNLOAD" }, function (err, doc) {
-                      if(doc){
-                        var conditions = { name: 'DATASETDOWNLOAD' }
-                          , update = { $inc: { hits: 1 }}
-                          , options = { multi: false };
-
-                        countsModel.update(conditions, update, options, callback);
-                        function callback (err, numAffected) {
-                            if(err){
-                                console.log("UNABLE TO UPDATE DATASETDOWNLOAD");
-                            }
-                        }
-
-                      }else{
-
-                        console.log("Error : ", err);
-                        console.log("Creating a new Entry for DATASETDOWNLOAD");
-                        countsModel.create({name: "DATASETDOWNLOAD", hits: 1}, function(err, doc) {
-                            if(err){
-                                console.log("UNABLE TO CREATE DATASETDOWNLOAD", err);
-                            }
-                        });
-                      }
-                    });
-
-                    var downloadLinks = {
-                     scibaseAcm : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz" ,
-                     scibaseIndian : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz" ,
-                     scibaseInt : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
-                     scibaseSchol : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
-                     scibaseTerence : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
-                     aminerPaper : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
-                     aminerAuthor : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
-                     aminerCo : "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
-                     scimagoDataset1 : "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
-                     scimagoDataset2 : "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
-                     scibaseUniversity : "static_files/datasets/University and Country mapping.json",
-                     scibaseVidyasagar : "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/Author+Data.zip",
-                     internationalrank : "static_files/datasets/internationality0fjournals.csv"
+        socket.on('graph_request', function(id) {
+            var colors = ["#266348", "#6242f4", "#00a838", "#1c2820", "#a80008"];
+            var actualId = id.replace('G', '0');
+            var hierarchy = id.split("-");
+            fs.readFile('public/files/TerenceTaoFirstArticle/' + actualId + '.json', { encoding: "utf8" }, (err, data) => {
+                if (err) {
+                    console.log("invalid ID");
+                    return;
+                }
+                var obj = JSON.parse(data);
+                var l = hierarchy.length;
+                var nodes = [];
+                var edgePairs = [];
+                for (var i = 0; obj.referenced_articles && i < obj.referenced_articles.length; i++) {
+                    item = {};
+                    item["label"] = obj.referenced_articles[i].articleId;
+                    item["id"] = id + "-" + i;
+                    item["color"] = {
+                        border: colors[l],
+                        background: colors[l],
+                        highlight: colors[l]
                     };
+                    item["title"] = obj.referenced_articles[i].title;
 
-                    var response_body = {};
-                    response_body.link = "#";
-                   // console.log("DatasetID : ", dataset_id);
-                   // console.log("value "+ downloadLinks[dataset_id]);
-                    response_body.link = downloadLinks[dataset_id] ;
+                    edgePairItem = {};
+                    edgePairItem.from = id;
+                    edgePairItem.to = item["id"];
+                    nodes.push(item);
+                    edgePairs.push(edgePairItem);
+                }
+                var graph = {};
+                graph.nodes = nodes;
+                graph.edges = edgePairs;
 
-                    socket.emit("downloadDatasetData_response", response_body);
-                });
+                socket.emit('graph_response', graph);
+            });
+
+        });
+
+        socket.on("rref_request_new", function(id) {
+            var hierarchy = id.split("-");
+            fs.readFile('public/files/TerenceTaoFirstArticle/' + id + '.json', { encoding: "utf8" }, (err, data) => {
+                if (err) {
+                    console.log("invalid file request " + id + ".json");
+                    return;
+                }
+                var obj = JSON.parse(data);
+
+                var l = hierarchy.length;
+                var returnArticle = {};
+                returnArticle["title"] = obj.title;
+                returnArticle["articleId"] = obj.articleId;
+                returnArticle["publisher"] = obj.publisher;
+                returnArticle["doi"] = obj.doi;
+                returnArticle["dirStructure"] = obj.dirStructure;
+                returnArticle["authors"] = obj.authors;
+                returnArticle["level"] = l;
+                returnArticle["referenced_articles"] = obj.referenced_articles;
+                socket.emit('rref_response_new', returnArticle);
+            });
+        });
+
+        socket.on('request_captcha', function() {
+            var captcha = svgCaptcha.create();
+            socket.emit("response_captcha", captcha);
+            console.log("Captcha generated");
+        });
+
+        socket.on('filterSearch_request', function(filter) {
+            console.log("Socket connected");
+            console.log(filter);
+            util.search_article(filter, function(filterResult) {
+                //console.log("filterResult", filterResult);
+                socket.emit("filterSearch_response", filterResult);
+                console.log("Socket emitted");
+            });
+
+        }); // socket event handler ends
+
+        socket.on('downloadArticleData_request', function(articleData) {
+
+            countsModel.findOne({ 'name': "ARTICLESDOWNLOAD" }, function(err, doc) {
+                if (doc) {
+                    var conditions = { name: 'ARTICLESDOWNLOAD' },
+                        update = { $inc: { hits: 1 } },
+                        options = { multi: false };
+
+                    countsModel.update(conditions, update, options, callback);
+
+                    function callback(err, numAffected) {
+                        if (err) {
+                            console.log("UNABLE TO UPDATE ARTICLESDOWNLOAD");
+                        }
+                    }
+
+                } else {
+
+                    console.log("Error : ", err);
+                    console.log("Creating a new Entry for ARTICLESDOWNLOAD");
+                    countsModel.create({ name: "ARTICLESDOWNLOAD", hits: 1 }, function(err, doc) {
+                        if (err) {
+                            console.log("UNABLE TO CREATE ARTICLESDOWNLOAD", err);
+                        }
+                    });
+                }
+            });
+
+            console.log("Downloading");
+            var file_name_base = util.randomString(20);
+
+            var response_body = {};
+
+            response_body.csv_url = "files/papers/" + file_name_base + ".csv";
+
+            var csv = "";
+            csv += '"Title","DOI","Month","Year"\n';
+            for (var i = 0; i < articleData.length; i++) {
+
+                csv += '"' + articleData[i].title + '","' + articleData[i].doi + '","' + articleData[i].month + '","' + articleData[i].year + '"\n';
+            }
+
+            try {
+                fs.writeFileSync(path.join(__dirname, "../public/files/papers/", file_name_base + ".csv"), csv, 'utf-8');
+                response_body.status = "success";
+
+            } catch (e) {
+                console.log("Error:", e.message);
+                response_body.status = "error";
+                response_body.csv_url = null;
+            }
+
+            socket.emit("downloadArticleData_response", response_body);
+
+        });
+        socket.on("downloadDatasetData_request", function(dataset_id) {
+
+            countsModel.findOne({ 'name': "DATASETDOWNLOAD" }, function(err, doc) {
+                if (doc) {
+                    var conditions = { name: 'DATASETDOWNLOAD' },
+                        update = { $inc: { hits: 1 } },
+                        options = { multi: false };
+
+                    countsModel.update(conditions, update, options, callback);
+
+                    function callback(err, numAffected) {
+                        if (err) {
+                            console.log("UNABLE TO UPDATE DATASETDOWNLOAD");
+                        }
+                    }
+
+                } else {
+
+                    console.log("Error : ", err);
+                    console.log("Creating a new Entry for DATASETDOWNLOAD");
+                    countsModel.create({ name: "DATASETDOWNLOAD", hits: 1 }, function(err, doc) {
+                        if (err) {
+                            console.log("UNABLE TO CREATE DATASETDOWNLOAD", err);
+                        }
+                    });
+                }
+            });
+
+            var downloadLinks = {
+                scibaseAcm: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ACM+dataset.tar.gz",
+                scibaseIndian: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet-IndianJournals.tar.gz",
+                scibaseInt: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/DataSet_InternationalJournal.tar.gz",
+                scibaseSchol: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/ScholasticIndices.csv",
+                scibaseTerence: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/T+Tao.zip",
+                aminerPaper: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Paper.rar",
+                aminerAuthor: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Author.zip",
+                aminerCo: "http://arnetminer.org/lab-datasets/aminerdataset/AMiner-Coauthor.zip",
+                scimagoDataset1: "http://www.journalmetrics.com/documents/SNIP_IPP_SJR_complete_1999_2014.xlsx",
+                scimagoDataset2: "http://www.journalmetrics.com/documents/SNIP_SJR_complete_1999_2009_JAN%202010.xlsx",
+                scibaseUniversity: "static_files/datasets/University and Country mapping.json",
+                scibaseVidyasagar: "https://s3.ap-south-1.amazonaws.com/scibasedatasets/datasets/Author+Data.zip",
+                internationalrank: "static_files/datasets/internationality0fjournals.csv"
+            };
+
+            var response_body = {};
+            response_body.link = "#";
+            // console.log("DatasetID : ", dataset_id);
+            // console.log("value "+ downloadLinks[dataset_id]);
+            response_body.link = downloadLinks[dataset_id];
+
+            socket.emit("downloadDatasetData_response", response_body);
+        });
 
     }); // io event handler ends
 
     return router;
-    };
+};
