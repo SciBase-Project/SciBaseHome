@@ -48,7 +48,7 @@ var locationModel = mongoose.model("locationModel", locationSchema);
 
     // this is a new comment here
 
-    var NEO4J_API_URL = "http://localhost:7474/db/data/transaction/commit";
+    var NEO4J_API_URL = "http://scibasetest.ml:7474/db/data/transaction/commit";
     // var NEO4J_API_URL = "http://" + process.env['NEO4J_HOST'] + ":7474/db/data/transaction/commit";
     // var NEO4J_API_URL = "http://54.201.10.92:7474/db/data/transaction/commit";
     // var NEO4J_USER = process.env['NEO4J_USER'];
